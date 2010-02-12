@@ -1,0 +1,8 @@
+#summary Main welcome page for the AIM-C wiki
+
+= Introduction =
+
+AIM-C
+
+= Details =
+
