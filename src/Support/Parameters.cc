@@ -1,0 +1,267 @@
+// Copyright 2006-2010, Willem van Engen
+//
+// AIM-C: A C++ implementation of the Auditory Image Model
+// http://www.acousticscale.org/AIMC
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+//!
+//! \file
+//! \brief Main parameters store
+//!
+//! \author Willem van Engen <cnbh@willem.engen.nl>
+//! \date created 2006/09/21
+//! \version \$Id: Parameters.cc 4 2010-02-03 18:44:58Z tcw $
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "Support/Common.h"
+#include "Support/Parameters.h"
+
+namespace aimc {
+const char *Parameters::m_SDefaultIniSection = "";
+
+Parameters::Parameters() {
+  m_iNestCount = 0;
+  m_pIni = new CSimpleIniCase(false, false, true);
+  AIM_ASSERT(m_pIni);
+}
+
+Parameters::~Parameters() {
+  DELETE_IF_NONNULL(m_pIni);
+}
+
+const char * Parameters::DefaultString(const char* sName, const char* val) {
+  AIM_ASSERT(m_pIni);
+  if (!IsSet(sName)) {
+    m_pIni->SetValue(m_SDefaultIniSection, sName, val);
+  }
+  return m_pIni->GetString(sName);
+}
+
+int Parameters::DefaultInt(const char* sName, int val) {
+  AIM_ASSERT(m_pIni);
+  if (!IsSet(sName)) {
+    m_pIni->SetInt(m_SDefaultIniSection, sName, val);
+  }
+  return m_pIni->GetInt(sName);
+}
+
+unsigned int Parameters::DefaultUInt(const char* sName, unsigned int val) {
+  AIM_ASSERT(m_pIni);
+  if (!IsSet(sName)) {
+    m_pIni->SetUInt(m_SDefaultIniSection, sName, val);
+  }
+  return m_pIni->GetUInt(sName);
+}
+
+float Parameters::DefaultFloat(const char* sName, float val) {
+  AIM_ASSERT(m_pIni);
+  if (!IsSet(sName)) {
+    m_pIni->SetFloat(m_SDefaultIniSection, sName, val);
+  }
+  return m_pIni->GetFloat(sName);
+}
+
+bool Parameters::DefaultBool(const char* sName, bool val) {
+  AIM_ASSERT(m_pIni);
+  if (!IsSet(sName)) {
+    m_pIni->SetBool(m_SDefaultIniSection, sName, val);
+  }
+  return m_pIni->GetBool(sName);
+}
+
+void Parameters::SetString(const char *sName, const char *val) {
+  AIM_ASSERT(m_pIni);
+  m_pIni->SetValue(m_SDefaultIniSection, sName, val);
+}
+
+void Parameters::SetInt(const char *sName, int val) {
+  char sVal[20];
+  snprintf(sVal, sizeof(sVal)/sizeof(sVal[0]), "%d", val);
+  SetString(sName, sVal);
+}
+
+void Parameters::SetUInt(const char *sName, unsigned int val) {
+  char sVal[20];
+  snprintf(sVal, sizeof(sVal)/sizeof(sVal[0]), "%ud", val);
+  SetString(sName, sVal);
+}
+
+void Parameters::SetBool(const char *sName, bool val) {
+  SetString(sName, val ? "true" : "false");
+}
+
+void Parameters::SetFloat(const char *sName, float val) {
+  char sVal[20];
+  snprintf(sVal, sizeof(sVal)/sizeof(sVal[0]), "%f", val);
+  SetString(sName, sVal);
+}
+
+const char *Parameters::GetString(const char *sName) {
+  AIM_ASSERT(m_pIni);
+  const char *sVal = m_pIni->GetValue(m_SDefaultIniSection, sName, NULL);
+  if (!sVal) {
+    LOG_ERROR(_T("Parameter not found '%s'"), sName);
+    return "";
+  }
+  return sVal;
+}
+
+int Parameters::GetInt(const char *sName) {
+  return atoi(GetString(sName));
+}
+
+unsigned int Parameters::GetUInt(const char *sName) {
+  return atoi(GetString(sName));
+}
+
+float Parameters::GetFloat(const char *sName) {
+  return (float)atof(GetString(sName));
+}
+
+bool Parameters::GetBool(const char *sName) {
+  const char *sVal = GetString(sName);
+  if (strcmp(sVal, "true")==0 || strcmp(sVal, "on")==0 ||
+      strcmp(sVal, "yes")==0 || strcmp(sVal, "1")==0 ||
+      strcmp(sVal, "y")==0 || strcmp(sVal, "t")==0)
+    return true;
+  else
+    return false;
+}
+
+bool Parameters::IsSet(const char *sName) {
+  AIM_ASSERT(m_pIni);
+  return m_pIni->GetValue(m_SDefaultIniSection, sName, NULL)!=NULL;
+}
+
+bool Parameters::Parse(const char *sCmd) {
+  //! \todo There is some code duplication here from Parameters::Merge()
+
+  CSimpleIniCase *pIni2 = new CSimpleIniCase(false, false, true);
+  AIM_ASSERT(pIni2);
+  if (pIni2->Load(sCmd, strlen(sCmd)) < 0) {
+    LOG_ERROR(_T("Could not parse option '%s'"), sCmd);
+    delete pIni2;
+    return false;
+  }
+
+  // if there are keys and values...
+  const CSimpleIniCase::TKeyVal *pSectionData =
+                                   pIni2->GetSection(m_SDefaultIniSection);
+  if (pSectionData) {
+    // iterate over all keys and set them in the current parameter file
+    CSimpleIniCase::TKeyVal::const_iterator iKeyVal = pSectionData->begin();
+    for ( ;iKeyVal != pSectionData->end(); ++iKeyVal) {
+      m_pIni->SetValue(m_SDefaultIniSection,
+                       iKeyVal->first.pItem,
+                       iKeyVal->second);
+      }
+    }
+  delete pIni2;
+  return true;
+}
+
+bool Parameters::Delete(const char *sName) {
+  AIM_ASSERT(m_pIni);
+  return(m_pIni->Delete(m_SDefaultIniSection, sName));
+}
+
+bool Parameters::LoadFile(const char *sParamFilename) {
+  AIM_ASSERT(m_pIni);
+  SI_Error siErr;
+  bool bRet = true;
+
+  // Avoid inclusion loops
+  if (m_iNestCount >= m_iNestCountMaximum) {
+    LOG_ERROR(_T("Possible inclusion loop in file '%s' (%d times)"),
+             sParamFilename, m_iNestCount);
+    return false;
+  }
+  m_iNestCount++;
+
+  if ( (siErr=m_pIni->LoadFile(sParamFilename))<0 ) {
+    // Don't complain if file not found, but do return error
+    if (siErr!=SI_FILE)
+      LOG_ERROR(_T("Couldn't parse parameters from '%s'"), sParamFilename);
+    m_iNestCount--;
+    return false;
+  }
+
+  m_iNestCount--;
+  return bRet;
+}
+
+bool Parameters::MergeFile(const char *sParamFilename) {
+  Parameters *pParam2 = new Parameters();
+  AIM_ASSERT(pParam2);
+  if (!pParam2->LoadFile(sParamFilename)) {
+    LOG_ERROR(_T("Could not load parameter file '%s' for merging"),
+              sParamFilename);
+    delete pParam2;
+    return false;
+  }
+
+  // if there are keys and values...
+  const CSimpleIniCase::TKeyVal *pSectionData =
+          pParam2->m_pIni->GetSection(m_SDefaultIniSection);
+  if (pSectionData) {
+    // iterate over all keys and set them in the current parameter file
+    CSimpleIniCase::TKeyVal::const_iterator iKeyVal = pSectionData->begin();
+    for ( ;iKeyVal != pSectionData->end(); ++iKeyVal) {
+      m_pIni->SetValue(m_SDefaultIniSection,
+                       iKeyVal->first.pItem,
+                       iKeyVal->second);
+      }
+  }
+
+  delete pParam2;
+  return true;
+}
+
+bool Parameters::Merge(const char *sParamFilename) {
+  return MergeFile(sParamFilename);
+}
+
+bool Parameters::Load(const char *sParamFilename) {
+  bool bRet = true;
+  // Load parameter file
+  bRet &= Merge(sParamFilename);
+  return bRet;
+}
+
+bool Parameters::Save(const char *sParamFilename) {
+  AIM_ASSERT(m_pIni);
+  SI_Error siErr;
+  FILE *pSaveFile;
+
+    pSaveFile = fopen(sParamFilename, "wb");
+    if (pSaveFile == NULL) {
+      LOG_ERROR(_T("Couldn't create parameters file '%s' to save to"),
+                sParamFilename);
+      return false;
+    }
+
+  if ((siErr = m_pIni->SaveFile(pSaveFile)) < 0 ) {
+    LOG_ERROR(_T("Couldn't save parameters in file '%s'"), sParamFilename);
+    return false;
+  }
+
+  fclose(pSaveFile);
+
+  return true;
+}
+}  // namespace aimc
