@@ -1,0 +1,41 @@
+#summary Building AIM-C
+#labels Phase-Design
+
+= Introduction =
+
+AIM-C is built using the [http://www.scons.org/ SCons] build system. SCons is multiplatform, and is based on Python. 
+
+= Build Environment =
+One of the major requirements of AIM-C is that it is written, as far as possible, in standard C++ (including some heavy dependence on the standard library). This means that (in theory at least) it will compile under any reasonably sane C++ compiler. In practice, so far development has taken place mainly using GCC on Mac OS 10.6.
+
+= External Dependencies =
+None as yet.
+
+The project uses [http://code.jellycan.com/simpleini/ simpleini] version 4.12 for storing, parsing and writing out parameters files, but this file (and the UTF support code that it requires) is included in the source repository. 
+
+The original command-line version of AIM-C had dependencies on
+  * [http://www.mega-nerd.com/libsndfile/ libsndfile] for audio file input.
+  * [http://www.portaudio.com/ PortAudio] for live audio input.
+  * [http://www.fftw.org/ FFTW3] for FFTs
+
+The libsndfile and portaudio input classes will eventually be ported over to the current version. The dependence on FFTW will likely be dropped, as the FIR gammatone filterbank from the original version is the only filterbank that uses FFT routines, and a basic FFT will likely be fast enough in place of FFTW.
+
+= Build Tools =
+== Building ==
+
+Assuming SCons is installed,  to build the source tree simply navigate to the top level of the source tree (where the SConstruct file resides) and issue the command:
+
+`scons`
+
+== Getting SCons ==
+On GNU/Linux systems, either use your favourite package manager to install scons, for example on Debian / Ubuntu:
+
+`sudo apt-get install scons`
+
+On Mac OS X, I'd recommend using MacPorts. It's a handy way of installing all sorts of free software. First install MacPorts, then run the command:
+
+`sudo port install scons`
+
+Alternatively, in either case, you can just download and install a tarball from the [http://www.scons.org/ SCons site].
+
+(TODO) On Windows...
