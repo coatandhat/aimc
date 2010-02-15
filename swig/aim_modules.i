@@ -16,7 +16,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%module aimc 
+%module aimc
+%include "std_string.i"
 %{
 #include "Support/Common.h"
 #include "Support/Module.h"
@@ -32,8 +33,13 @@ public:
 	~Parameters();
 	bool Load(const char *sParamFilename);
 	bool Save(const char *sParamFilename);
+  std::string WriteString();
 	bool Merge(const char *sParamFilename);
-  void SetDefault(const char* sName, const char* value);
+	const char* DefaultString(const char *sName, const char *val);
+	int DefaultInt(const char *sName, int val);
+	unsigned int DefaultUInt(const char *sName, unsigned int val);
+	float DefaultFloat(const char *sName, float val);
+	bool DefaultBool(const char *sName, bool val);
 	void SetString(const char *sName, const char *val);
 	void SetInt(const char *sName, int val);
 	void SetUInt(const char *sName, unsigned int val);
@@ -52,21 +58,22 @@ public:
 
 class SignalBank {
  public:
-  SignalBank();
-  bool Initialize(int channel_count, int signal_length, float sample_rate);
-  bool Validate() const;
-  inline const vector<float> &operator[](int channel) const;
-  void set_sample(int channel, int sample, float value);
-  float sample_rate() const;
-  int buffer_length() const;
-  int start_time() const;
-  void set_start_time(int start_time);
-  float get_centre_frequency(int i) const;
-  void set_centre_frequency(int i, float cf);
-  bool initialized() const;
-  int channel_count() const;
- private:
-  DISALLOW_COPY_AND_ASSIGN(SignalBank);
+   SignalBank();
+    ~SignalBank();
+    bool Initialize(int channel_count, int signal_length, float sample_rate);
+    bool Initialize(const SignalBank &input);
+    bool Validate() const;
+    const vector<float> &operator[](int channel) const;
+    float sample(int channel, int index) const;
+    void set_sample(int channel, int index, float value);
+    float sample_rate() const;
+    int buffer_length() const;
+    int start_time() const;
+    void set_start_time(int start_time);
+    float get_centre_frequency(int i) const;
+    void set_centre_frequency(int i, float cf);
+    bool initialized() const;
+    int channel_count() const;
 };
 
 class Module {

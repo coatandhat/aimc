@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright 2010, Thomas Walters
+# encoding: utf-8
 #
 # AIM-C: A C++ implementation of the Auditory Image Model
 # http://www.acousticscale.org/AIMC
@@ -16,12 +16,32 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+ModuleGaussians_test.py
+
+Created by Thomas Walters on 2010-02-15.
+Copyright 2010 Thomas Walters <tom@acousticscale.org>
+Test for the Gaussians module. Runs a number of pre-computed SAI profiles
+through the module, and tests them against the equivalent output from the
+MATLAB rubber_GMM code.
+"""
 
 import aimc
-params = aimc.Parameters()
-mod_gauss = aimc.ModuleGaussians(params)
-sig = aimc.SignalBank()
-sig.Initialize(115, 1, 44100)
-mod_gauss.Initialize(sig)
-mod_gauss.Process(sig)
+import matplotlib
+import pylab
+import scipy
 
+def main():
+  data_file = "src/Modules/Features/testdata/aa153.0p108.1s100.0t+000itd.mat"
+  data = scipy.io.loadmat(data_file)
+  
+  given_profiles = data["Templates"]
+  matlab_features = data["feature"]
+  
+  
+  
+  pass
+
+
+if __name__ == '__main__':
+  main()

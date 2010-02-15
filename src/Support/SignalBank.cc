@@ -114,15 +114,11 @@ bool SignalBank::Validate() const {
   return true;
 }
 
-inline const vector<float> &SignalBank::operator[](int channel) const {
-  return signals_[channel];
-}
-
-inline float SignalBank::sample(int channel, int index) const {
+float SignalBank::sample(int channel, int index) const {
   return signals_[channel][index];
 }
 
-inline void SignalBank::set_sample(int channel, int index, float value) {
+void SignalBank::set_sample(int channel, int index, float value) {
   signals_[channel][index] = value;
 }
 

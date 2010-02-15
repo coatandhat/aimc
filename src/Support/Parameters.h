@@ -27,6 +27,8 @@
 #ifndef _AIMC_SUPPORT_PARAMETERS_H_
 #define _AIMC_SUPPORT_PARAMETERS_H_
 
+#include <string>
+
 // If not _WINDOWS, please compile in Support/ConvertUTF.c
 #ifdef _UNICODE
 // Here we want to use the ANSI version of all the non wxWidgets stuff, but
@@ -169,6 +171,12 @@ public:
    * \return true on success
    */
   bool Delete(const char *sName);
+
+  /*! \brief Append parameters to a string
+   * \param sName pointer to a string
+   * \return true on success
+   */
+   std::string WriteString();
 
   //! \brief Maximum length of a parameter name in characters
   static const unsigned int MaxParamNameLength = 128;

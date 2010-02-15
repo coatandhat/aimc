@@ -16,13 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <vector>
-#include <boost/scoped_ptr.hpp>
-
-using std::vector;
-using boost::scoped_ptr;
-
 int main () {
-  scoped_ptr<vector<float> > fred;
-  fred.reset(new vector<float>);
+ // TODO
 }

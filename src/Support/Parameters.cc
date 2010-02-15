@@ -47,41 +47,41 @@ Parameters::~Parameters() {
 const char * Parameters::DefaultString(const char* sName, const char* val) {
   AIM_ASSERT(m_pIni);
   if (!IsSet(sName)) {
-    m_pIni->SetValue(m_SDefaultIniSection, sName, val);
+    SetString(sName, val);
   }
-  return m_pIni->GetString(sName);
+  return GetString(sName);
 }
 
 int Parameters::DefaultInt(const char* sName, int val) {
   AIM_ASSERT(m_pIni);
   if (!IsSet(sName)) {
-    m_pIni->SetInt(m_SDefaultIniSection, sName, val);
+    SetInt(sName, val);
   }
-  return m_pIni->GetInt(sName);
+  return GetInt(sName);
 }
 
 unsigned int Parameters::DefaultUInt(const char* sName, unsigned int val) {
   AIM_ASSERT(m_pIni);
   if (!IsSet(sName)) {
-    m_pIni->SetUInt(m_SDefaultIniSection, sName, val);
+    SetUInt(sName, val);
   }
-  return m_pIni->GetUInt(sName);
+  return GetUInt(sName);
 }
 
 float Parameters::DefaultFloat(const char* sName, float val) {
   AIM_ASSERT(m_pIni);
   if (!IsSet(sName)) {
-    m_pIni->SetFloat(m_SDefaultIniSection, sName, val);
+    SetFloat(sName, val);
   }
-  return m_pIni->GetFloat(sName);
+  return GetFloat(sName);
 }
 
 bool Parameters::DefaultBool(const char* sName, bool val) {
   AIM_ASSERT(m_pIni);
   if (!IsSet(sName)) {
-    m_pIni->SetBool(m_SDefaultIniSection, sName, val);
+    SetBool(sName, val);
   }
-  return m_pIni->GetBool(sName);
+  return GetBool(sName);
 }
 
 void Parameters::SetString(const char *sName, const char *val) {
@@ -264,4 +264,17 @@ bool Parameters::Save(const char *sParamFilename) {
 
   return true;
 }
+
+std::string Parameters::WriteString() {
+  AIM_ASSERT(m_pIni);
+  SI_Error siErr;
+  std::string output_string;
+
+  if ((siErr = m_pIni->Save(output_string)) < 0 ) {
+    LOG_ERROR(_T("Couldn't write parameters to string"));
+    return false;
+  }
+  return output_string;
+}
+
 }  // namespace aimc
