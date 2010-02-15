@@ -54,9 +54,13 @@ class SignalBank {
    */
   bool Initialize(const SignalBank &input);
   bool Validate() const;
-  inline const vector<float> &operator[](int channel) const;
-  inline float sample(int channel, int index) const;
-  inline void set_sample(int channel, int index, float value);
+
+  inline const vector<float> &operator[](int channel) const {
+    return signals_[channel];
+  };
+
+  float sample(int channel, int index) const;
+  void set_sample(int channel, int index, float value);
   const deque<int> &strobes(int channel) const;
   float sample_rate() const;
   int buffer_length() const;

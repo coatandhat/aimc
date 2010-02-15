@@ -93,11 +93,12 @@ else:
 
 # Sources common to every version
 common_sources = ['Support/Common.cc',
+                  'Support/SignalBank.cc',
                   'Support/Parameters.cc',
                   'Support/Module.cc', 
                   'Modules/BMM/ModulePZFC.cc',
                   'Modules/NAP/ModuleHCL.cc',
-                  'Modules/SAI/ModuleSAI.cc',
+                  #'Modules/SAI/ModuleSAI.cc',
                   'Modules/Features/ModuleGaussians.cc']
     
 if not target_platform == 'win32':
@@ -106,7 +107,7 @@ if not target_platform == 'win32':
   common_sources += ['Support/ConvertUTF.c']
 
 # Choose file which contains main()
-sources = common_sources + ['Main/aimc.cpp']
+sources = common_sources + ['Main/aimc.cc']
 
 # Place the build products in the corect place
 env.BuildDir('#' + build_dir, '#', duplicate = 0)

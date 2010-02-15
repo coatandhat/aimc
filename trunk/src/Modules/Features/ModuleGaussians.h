@@ -74,7 +74,7 @@ class ModuleGaussians : public Module
 
   /*! \brief Maximum Number of iterations
    */
-  unsigned int m_iParamMaxIt;
+  int m_iParamMaxIt;
 
   /*! \brief convergence criterion
    */

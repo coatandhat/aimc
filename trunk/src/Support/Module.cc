@@ -50,7 +50,7 @@ bool Module::Initialize(const SignalBank &input) {
     LOG_ERROR("Input SignalBank not valid");
     return false;
   }
-    if (!InitializeInternal(input)) {
+  if (!InitializeInternal(input)) {
     LOG_ERROR("Module initialization failed");
     return false;
   }

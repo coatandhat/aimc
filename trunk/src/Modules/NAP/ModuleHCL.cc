@@ -37,15 +37,10 @@ ModuleHCL::ModuleHCL(Parameters *parameters) : Module(parameters) {
                         "and lowpass filtering";
   module_version_ = "$Id: ModuleHCL.cc 4 2010-02-03 18:44:58Z tcw $";
 
-  parameters_->SetDefault("nap.do_lowpass", "false");
-  parameters_->SetDefault("nap.do_log_compression", "false");
-  parameters_->SetDefault("nap.lowpass_cutoff", "1200.0");
-  parameters_->SetDefault("nap.lowpass_order", "2");
-
-  do_lowpass_ = parameters_->GetBool("nap.do_lowpass");
-  do_log_ = parameters_->GetBool("nap.do_log_compression");
-  lowpass_cutoff_ = parameters_->GetFloat("nap.lowpass_cutoff");
-  lowpass_order_ = parameters_->GetInt("nap.lowpass_order");
+  do_lowpass_ = parameters_->DefaultBool("nap.do_lowpass", false);
+  do_log_ = parameters_->DefaultBool("nap.do_log_compression", false);
+  lowpass_cutoff_ = parameters_->DefaultFloat("nap.lowpass_cutoff", 1200.0);
+  lowpass_order_ = parameters_->DefaultInt("nap.lowpass_order", 2);
 }
 
 ModuleHCL::~ModuleHCL() {

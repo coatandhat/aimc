@@ -21,7 +21,7 @@
  */
 
 /*!
- * \author Tom Walters <tcw24@cam.ac.uk>
+ * \author Thomas Walters <tom@acousticscale.org>
  * \date created 2008/06/23
  * \version \$Id: ModuleGaussians.cc 2 2010-02-02 12:59:50Z tcw $
  */
@@ -36,26 +36,21 @@ ModuleGaussians::ModuleGaussians(Parameters *pParam)
 : Module(pParam) {
   // Set module metadata
   module_description_ = "Gaussian Fitting to SSI profile";
-  module_identifier_ = "gaussians"; // unique identifier for the module
+  module_identifier_ = "gaussians";
   module_type_ = "features";
   module_version_ = "$Id: ModuleGaussians.cc 2 2010-02-02 12:59:50Z tcw $";
 
-  parameters_->SetDefault("features.gaussians.ncomp", "4");
-  m_iParamNComp = parameters_->GetInt("features.gaussians.ncomp");
-
-  parameters_->SetDefault("features.gaussians.var", "115.0");
-  m_fParamVar = parameters_->GetFloat("features.gaussians.var");
-
-  parameters_->SetDefault("features.gaussians.posterior_exp", "6.0");
+  m_iParamNComp = parameters_->DefaultInt("features.gaussians.ncomp", 4);
+  m_fParamVar = parameters_->DefaultFloat("features.gaussians.var", 115.0);
   m_fParamPosteriorExp =
-    parameters_->GetFloat("features.gaussians.posterior_exp");
+    parameters_->DefaultFloat("features.gaussians.posterior_exp", 6.0);
+  m_iParamMaxIt = parameters_->DefaultInt("features.gaussians.maxit", 250);
 
-  parameters_->SetDefault("features.gaussians.maxit", "250");
-  m_iParamMaxIt = parameters_->GetInt("features.gaussians.maxit");
-
-  parameters_->SetDefault("features.gaussians.priors_converged", "1e-7");
+  // The parameters system doesn't support tiny numbers well, to define this
+  // variable as a string, then convert it to a float afterwards
+  parameters_->DefaultString("features.gaussians.priors_converged", "1e-7");
   m_fParamPriorsConverged =
-    parameters_->GetInt("features.gaussians.priors_converged");
+    parameters_->GetFloat("features.gaussians.priors_converged");
 }
 
 ModuleGaussians::~ModuleGaussians() {
@@ -68,7 +63,7 @@ bool ModuleGaussians::InitializeInternal(const SignalBank &input) {
   // Assuming the number of channels is greater than twice the number of
   // Gaussian components, this is ok
   if (input.channel_count() >= 2 * m_iParamNComp) {
-    output_.Initialize(1, m_iParamNComp, input.sample_rate());
+    output_.Initialize(m_iParamNComp, 1, input.sample_rate());
   } else {
     LOG_ERROR(_T("Too few channels in filterbank to produce sensible "
                  "Gaussian features. Either increase the number of filterbank"
@@ -88,8 +83,10 @@ void ModuleGaussians::Reset() {
 }
 
 void ModuleGaussians::Process(const SignalBank &input) {
-  int iAudCh = 0;
-
+  if (!initialized_) {
+    LOG_ERROR(_T("Module ModuleGaussians not initialized."));
+    return;
+  }
   // Calculate spectral profile
   for (int iChannel = 0;
        iChannel < input.channel_count();
@@ -100,17 +97,25 @@ void ModuleGaussians::Process(const SignalBank &input) {
          ++iSample) {
       m_pSpectralProfile[iChannel] += input[iChannel][iSample];
     }
+    m_pSpectralProfile[iChannel] /= static_cast<float>(input.buffer_length());
+  }
+
+  float spectral_profile_sum = 0.0f;
+  for (int i = 0; i < input.channel_count(); ++i) {
+    spectral_profile_sum += m_pSpectralProfile[i];
+  }
+
+  double logsum = log(spectral_profile_sum);
+  if (!isinf(logsum)) {
+    output_.set_sample(m_iParamNComp - 1, 0, logsum);
+  } else {
+    output_.set_sample(m_iParamNComp - 1, 0, -1000.0);
   }
 
   for (int iChannel = 0;
        iChannel < input.channel_count();
        ++iChannel) {
     m_pSpectralProfile[iChannel] = pow(m_pSpectralProfile[iChannel], 0.8);
-  }
-
-  float spectral_profile_sum = 0.0f;
-  for (int i = 0; i < input.channel_count(); ++i) {
-    spectral_profile_sum += m_pSpectralProfile[i];
   }
 
   RubberGMMCore(2, true);
@@ -142,15 +147,7 @@ void ModuleGaussians::Process(const SignalBank &input) {
       output_.set_sample(i, 0, 0.0f);
     }
   }
-  /*for (int i = m_iParamNComp; i < m_iParamNComp * 2; ++i) {
-    m_pOutputData->getSignal(i)->setSample(iAudCh, 0, m_pMu[i-m_iParamNComp]);
-  }*/
-  double logsum = log(spectral_profile_sum);
-  if (!isinf(logsum)) {
-    output_.set_sample(m_iParamNComp - 1, 0, logsum);
-  } else {
-    output_.set_sample(m_iParamNComp - 1, 0, -1000.0);
-  }
+
   PushOutput();
 }
 
