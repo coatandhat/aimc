@@ -77,7 +77,7 @@ bool ModuleGaussians::InitializeInternal(const SignalBank &input) {
   return true;
 }
 
-void ModuleGaussians::Reset() {
+void ModuleGaussians::ResetInternal() {
   m_pSpectralProfile.clear();
   m_pSpectralProfile.resize(m_iNumChannels, 0.0f);
 }

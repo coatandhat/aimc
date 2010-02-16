@@ -40,7 +40,6 @@ class ModuleSAI : public Module {
   ModuleSAI(Parameters *parameters);
   virtual ~ModuleSAI();
   void Process(const SignalBank &input);
-  void Reset();
 
  private:
   /*! \brief Prepare the module
@@ -48,6 +47,8 @@ class ModuleSAI : public Module {
    *  \param output true on success false on failure
    */
   bool InitializeInternal(const SignalBank &input);
+
+  virtual void ResetInternal();
 
   //! \brief Temporary buffer for constructing the current SAI frame
   SignalBank sai_temp_;

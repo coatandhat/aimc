@@ -42,7 +42,6 @@ class ModuleHCL : public Module {
   virtual ~ModuleHCL();
 
   virtual void Process(const SignalBank &input);
-  virtual void Reset();
 
  private:
   /*! \brief Prepare the module
@@ -50,6 +49,8 @@ class ModuleHCL : public Module {
    *  \param output true on success false on failure
    */
   virtual bool InitializeInternal(const SignalBank &input);
+
+  virtual void ResetInternal();
 
   //! \brief Do lowpass filtering?
   bool do_lowpass_;

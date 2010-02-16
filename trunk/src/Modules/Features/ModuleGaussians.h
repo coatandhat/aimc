@@ -48,14 +48,14 @@ class ModuleGaussians : public Module
   //! \brief Process a buffer
   virtual void Process(const SignalBank &input);
 
-  //! \brief Reset the internal state of the module
-  void Reset();
-
  private:
-    /*! \brief Prepare the module
-     *  \param input Input signal
-     *  \param output true on success false on failure
-     */
+  //! \brief Reset the internal state of the module
+  virtual void ResetInternal();
+
+  /*! \brief Prepare the module
+   *  \param input Input signal
+   *  \param output true on success false on failure
+   */
   virtual bool InitializeInternal(const SignalBank &input);
 
   bool RubberGMMCore(int iNumComponents, bool bDoInit);

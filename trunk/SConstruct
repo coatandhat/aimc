@@ -95,7 +95,8 @@ else:
 common_sources = ['Support/Common.cc',
                   'Support/SignalBank.cc',
                   'Support/Parameters.cc',
-                  'Support/Module.cc', 
+                  'Support/Module.cc',
+                  'Modules/Input/ModuleFileInput.cc',
                   'Modules/BMM/ModulePZFC.cc',
                   'Modules/NAP/ModuleHCL.cc',
                   #'Modules/SAI/ModuleSAI.cc',
@@ -116,7 +117,11 @@ env.BuildDir('#' + build_dir, '#', duplicate = 0)
 env.Append(CPPPATH = '#src')
 
 # Dependencies
-deplibs = ''
+deplibs = ['sndfile']
+
+for depname in deplibs:
+  env.ParseConfig('pkg-config --cflags --libs ' + depname)
+
 env.AppendUnique(LIBS = deplibs)
 
 # Set up the builder to build the program

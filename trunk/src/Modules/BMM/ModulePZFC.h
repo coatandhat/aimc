@@ -43,10 +43,10 @@ class ModulePZFC : public Module {
   //! \brief Process a buffer
   virtual void Process(const SignalBank &input);
 
-  //! \brief Reset all internal state variables to their initial values
-  virtual void Reset();
-
  private:
+   //! \brief Reset all internal state variables to their initial values
+   virtual void ResetInternal();
+
   //! \brief Prepare the module
   //! \param input Input SignalBank
   //! \param output true on success false on failure

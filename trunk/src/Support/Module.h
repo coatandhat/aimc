@@ -72,8 +72,14 @@ class Module {
    * any targets of the module if necessary.
    * \param input Input SignalBank.
    * \param output true on success, false on failure.
+   *
+   * Note that in most instances when creating a new module, it is better to 
+   * simply implement the pure virtual function InitializeInternal(), rather
+   * than refining a new Initialize. The only reason that Initialize() is made
+   * virtual is to deal with the edge case of input modules which do not take 
+   * a SignalBank as input, but rather generate their own input.
    */
-  bool Initialize(const SignalBank &input);
+  virtual bool Initialize(const SignalBank &input);
 
   /*! \brief
    */
@@ -98,10 +104,10 @@ class Module {
    */
   virtual void Process(const SignalBank &input) = 0;
 
-  /*! \brief Reset the internal state of the module to that when it was
-   * initialised
+  /*! \brief Reset the internal state of this module and all its children to
+   *  their initial state.
    */
-  virtual void Reset() = 0;
+  void Reset() ;
 
   /*! \brief
    */
@@ -109,6 +115,8 @@ class Module {
 
  protected:
   void PushOutput();
+
+  virtual void ResetInternal() = 0;
 
   virtual bool InitializeInternal(const SignalBank &input) = 0;
 

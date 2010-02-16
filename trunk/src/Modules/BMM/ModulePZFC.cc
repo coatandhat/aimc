@@ -73,12 +73,12 @@ bool ModulePZFC::InitializeInternal(const SignalBank &input) {
     return false;
 
   // This initialises all buffers which can be modified by Process()
-  Reset();
+  ResetInternal();
 
   return true;
 }
 
-void ModulePZFC::Reset() {
+void ModulePZFC::ResetInternal() {
   // These buffers may be actively modified by the algorithm
   agc_state_.clear();
   agc_state_.resize(channel_count_);

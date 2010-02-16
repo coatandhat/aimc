@@ -22,13 +22,11 @@ ModuleGaussians_test.py
 Created by Thomas Walters on 2010-02-15.
 Copyright 2010 Thomas Walters <tom@acousticscale.org>
 Test for the Gaussians module. Runs a number of pre-computed SAI profiles
-through the module, and tests them against the equivalent output from the
+through the module, and tests them against the saved output from the
 MATLAB rubber_GMM code.
 """
 
 import aimc
-import matplotlib
-import pylab
 from scipy import io
 
 def main():
