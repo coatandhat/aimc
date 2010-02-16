@@ -97,10 +97,10 @@ void ModuleGaussians::Process(const SignalBank &input) {
          ++iSample) {
       m_pSpectralProfile[iChannel] += input[iChannel][iSample];
     }
-    m_pSpectralProfile[iChannel] /= static_cast<float>(input.buffer_length());
+    m_pSpectralProfile[iChannel] /= static_cast<double>(input.buffer_length());
   }
 
-  float spectral_profile_sum = 0.0f;
+  double spectral_profile_sum = 0.0f;
   for (int i = 0; i < input.channel_count(); ++i) {
     spectral_profile_sum += m_pSpectralProfile[i];
   }
@@ -120,22 +120,33 @@ void ModuleGaussians::Process(const SignalBank &input) {
 
   RubberGMMCore(2, true);
 
-  float fMean1 = m_pMu[0];
-  float fMean2 = m_pMu[1];
+  double fMean1 = m_pMu[0];
+  double fMean2 = m_pMu[1];
+  //LOG_INFO(_T("Orig. mean 0 = %f"), m_pMu[0]);
+  //LOG_INFO(_T("Orig. mean 1 = %f"), m_pMu[1]);
+  //LOG_INFO(_T("Orig. prob 0 = %f"), m_pA[0]);
+  //LOG_INFO(_T("Orig. prob 1 = %f"), m_pA[1]);
 
-  float fA1 = 0.05 * m_pA[0];
-  float fA2 = 1.0 - 0.25 * m_pA[1];
+  double fA1 = 0.05 * m_pA[0];
+  double fA2 = 1.0 - 0.25 * m_pA[1];
 
-  float fGradient = (fMean2 - fMean1) / (fA2 - fA1);
-  float fIntercept = fMean2 - fGradient * fA2;
+  //LOG_INFO(_T("fA1 = %f"), fA1);
+  //LOG_INFO(_T("fA2 = %f"), fA2);
+
+  double fGradient = (fMean2 - fMean1) / (fA2 - fA1);
+  double fIntercept = fMean2 - fGradient * fA2;
+
+  //LOG_INFO(_T("fGradient = %f"), fGradient);
+  //LOG_INFO(_T("fIntercept = %f"), fIntercept);
 
   for (int i = 0; i < m_iParamNComp; ++i) {
-    m_pMu[i] = ((float)i / (float)m_iParamNComp - 1.0f)
-                  * -fGradient + fIntercept;
+    m_pMu[i] = ((double)i / ((double)m_iParamNComp - 1.0f))
+                  * fGradient + fIntercept;
+                //LOG_INFO(_T("mean %d = %f"), i, m_pMu[i]);
   }
 
   for (int i = 0; i < m_iParamNComp; ++i) {
-    m_pA[i] = 1.0f / (float)m_iParamNComp;
+    m_pA[i] = 1.0f / (double)m_iParamNComp;
   }
 
   RubberGMMCore(m_iParamNComp, false);
@@ -155,7 +166,7 @@ bool ModuleGaussians::RubberGMMCore(int iNComponents, bool bDoInit) {
   int iSizeX = m_iNumChannels;
 
   // Normalise the spectral profile
-  float fSpectralProfileTotal = 0.0f;
+  double fSpectralProfileTotal = 0.0f;
   for (int iCount = 0; iCount < iSizeX; iCount++) {
     fSpectralProfileTotal += m_pSpectralProfile[iCount];
   }
@@ -165,18 +176,18 @@ bool ModuleGaussians::RubberGMMCore(int iNComponents, bool bDoInit) {
 
   if (bDoInit) {
     // Uniformly spaced components
-    float dd = (iSizeX - 1.0f) / iNComponents;
+    double dd = (iSizeX - 1.0f) / iNComponents;
     for (int i = 0; i < iNComponents; i++) {
       m_pMu[i] = dd / 2.0f + (i * dd);
       m_pA[i] = 1.0f / iNComponents;
     }
   }
 
-  vector<float> pA_old;
+  vector<double> pA_old;
   pA_old.resize(iNComponents);
-  vector<float> pP_mod_X;
+  vector<double> pP_mod_X;
   pP_mod_X.resize(iSizeX);
-  vector<float> pP_comp;
+  vector<double> pP_comp;
   pP_comp.resize(iSizeX * iNComponents);
 
   for (int iIteration = 0; iIteration < m_iParamMaxIt; iIteration++) {
@@ -189,7 +200,7 @@ bool ModuleGaussians::RubberGMMCore(int iNComponents, bool bDoInit) {
     for (int i = 0; i < iNComponents; i++) {
       for (int iCount = 0; iCount < iSizeX; iCount++) {
         pP_mod_X[iCount] += 1.0f / sqrt(2.0f * M_PI * m_fParamVar)
-                            * exp((-0.5f) * pow(((float)iCount-m_pMu[i]), 2)
+                            * exp((-0.5f) * pow(((double)(iCount + 1)-m_pMu[i]), 2)
                                   / m_fParamVar) * m_pA[i];
       }
     }
@@ -202,14 +213,14 @@ bool ModuleGaussians::RubberGMMCore(int iNComponents, bool bDoInit) {
       for (int iCount = 0; iCount < iSizeX; iCount++) {
         pP_comp[iCount + i * iSizeX] =
           1.0f / sqrt(2.0f * M_PI * m_fParamVar)
-          * exp((-0.5f) * pow(((float)iCount - m_pMu[i]), 2) / m_fParamVar);
+          * exp((-0.5f) * pow(((double)(iCount + 1) - m_pMu[i]), 2) / m_fParamVar);
         pP_comp[iCount + i * iSizeX] =
           pP_comp[iCount + i * iSizeX] * m_pA[i] / pP_mod_X[iCount];
       }
     }
 
     for (int iCount = 0; iCount < iSizeX; ++iCount) {
-      float fSum = 0.0f;
+      double fSum = 0.0f;
       for (int i = 0; i < iNComponents; ++i) {
         pP_comp[iCount+i*iSizeX] = pow(pP_comp[iCount + i * iSizeX],
                                        m_fParamPosteriorExp); // expansion
@@ -229,25 +240,27 @@ bool ModuleGaussians::RubberGMMCore(int iNComponents, bool bDoInit) {
     }
 
     // finish when already converged
-    float fPrdist = 0.0f;
+    double fPrdist = 0.0f;
     for (int i = 0; i < iNComponents; ++i) {
       fPrdist += pow((m_pA[i] - pA_old[i]), 2);
     }
     fPrdist /= iNComponents;
 
     if (fPrdist < m_fParamPriorsConverged) {
-      LOG_INFO("Converged!");
+      //LOG_INFO("Converged!");
       break;
     }
+    //LOG_INFO("Didn't converge!");
+
 
     // update means (positions)
     for (int i = 0 ; i < iNComponents; ++i) {
-      float mu_old = m_pMu[i];
+      double mu_old = m_pMu[i];
       if (m_pA[i] > 0.0f) {
         m_pMu[i] = 0.0f;
         for (int iCount = 0; iCount < iSizeX; ++iCount) {
           m_pMu[i] += m_pSpectralProfile[iCount]
-                      * pP_comp[iCount + i * iSizeX] * (float)iCount;
+                      * pP_comp[iCount + i * iSizeX] * (double)(iCount + 1);
         }
         m_pMu[i] /= m_pA[i];
         if (isnan(m_pMu[i])) {
@@ -263,7 +276,7 @@ bool ModuleGaussians::RubberGMMCore(int iNComponents, bool bDoInit) {
     bSorted = true;
     for (int i = 0; i < iNComponents - 1; ++i) {
       if (m_pMu[i] > m_pMu[i + 1]) {
-        float fTemp = m_pMu[i];
+        double fTemp = m_pMu[i];
         m_pMu[i] = m_pMu[i + 1];
         m_pMu[i + 1] = fTemp;
         fTemp = m_pA[i];
