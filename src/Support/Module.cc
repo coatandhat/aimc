@@ -78,6 +78,19 @@ bool Module::Initialize(const SignalBank &input) {
   return true;
 }
 
+void Module::Reset() {
+  if (!initialized_)
+    return;
+
+  ResetInternal();
+
+  // Iterate through all the targets of this module, resetting
+  // them.
+  set<Module*>::const_iterator it;
+  for (it = targets_.begin(); it != targets_.end(); ++it)
+    (*it)->Reset();
+}
+
 bool Module::initialized() const {
   return initialized_;
 }

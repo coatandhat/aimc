@@ -111,7 +111,7 @@ bool ModuleSAI::InitializeInternal(const SignalBank &input) {
   return true;
 }
 
-void ModuleSAI::Reset() {
+void ModuleSAI::ResetInternal() {
 }
 
 void ModuleSAI::Process(const SignalBank &input) {

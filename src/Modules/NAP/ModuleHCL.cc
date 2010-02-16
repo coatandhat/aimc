@@ -50,11 +50,11 @@ bool ModuleHCL::InitializeInternal(const SignalBank &input) {
   time_constant_ = 1.0f / (2.0f * M_PI * lowpass_cutoff_);
   channel_count_ = input.channel_count();
   output_.Initialize(input);
-  Reset();
+  ResetInternal();
   return true;
 }
 
-void ModuleHCL::Reset() {
+void ModuleHCL::ResetInternal() {
   xn_ = 0.0f;
   yn_ = 0.0f;
   yns_.clear();
