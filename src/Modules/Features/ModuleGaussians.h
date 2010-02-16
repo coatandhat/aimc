@@ -66,11 +66,11 @@ class ModuleGaussians : public Module
 
   /*! \brief Constant variance of Gaussians
    */
-  float m_fParamVar;
+  double m_fParamVar;
 
   /*! \brief posterior probability expansion exponent
    */
-  float m_fParamPosteriorExp;
+  double m_fParamPosteriorExp;
 
   /*! \brief Maximum Number of iterations
    */
@@ -78,19 +78,19 @@ class ModuleGaussians : public Module
 
   /*! \brief convergence criterion
    */
-  float m_fParamPriorsConverged;
+  double m_fParamPriorsConverged;
 
   /*! \brief The amplitudes of the components (priors)
    */
-  vector<float> m_pA;
+  vector<double> m_pA;
 
   /*! \brief The means of the components (priors)
    */
-  vector<float> m_pMu;
+  vector<double> m_pMu;
 
   /*! \brief The spectral profile of the incoming buffer
    */
-  vector<float> m_pSpectralProfile;
+  vector<double> m_pSpectralProfile;
 
   int m_iNumChannels;
 };
