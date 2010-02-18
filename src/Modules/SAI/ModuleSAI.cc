@@ -57,7 +57,8 @@ bool ModuleSAI::InitializeInternal(const SignalBank &input) {
   // The SAI output bank must be as long as the SAI's Maximum delay.
   // One sample is added to the SAI buffer length to account for the
   // zero-lag point
-  int sai_buffer_length = 1 + floor(input.sample_rate() * max_delay_ms_);
+  int sai_buffer_length = 1 + floor(input.sample_rate() * max_delay_ms_
+                                    / 1000.0f);
   channel_count_ = input.channel_count();
 
   // Make an output SignalBank with the same number of channels and centre

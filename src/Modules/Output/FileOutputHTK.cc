@@ -40,6 +40,11 @@
 
 namespace aimc {
 FileOutputHTK::FileOutputHTK(Parameters *params) : Module(params) {
+  module_description_ = "File output in HTK format";
+  module_identifier_ = "htk_out";
+  module_type_ = "output";
+  module_version_ = "$Id$";
+
 	file_handle_ = NULL;
 	header_written_ = false;
   filename_[0] = '\0';
