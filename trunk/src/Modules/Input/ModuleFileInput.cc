@@ -36,8 +36,8 @@ ModuleFileInput::ModuleFileInput(Parameters *params) : Module(params) {
   module_type_ = "input";
   module_version_ = "$Id$";
 
-	file_handle_ = NULL;
-	buffer_length_ = parameters_->DefaultInt("input.buffersize", 1024);
+  file_handle_ = NULL;
+  buffer_length_ = parameters_->DefaultInt("input.buffersize", 1024);
 
   file_position_samples_ = 0;
   file_loaded_ = false;
@@ -47,7 +47,7 @@ ModuleFileInput::ModuleFileInput(Parameters *params) : Module(params) {
 
 ModuleFileInput::~ModuleFileInput() {
   if (file_handle_)
-	  sf_close(file_handle_);
+    sf_close(file_handle_);
 }
 
 void ModuleFileInput::ResetInternal() {
@@ -56,29 +56,29 @@ void ModuleFileInput::ResetInternal() {
 }
 
 bool ModuleFileInput::LoadFile(const char* filename) {
-	// Open the file
-	SF_INFO sfinfo;
-	memset((void*)&sfinfo, 0, sizeof(SF_INFO));
-	file_handle_ = sf_open(filename, SFM_READ, &sfinfo);
+  // Open the file
+  SF_INFO sfinfo;
+  memset((void*)&sfinfo, 0, sizeof(SF_INFO));
+  file_handle_ = sf_open(filename, SFM_READ, &sfinfo);
 
-	if (file_handle_ == NULL) {
-		//! \todo Also display error reason
-		LOG_ERROR(_T("Couldn't read audio file '%s'"), filename);
-		return false;
-	}
+  if (file_handle_ == NULL) {
+    //! \todo Also display error reason
+    LOG_ERROR(_T("Couldn't read audio file '%s'"), filename);
+    return false;
+  }
 
   file_loaded_ = true;
   audio_channels_ = sfinfo.channels;
   sample_rate_ = sfinfo.samplerate;
-	file_position_samples_ = 0;
+  file_position_samples_ = 0;
 
   // A dummy signal bank to be passed to the Initialize() function.
   SignalBank s;
   s.Initialize(1, 1, 1);
 
-	// Self-initialize by calling Module::Initialize() explicitly. 
-	// The Initialize() call in this subclass is overloaded to prevent it from
-	// being called drectly. 
+  // Self-initialize by calling Module::Initialize() explicitly.
+  // The Initialize() call in this subclass is overloaded to prevent it from
+  // being called drectly.
   return Module::Initialize(s);
 }
 
@@ -109,19 +109,19 @@ bool ModuleFileInput::InitializeInternal(const SignalBank& input) {
     return false;
   }
   ResetInternal();
-	return true;
+  return true;
 }
 
 void ModuleFileInput::Process() {
   if (!file_loaded_)
     return;
-	sf_count_t read;
+  sf_count_t read;
   vector<float> buffer;
   buffer.resize(buffer_length_ * audio_channels_);
 
   while (true) {
-	  // Read buffersize bytes into buffer
-	  read = sf_readf_float(file_handle_, &buffer[0], buffer_length_);
+    // Read buffersize bytes into buffer
+    read = sf_readf_float(file_handle_, &buffer[0], buffer_length_);
 
     // Place the contents of the buffer into the signal bank
     int counter = 0;
@@ -132,24 +132,23 @@ void ModuleFileInput::Process() {
       }
     }
 
-	  // If the number of saples read is less than the buffer length, the end 
-	  // of the file has been reached.
-	  if (read < buffer_length_) {
-		  // Zero samples at end
-		  for (int c = 0; c < audio_channels_; ++c) {
+    // If the number of saples read is less than the buffer length, the end
+    // of the file has been reached.
+    if (read < buffer_length_) {
+      // Zero samples at end
+      for (int c = 0; c < audio_channels_; ++c) {
         for (int i = read; i < buffer_length_; ++i) {
           output_.set_sample(c, i, 0.0f);
         }
       }
-		  // When we're past the end of the buffer, stop looping.
-		  if (read == 0)
+      // When we're past the end of the buffer, stop looping.
+      if (read == 0)
         break;
-	  }
+    }
 
-	  // Update time
-	  output_.set_start_time(file_position_samples_);
-	  file_position_samples_ += read;
-
+    // Update time
+    output_.set_start_time(file_position_samples_);
+    file_position_samples_ += read;
     PushOutput();
   }
 }

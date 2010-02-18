@@ -17,19 +17,19 @@
 
 
 // Defines taken from HTKwrite.c and The HTK Book
-#define H_WAVEFORM		0	//sampled waveform
-#define H_LPC			1	//linear prediction filter coefficients
-#define H_LPREFC		2	//linear prediction reflection coefficients
-#define H_LPCEPSTRA		3	//LPC cepstral coefficients
-#define H_LPDELCEP		4	//LPC cepstra plus delta coefficients
-#define H_IREFC			5	//LPC reflection coef in 16 bit integer format
-#define H_MFCC			6	//mel-frequency cepstral coefficients
-#define H_FBANK			7	//log mel-filter bank channel outputs
-#define H_MELSPEC		8	//linear mel-filter bank channel outputs
-#define H_USER			9	//user defined sample kind
-#define H_DISCRETE		10	//vector quantised data
-#define H_PLP           11  // Perceptual Linear Prediction
-#define H_ANON          12
+#define H_WAVEFORM    0  //sampled waveform
+#define H_LPC         1  //linear prediction filter coefficients
+#define H_LPREFC      2  //linear prediction reflection coefficients
+#define H_LPCEPSTRA   3  //LPC cepstral coefficients
+#define H_LPDELCEP    4  //LPC cepstra plus delta coefficients
+#define H_IREFC       5  //LPC reflection coef in 16 bit integer format
+#define H_MFCC        6  //mel-frequency cepstral coefficients
+#define H_FBANK       7  //log mel-filter bank channel outputs
+#define H_MELSPEC     8  //linear mel-filter bank channel outputs
+#define H_USER        9  //user defined sample kind
+#define H_DISCRETE    10  //vector quantised data
+#define H_PLP         11  // Perceptual Linear Prediction
+#define H_ANON        12
 
 #define H_E 64 //has energy
 #define H_N 128 //absolute energy suppressed
@@ -63,38 +63,38 @@
 namespace aimc {
 class FileOutputHTK : public Module {
  public:
-	/*! \brief Create a new file output for an HTK format file. Use of this 
-	 *  class only really makes sense for the output of 1-D frames.
-	 */
-	FileOutputHTK(Parameters *pParam);
-	~FileOutputHTK();
+  /*! \brief Create a new file output for an HTK format file. Use of this 
+   *  class only really makes sense for the output of 1-D frames.
+   */
+  FileOutputHTK(Parameters *pParam);
+  ~FileOutputHTK();
 
-	/*! \brief Initialize the output to HTK.
-	 *  \param *filename Filename of the ouptut file to be created.
-	 *  If the file exists it will be overwritten
-	 *  \return Returns true on success of initialization.
-	 */
-	bool OpenFile(const char *filename, float frame_period_ms);
+  /*! \brief Initialize the output to HTK.
+   *  \param *filename Filename of the ouptut file to be created.
+   *  If the file exists it will be overwritten
+   *  \return Returns true on success of initialization.
+   */
+  bool OpenFile(const char *filename, float frame_period_ms);
   bool CloseFile();
   virtual void Process(const SignalBank &input);
-protected:
+ private:
   virtual bool InitializeInternal(const SignalBank &input);
   virtual void ResetInternal();
 
   float ByteSwapFloat(float d);
 
-	void WriteHeader(int nelements, float sampPeriod);
+  void WriteHeader(int nelements, float sampPeriod);
 
-	//! \brief Whether initialization is done or not
-	bool header_written_;
+  //! \brief Whether initialization is done or not
+  bool header_written_;
 
-	//! \brief Filename
-	char filename_[PATH_MAX];
-	//! \brief Internal pointer to the output file
-	FILE *file_handle_;
+  //! \brief Filename
+  char filename_[PATH_MAX];
+  //! \brief Internal pointer to the output file
+  FILE *file_handle_;
 
-	//! \brief Count of the number of samples in the file, written on close
-	int sample_count_;
+  //! \brief Count of the number of samples in the file, written on close
+  int sample_count_;
 
   int channel_count_;
   int buffer_length_;

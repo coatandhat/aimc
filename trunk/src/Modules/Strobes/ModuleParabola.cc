@@ -105,38 +105,38 @@ void ModuleParabola::Process(const SignalBank &input) {
       // Copy input signal to output signal
       output_.set_sample(ch, i, input.sample(ch, i));
 
-	    if (curr_sample_[ch] >= threshold_[ch]) {
-	      threshold_[ch] = curr_sample_[ch];
-		    if (prev_sample_[ch] < curr_sample_[ch]
-		        && next_sample_[ch] < curr_sample_[ch]) {
-		      // We have a strobe: set threshold and add strobe to the list
-		      output_.AddStrobe(ch, i - 1);
-		      last_threshold_[ch] = threshold_[ch];
-		      parab_var_samples_[ch] =
-		        floor(input.sample_rate()
-		              * (parab_wnull_[ch] - (threshold_[ch]
-		                                     - 2.0f * parab_a_[ch]  *parab_b_[ch])
-		                                    / (2.0f * parab_a_[ch])));
-		    }
+      if (curr_sample_[ch] >= threshold_[ch]) {
+        threshold_[ch] = curr_sample_[ch];
+        if (prev_sample_[ch] < curr_sample_[ch]
+            && next_sample_[ch] < curr_sample_[ch]) {
+          // We have a strobe: set threshold and add strobe to the list
+          output_.AddStrobe(ch, i - 1);
+          last_threshold_[ch] = threshold_[ch];
+          parab_var_samples_[ch] =
+            floor(input.sample_rate()
+                  * (parab_wnull_[ch] - (threshold_[ch]
+                                         - 2.0f * parab_a_[ch]  *parab_b_[ch])
+                                        / (2.0f * parab_a_[ch])));
+        }
       }
-	    if (output_.strobe_count(ch) > 0) {
+      if (output_.strobe_count(ch) > 0) {
         samples_since_last_strobe_[ch] = (i - 1)
              - output_.strobe(ch, output_.strobe_count(ch) - 1);
       } else {
-	      samples_since_last_strobe_[ch] = UINT_MAX;
+        samples_since_last_strobe_[ch] = UINT_MAX;
       }
 
-	    if (samples_since_last_strobe_[ch] > parab_var_samples_[ch]) {
-	      decay_constant = last_threshold_[ch] / strobe_decay_samples_;
-	      if (threshold_[ch] > decay_constant)
-		      threshold_[ch] -= decay_constant;
-	      else
-		      threshold_[ch] = 0.0f;
+      if (samples_since_last_strobe_[ch] > parab_var_samples_[ch]) {
+        decay_constant = last_threshold_[ch] / strobe_decay_samples_;
+        if (threshold_[ch] > decay_constant)
+          threshold_[ch] -= decay_constant;
+        else
+          threshold_[ch] = 0.0f;
       } else {
-	      threshold_[ch] = last_threshold_[ch]
-	          * (parab_a_[ch] * pow((samples_since_last_strobe_[ch]
-	                                 / input.sample_rate() + parab_b_[ch]),
-	                                2.0f) + height_);
+        threshold_[ch] = last_threshold_[ch]
+            * (parab_a_[ch] * pow((samples_since_last_strobe_[ch]
+                                   / input.sample_rate() + parab_b_[ch]),
+                                  2.0f) + height_);
       }
     }
   }
