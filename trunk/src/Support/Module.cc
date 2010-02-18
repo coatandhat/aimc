@@ -45,13 +45,15 @@ Module::~Module() {
 };
 
 bool Module::Initialize(const SignalBank &input) {
+  LOG_INFO_NN(_T("-> %s "), module_identifier_.c_str());
   // Validate the input
   if (!input.Validate()) {
-    LOG_ERROR("Input SignalBank not valid");
+    LOG_ERROR(_T("Input SignalBank not valid"));
     return false;
   }
   if (!InitializeInternal(input)) {
-    LOG_ERROR("Module initialization failed");
+    LOG_ERROR(_T("Initialization failed in module %s"),
+              module_identifier_.c_str());
     return false;
   }
   // If the module has an output bank, then we can set up the targets
@@ -59,7 +61,8 @@ bool Module::Initialize(const SignalBank &input) {
   if (output_.initialized()) {
     // Check that the output SignalBank has been set up correctly
     if (!output_.Validate()) {
-      LOG_ERROR("Output SignalBank not valid");
+      LOG_ERROR(_T("Output SignalBank not valid in module %s"),
+                module_identifier_.c_str());
       return false;
     }
     // Iterate through all the targets of this module, initializing
@@ -73,6 +76,8 @@ bool Module::Initialize(const SignalBank &input) {
         if (!(*it)->Initialize(output_))
           return false;
     }
+  } else {
+    LOG_INFO(_T("|"));
   }
   initialized_ = true;
   return true;

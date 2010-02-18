@@ -1,4 +1,4 @@
-// Copyright 2006-2010, Thomas Walters
+// Copyright 2008-2010, Thomas Walters
 //
 // AIM-C: A C++ implementation of the Auditory Image Model
 // http://www.acousticscale.org/AIMC
@@ -16,6 +16,50 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-int main () {
- // TODO
+#include <string>
+
+#include <stdlib.h>
+
+#include "Modules/Input/ModuleFileInput.h"
+#include "Modules/BMM/ModuleGammatone.h"
+#include "Modules/BMM/ModulePZFC.h"
+#include "Modules/NAP/ModuleHCL.h"
+#include "Modules/Strobes/ModuleParabola.h"
+#include "Modules/SAI/ModuleSAI.h"
+//#include "Modules/SSI/ModuleSSI.h"
+//#include "Modules/Profile/ModuleProfile.h"
+#include "Modules/Features/ModuleGaussians.h"
+#include "Modules/Output/FileOutputHTK.h"
+
+int main (int argc, char* argv[]) {
+  aimc::Parameters params;
+  aimc::ModuleFileInput input(&params);
+  //aimc::ModuleGammatone bmm(&params);
+  aimc::ModulePZFC bmm(&params);
+  aimc::ModuleHCL nap(&params);
+  aimc::ModuleParabola strobes(&params);
+  aimc::ModuleSAI sai(&params);
+  //aimc::ModuleSSI ssi(&params);
+  //aimc::ModuleProfile profile(&params);
+  aimc::ModuleGaussians features(&params);
+  aimc::FileOutputHTK output(&params);
+
+  std::string parameters_string = params.WriteString();
+  printf("%s", parameters_string.c_str());
+
+  input.AddTarget(&bmm);
+  bmm.AddTarget(&nap);
+  nap.AddTarget(&strobes);
+  strobes.AddTarget(&sai);
+  sai.AddTarget(&features);
+  //ssi.AddTarget(&profile);
+  //profile.AddTarget(&features);
+  features.AddTarget(&output);
+
+  output.OpenFile("test_output.htk", params.GetFloat("sai.frame_period_ms"));
+  if (input.LoadFile("test.wav")) {
+    input.Process();
+  } else {
+    printf("LoadFile failed");
+  }
 }

@@ -96,6 +96,7 @@
 namespace aimc {
 void LOG_ERROR(const char *sFmt, ...);
 void LOG_INFO(const char *sFmt, ...);
+void LOG_INFO_NN(const char *sFmt, ...);
 }  // namespace aimc
 
 #endif  // _AIMC_SUPPORT_COMMON_H_

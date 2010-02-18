@@ -31,13 +31,17 @@
 
 namespace aimc {
 ModuleFileInput::ModuleFileInput(Parameters *params) : Module(params) {
+  module_description_ = "File input using libsndfile";
+  module_identifier_ = "file_input";
+  module_type_ = "input";
+  module_version_ = "$Id$";
+
 	file_handle_ = NULL;
 	buffer_length_ = parameters_->DefaultInt("input.buffersize", 1024);
 
   file_position_samples_ = 0;
   file_loaded_ = false;
   audio_channels_ = 0;
-  buffer_length_ = 0;
   sample_rate_ = 0.0f;
 }
 
@@ -78,6 +82,11 @@ bool ModuleFileInput::LoadFile(const char* filename) {
   return Module::Initialize(s);
 }
 
+
+/* Do not call Initialize() on ModuleFileInput directly
+ * instead call LoadFile() with a filename to load.
+ * This will automatically initialize the module.
+ */
 bool ModuleFileInput::Initialize(const SignalBank& input) {
   LOG_ERROR(_T("Do not call Initialize() on ModuleFileInput directly "
                "instead call LoadFile() with a filename to load. "
@@ -91,13 +100,21 @@ void ModuleFileInput::Process(const SignalBank& input) {
 }
 
 bool ModuleFileInput::InitializeInternal(const SignalBank& input) {
-  if (!file_loaded_)
+  if (!file_loaded_) {
+    LOG_ERROR(_T("No file loaded in FileOutputHTK"));
     return false;
+  }
+  if (audio_channels_ < 1 || buffer_length_ < 1 || sample_rate_ < 0.0f) {
+    LOG_ERROR(_T("audio_channels, buffer_length_ or sample_rate too small"));
+    return false;
+  }
   ResetInternal();
 	return true;
 }
 
 void ModuleFileInput::Process() {
+  if (!file_loaded_)
+    return;
 	sf_count_t read;
   vector<float> buffer;
   buffer.resize(buffer_length_ * audio_channels_);

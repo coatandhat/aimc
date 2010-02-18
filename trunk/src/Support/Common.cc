@@ -35,4 +35,12 @@ void LOG_INFO(const char *sFmt, ...) {
   printf("\n");
   va_end(args);
 }
+
+void LOG_INFO_NN(const char *sFmt, ...) {
+  va_list args;
+  va_start(args, sFmt);
+  // Just print message to console (will be lost on windows with gui)
+  vprintf(sFmt, args);
+  va_end(args);
+}
 }  // namespace aimc

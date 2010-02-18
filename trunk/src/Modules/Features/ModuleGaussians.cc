@@ -32,8 +32,7 @@
 #include "Support/Common.h"
 
 namespace aimc {
-ModuleGaussians::ModuleGaussians(Parameters *pParam)
-: Module(pParam) {
+ModuleGaussians::ModuleGaussians(Parameters *params) : Module(params) {
   // Set module metadata
   module_description_ = "Gaussian Fitting to SSI profile";
   module_identifier_ = "gaussians";
