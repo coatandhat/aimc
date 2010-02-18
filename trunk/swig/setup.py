@@ -29,7 +29,8 @@ aimc_module = Extension('_aimc',
                                    '../src/Support/Parameters.cc',
                                    '../src/Support/SignalBank.cc', 
                                    '../src/Support/Module.cc',
-                                   '../src/Modules/Features/ModuleGaussians.cc'],
+                                   '../src/Modules/Features/ModuleGaussians.cc',
+                                   '../src/Modules/BMM/ModuleGammatone.cc'],
                         swig_opts = ['-c++','-I../src/'], 
                         include_dirs=['../src/']
                         )

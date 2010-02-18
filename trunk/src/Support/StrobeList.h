@@ -25,25 +25,25 @@
  * \version \$Id: StrobeList.h 1 2010-02-02 11:04:50Z tcw $
  */
 
-#ifndef _AIMC_STROBE_LIST_H_
-#define _AIMC_STROBE_LIST_H_
+#ifndef _AIMC_SUPPORT_STROBE_LIST_H_
+#define _AIMC_SUPPORT_STROBE_LIST_H_
 
+#include <deque>
 #include <math.h>
 
-#include "Support/util.h"
-
-typedef struct StrobePoint {
-  int iTime;
-  float fWeight;
-  float fWorkingWeight;
+namespace aimc {
+using std::deque;
+struct StrobePoint {
+  int time;
+  float weight;
+  float working_weight;
   StrobePoint() {
-   iTime=0;
-   fWeight=0.0f;
-   fWorkingWeight=0.0f;
+   time = 0;
+   weight = 0.0f;
+   working_weight = 0.0f;
   }
 };
 
-class StrobeList;
 /*!
  * \class Signal "Support/StrobeList.h"
  * \brief Modifiable List of Strobe Points, which must be ordered
@@ -54,90 +54,56 @@ class StrobeList {
   /*! \brief Create a new strobe list
    */
   inline StrobeList() {
-    m_iStrobeCount = 0;
-    m_iMaxStrobes=0;
-    m_iOffset=0;
-    m_pStrobes = NULL;
+    strobes_.resize(0);
   };
 
-  inline void Create(unsigned int iMaxStrobes) {
-    m_iMaxStrobes = iMaxStrobes;
-    m_pStrobes = new StrobePoint[m_iMaxStrobes+1];
-  }
-
   inline ~StrobeList() {
-    if (m_pStrobes != NULL)
-      delete [] m_pStrobes;
   };
 
   //! \brief Return the strobe time (in samples, can be negative)
-  inline unsigned int getTime(unsigned int iStrobeNumber) {
-    return m_pStrobes[GetBufferNumber(iStrobeNumber)].iTime;
-  };
-
-  //! \brief Return the strobe weight
-  inline float getWeight(unsigned int iStrobeNumber) {
-    return m_pStrobes[GetBufferNumber(iStrobeNumber)].fWeight;
-  };
-
-  //! \brief Return the strobe's working weight
-  inline float getWorkingWeight(unsigned int iStrobeNumber) {
-    return m_pStrobes[GetBufferNumber(iStrobeNumber)].fWorkingWeight;
+  inline StrobePoint Strobe(int strobe_number) {
+    return strobes_.at(strobe_number);
   };
 
     //! \brief Set the strobe weight
-  inline void setWeight(unsigned int iStrobeNumber, float fWeight) {
-    m_pStrobes[GetBufferNumber(iStrobeNumber)].fWeight = fWeight;
+  inline void SetWeight(int strobe_number, float weight) {
+    strobes_.at(strobe_number).weight = weight;
   };
 
     //! \brief Set the strobe's working weight
-  inline void setWorkingWeight(unsigned int iStrobeNumber,
-                               float fWorkingWeight) {
-    m_pStrobes[GetBufferNumber(iStrobeNumber)].fWorkingWeight = fWorkingWeight;
+  inline void SetWorkingWeight(int strobe_number, float working_weight) {
+    strobes_.at(strobe_number).working_weight = working_weight;
   };
 
   //! \brief Add a strobe to the list (must be in order)
-  inline void addStrobe(int iTime, float fWeight) {
-    if (m_iStrobeCount + 1 <= m_iMaxStrobes) {
-      m_iStrobeCount++;
-      m_pStrobes[GetBufferNumber(m_iStrobeCount)].iTime=iTime;
-      m_pStrobes[GetBufferNumber(m_iStrobeCount)].fWeight=fWeight;
-    }
+  inline void AddStrobe(int time, float weight) {
+    StrobePoint s;
+    s.time = time;
+    s.weight = weight;
+    strobes_.push_back(s);
   };
 
   //! \brief Delete a strobe from the list
-  inline void deleteFirstStrobe() {
-    if (m_iStrobeCount > 0) {
-      m_iOffset = (m_iOffset+1) % m_iMaxStrobes;
-      m_iStrobeCount--;
-    }
+  inline void DeleteFirstStrobe() {
+    strobes_.pop_front();
   };
 
   //! \brief Get the number of strobes
-  inline unsigned int getStrobeCount() {
-    return m_iStrobeCount;
+  inline int strobe_count() const {
+    return strobes_.size();
   };
 
-  //! \brief Shift the position of all strobes by subtracting iOffset from
+  //! \brief Shift the position of all strobes by subtracting offset from
   //! the time value of each
-  inline void shiftStrobes(unsigned int iOffset) {
-    for (unsigned int i=1; i<m_iStrobeCount+1; i++)
-      m_pStrobes[GetBufferNumber(i)].iTime-=iOffset;
+  inline void ShiftStrobes(int offset) {
+    for (unsigned int i = 0; i < strobes_.size(); ++i)
+      strobes_[i].time -= offset;
   };
-
- protected:
 
  private:
-  unsigned int m_iStrobeCount;
-  unsigned int m_iMaxStrobes;
-  unsigned int m_iOffset;
-  StrobePoint* m_pStrobes;
-
-  inline unsigned int GetBufferNumber(unsigned int iStrobeIndex) {
-    aimASSERT(((iStrobeIndex-1+m_iOffset) % m_iMaxStrobes)<m_iMaxStrobes);
-    return ((iStrobeIndex-1+m_iOffset) % m_iMaxStrobes) ;
-  };
+  deque<StrobePoint> strobes_;
 };
+}  // namespace aimc
 
 #endif /* _AIMC_STROBE_LIST_H_ */
 

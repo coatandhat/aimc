@@ -17,7 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /*! \file
- *  \brief
+ *  \brief ERB calculations
  */
 
 /*! \author: Thomas Walters <tom@acousticscale.org>
@@ -39,6 +39,10 @@ class ERBTools {
 
   static float Freq2ERBw(float freq) {
     return 24.7f * (4.37f * freq / 1000.0f + 1.0f);
+  }
+
+  static float ERB2Freq(float erb) {
+    return (pow(10, (erb / 21.4f)) - 1.0f) / 4.37f * 1000.0f;
   }
 };
 }

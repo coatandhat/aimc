@@ -84,11 +84,12 @@ bool SignalBank::Initialize(const SignalBank &input) {
 
   centre_frequencies_.resize(channel_count_, 0.0f);
   for (int i = 0; i < channel_count_; ++i) {
-    centre_frequencies_[i] = input.get_centre_frequency(i);
+    centre_frequencies_[i] = input.centre_frequency(i);
   }
 
   for (int i = 0; i < channel_count_; ++i) {
     signals_[i].resize(buffer_length_, 0.0f);
+    strobes_[i].resize(0);
   }
   initialized_ = true;
   return true;
@@ -122,8 +123,20 @@ void SignalBank::set_sample(int channel, int index, float value) {
   signals_[channel][index] = value;
 }
 
-const deque<int> &SignalBank::strobes(int channel) const {
-  return strobes_[channel];
+int SignalBank::strobe(int channel, int index) const {
+  return strobes_[channel][index];
+}
+
+int SignalBank::strobe_count(int channel) const {
+  return strobes_[channel].size();
+}
+
+void SignalBank::AddStrobe(int channel, int time) {
+  strobes_[channel].push_back(time);
+}
+
+void SignalBank::ResetStrobes(int channel) {
+  strobes_[channel].resize(0);
 }
 
 float SignalBank::sample_rate() const {
@@ -142,7 +155,7 @@ void SignalBank::set_start_time(int start_time) {
   start_time_ = start_time;
 }
 
-float SignalBank::get_centre_frequency(int i) const {
+float SignalBank::centre_frequency(int i) const {
   if (i < channel_count_)
     return centre_frequencies_[i];
   else

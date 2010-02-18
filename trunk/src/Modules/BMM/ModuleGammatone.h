@@ -26,6 +26,10 @@
 
 #include <vector>
 
+#include "Support/Module.h"
+#include "Support/Parameters.h"
+#include "Support/SignalBank.h"
+
 namespace aimc {
 using std::vector;
 class ModuleGammatone : public Module {
@@ -39,7 +43,8 @@ class ModuleGammatone : public Module {
   virtual bool InitializeInternal(const SignalBank& input);
   virtual void ResetInternal();
   vector<vector<float> > forward_;
-  vector<vector<float> > feedback_;
+  vector<vector<float> > back_;
+  vector<vector<float> > state_;
   vector<float> centre_frequencies_;
   int num_channels_;
   float max_frequency_;

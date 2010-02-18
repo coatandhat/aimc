@@ -61,12 +61,15 @@ class SignalBank {
 
   float sample(int channel, int index) const;
   void set_sample(int channel, int index, float value);
-  const deque<int> &strobes(int channel) const;
+  int strobe(int channel, int index) const;
+  int strobe_count(int channel) const;
+  void AddStrobe(int channel, int time);
+  void ResetStrobes(int channel);
   float sample_rate() const;
   int buffer_length() const;
   int start_time() const;
   void set_start_time(int start_time);
-  float get_centre_frequency(int i) const;
+  float centre_frequency(int i) const;
   void set_centre_frequency(int i, float cf);
   bool initialized() const;
   int channel_count() const;
@@ -74,7 +77,7 @@ class SignalBank {
   int channel_count_;
   int buffer_length_;
   vector<vector<float> > signals_;
-  vector<deque<int> > strobes_;
+  vector<vector<int> > strobes_;
   vector<float> centre_frequencies_;
   float sample_rate_;
   int start_time_;

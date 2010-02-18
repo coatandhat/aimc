@@ -78,21 +78,18 @@ class ModuleSAI : public Module {
 
   /*! \brief The maximum number strobes that can be active at the same time.
    *
-   *  A strobe lasts for strobe.maxdelay, there can only be a certain number
-   *  of strobes active at the same time, that's this value. It's used for
-   *  allocating memory buffers, like m_pUnfinishedStrobeCount and
-   *  m_pStrobeWeights.
    */
   int max_concurrent_strobes_;
 
-  int fire_period_samples_;
   int fire_counter_;
 
   //! \brief Period in milliseconds between output frames
-  float output_frame_period_ms_;
+  float frame_period_ms_;
+  int frame_period_samples_;
 
-  //! \brief Time of the last frame output
-  float last_output_frame_time_ms_;
+  float min_delay_ms_;
+  float max_delay_ms_;
+  int channel_count_;
 };
 }  // namespace aimc
 
