@@ -37,7 +37,7 @@ namespace aimc {
 using std::vector;
 class ModuleSAI : public Module {
  public:
-  ModuleSAI(Parameters *parameters);
+  explicit ModuleSAI(Parameters *parameters);
   virtual ~ModuleSAI();
   void Process(const SignalBank &input);
 
@@ -50,28 +50,36 @@ class ModuleSAI : public Module {
 
   virtual void ResetInternal();
 
-  //! \brief Temporary buffer for constructing the current SAI frame
+  /*! \brief Temporary buffer for constructing the current SAI frame
+   */
   SignalBank sai_temp_;
 
-  //! \brief List of strobes for each channel
+  /*! \brief List of strobes for each channel
+   */
   vector<StrobeList> active_strobes_;
 
-  //! \brief Buffer decay parameter
+  /*! \brief Buffer decay parameter
+   */
   float buffer_memory_decay_;
 
-  //! \brief Sample index of minimum strobe delay
+  /*! \brief Sample index of minimum strobe delay
+   */
   int min_strobe_delay_idx_;
 
-  //! \brief Sample index of maximum strobe delay
+  /*! \brief Sample index of maximum strobe delay
+   */
   int max_strobe_delay_idx_;
 
-  //! \brief Factor with which the SAI should be decayed
+  /*! \brief Factor with which the SAI should be decayed
+   */
   float sai_decay_factor_;
 
-  //! \brief Precomputed 1/n^alpha values for strobe weighting
+  /*! \brief Precomputed 1/n^alpha values for strobe weighting
+   */
   vector<float> strobe_weights_;
 
-  //! \brief Next Strobe for each channels
+  /*! \brief Next Strobe for each channels
+   */
   vector<int> next_strobes_;
 
   float strobe_weight_alpha_;
@@ -83,7 +91,8 @@ class ModuleSAI : public Module {
 
   int fire_counter_;
 
-  //! \brief Period in milliseconds between output frames
+  /*! \brief Period in milliseconds between output frames
+   */
   float frame_period_ms_;
   int frame_period_samples_;
 

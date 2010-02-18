@@ -58,11 +58,12 @@ void ModuleFileInput::ResetInternal() {
 bool ModuleFileInput::LoadFile(const char* filename) {
   // Open the file
   SF_INFO sfinfo;
-  memset((void*)&sfinfo, 0, sizeof(SF_INFO));
+  memset(reinterpret_cast<void*>(&sfinfo), 0, sizeof(SF_INFO));
   file_handle_ = sf_open(filename, SFM_READ, &sfinfo);
 
   if (file_handle_ == NULL) {
-    //! \todo Also display error reason
+    /*! \todo Also display error reason
+     */
     LOG_ERROR(_T("Couldn't read audio file '%s'"), filename);
     return false;
   }

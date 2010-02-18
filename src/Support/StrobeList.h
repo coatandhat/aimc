@@ -28,8 +28,8 @@
 #ifndef _AIMC_SUPPORT_STROBE_LIST_H_
 #define _AIMC_SUPPORT_STROBE_LIST_H_
 
-#include <deque>
 #include <math.h>
+#include <deque>
 
 namespace aimc {
 using std::deque;
@@ -38,9 +38,9 @@ struct StrobePoint {
   float weight;
   float working_weight;
   StrobePoint() {
-   time = 0;
-   weight = 0.0f;
-   working_weight = 0.0f;
+    time = 0;
+    weight = 0.0f;
+    working_weight = 0.0f;
   }
 };
 
@@ -60,22 +60,26 @@ class StrobeList {
   inline ~StrobeList() {
   };
 
-  //! \brief Return the strobe time (in samples, can be negative)
+  /*! \brief Return the strobe time (in samples, can be negative)
+   */
   inline StrobePoint Strobe(int strobe_number) {
     return strobes_.at(strobe_number);
   };
 
-    //! \brief Set the strobe weight
+  /*! \brief Set the strobe weight
+   */
   inline void SetWeight(int strobe_number, float weight) {
     strobes_.at(strobe_number).weight = weight;
   };
 
-    //! \brief Set the strobe's working weight
+  /*! \brief Set the strobe's working weight
+   */
   inline void SetWorkingWeight(int strobe_number, float working_weight) {
     strobes_.at(strobe_number).working_weight = working_weight;
   };
 
-  //! \brief Add a strobe to the list (must be in order)
+  /*! \brief Add a strobe to the list (must be in order)
+   */
   inline void AddStrobe(int time, float weight) {
     StrobePoint s;
     s.time = time;
@@ -83,18 +87,21 @@ class StrobeList {
     strobes_.push_back(s);
   };
 
-  //! \brief Delete a strobe from the list
+  /*! \brief Delete a strobe from the list
+   */
   inline void DeleteFirstStrobe() {
     strobes_.pop_front();
   };
 
-  //! \brief Get the number of strobes
+  /*! \brief Get the number of strobes
+   */
   inline int strobe_count() const {
     return strobes_.size();
   };
 
-  //! \brief Shift the position of all strobes by subtracting offset from
-  //! the time value of each
+  /*! \brief Shift the position of all strobes by subtracting offset from
+   *  the time value of each
+   */
   inline void ShiftStrobes(int offset) {
     for (unsigned int i = 0; i < strobes_.size(); ++i)
       strobes_[i].time -= offset;

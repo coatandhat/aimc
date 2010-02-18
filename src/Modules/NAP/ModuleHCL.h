@@ -38,7 +38,7 @@ namespace aimc {
 using std::vector;
 class ModuleHCL : public Module {
  public:
-  ModuleHCL(Parameters *parameters);
+  explicit ModuleHCL(Parameters *parameters);
   virtual ~ModuleHCL();
 
   virtual void Process(const SignalBank &input);
@@ -52,25 +52,33 @@ class ModuleHCL : public Module {
 
   virtual void ResetInternal();
 
-  //! \brief Do lowpass filtering?
+  /*! \brief Do lowpass filtering?
+   */
   bool do_lowpass_;
 
-  //! \brief Do log compression?
+  /*! \brief Do log compression?
+   */
   bool do_log_;
 
-  //! \brief Cutoff frequency for lowpass filter
+  /*! \brief Cutoff frequency for lowpass filter
+   */
   float lowpass_cutoff_;
 
-  //! \brief Order of Lowpass Filter
+  /*! \brief Order of Lowpass Filter
+   */
   int lowpass_order_;
 
-  //! \brief Internal record of the number of channels in the input
+  /*! \brief Internal record of the number of channels in the input
+   */
   int channel_count_;
 
-  //! \brief Time constant corresponsing to the lowpass filter cutoff freqency
+  /*! \brief Time constant corresponsing to the lowpass filter 
+   *  cutoff freqency
+   */
   float time_constant_;
 
-  //! \brief Lowpass filter state variables
+  /*! \brief Lowpass filter state variables
+   */
   float xn_;
   float yn_;
   vector<vector<float> > yns_;

@@ -37,7 +37,7 @@
 namespace aimc {
 class ModuleFileInput : public Module {
  public:
-  ModuleFileInput(Parameters *pParam);
+  explicit ModuleFileInput(Parameters *pParam);
   virtual ~ModuleFileInput();
 
   /*! \brief Initializes this input device using an audio file
@@ -46,29 +46,36 @@ class ModuleFileInput : public Module {
    */
   bool LoadFile(const char *sFilename);
 
-  //! \brief Process the loaded file.
+  /*! \brief Process the loaded file.
+   */
   void Process();
 
-  //! \brief Dummy Initialize function. Call LoadFile instead.
+  /*! \brief Dummy Initialize function. Call LoadFile instead.
+   */
   virtual bool Initialize(const SignalBank &input);
 
-  //! \brief Dummy funciton to comply with the Module specification. Gives an
-  //  error message when called.
+  /*! \brief Dummy funciton to comply with the Module specification. Gives an
+   *  error message when called.
+   */
   virtual void Process(const SignalBank &input);
 
  private:
-  //! \brief Prepare the module
-  //! \param input Input SignalBank
-  //! \param output true on success false on failure
+  /*! \brief Prepare the module
+   *  \param input Input SignalBank
+   *  \param output true on success false on failure
+   */
   virtual bool InitializeInternal(const SignalBank &input);
 
-  //! \brief Rewind to the start of the file
+  /*! \brief Rewind to the start of the file
+   */
   virtual void ResetInternal();
 
-  //! \brief File descriptor
+  /*! \brief File descriptor
+   */
   SNDFILE *file_handle_;
 
-  //! \brief Current position in time of the file
+  /*! \brief Current position in time of the file
+   */
   int file_position_samples_;
   bool file_loaded_;
   int audio_channels_;
@@ -77,4 +84,4 @@ class ModuleFileInput : public Module {
 };
 }  // namespace aimc
 
-#endif // _AIMC_MODULES_INPUT_FILE_H_
+#endif  // _AIMC_MODULES_INPUT_FILE_H_

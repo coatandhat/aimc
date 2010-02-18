@@ -27,10 +27,10 @@
  */
 
 #ifdef _WINDOWS
-#  include <direct.h> // for _mkdir&_rmdir
+#  include <direct.h>  // for _mkdir&_rmdir
 #else
 #  include <sys/types.h>
-#  include <dirent.h> // for opendir&friends
+#  include <dirent.h>  // for opendir&friends
 #endif
 #include <stdio.h>
 #include <string.h>
@@ -63,7 +63,7 @@ bool FileOutputHTK::OpenFile(const char* filename, float frame_period_ms) {
   }
 
   // Check that the output file exists and is writeable
-  if ((file_handle_ = fopen(filename, "wb"))==NULL ) {
+  if ((file_handle_ = fopen(filename, "wb")) == NULL) {
     LOG_ERROR(_T("Couldn't open output file '%s' for writing."), filename);
     return false;
   }
@@ -157,7 +157,7 @@ void FileOutputHTK::Process(const SignalBank &input) {
     for (int i = 0; i < input.buffer_length(); i++) {
       s = input.sample(ch, i);
       s = ByteSwapFloat(s);
-      fwrite(&s, sizeof(float), 1, file_handle_);
+      fwrite(&s, sizeof(s), 1, file_handle_);
     }
   }
   sample_count_++;
@@ -195,5 +195,5 @@ float FileOutputHTK::ByteSwapFloat(float d) {
 
   return a;
 }
-}  //namespace aimc
+}  // namespace aimc
 

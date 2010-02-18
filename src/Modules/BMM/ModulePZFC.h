@@ -16,14 +16,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-//! \file
-//! \brief Dick Lyon's Pole-Zero Filter Cascade - implemented in C++ by Tom
-//! Walters from the AIM-MAT module based on Dick Lyon's code.
-//!
-//! \author Thomas Walters <tom@acousticscale.org>
-//! \date created 2008/02/05
-//! \version \$Id: ModulePZFC.h 2 2010-02-02 12:59:50Z tcw $
-//!
+/*! \file
+ *  \brief Dick Lyon's Pole-Zero Filter Cascade - implemented in C++ by Tom
+ *  Walters from the AIM-MAT module based on Dick Lyon's code.
+ *
+ *  \author Thomas Walters <tom@acousticscale.org>
+ *  \date created 2008/02/05
+ * \version \$Id: ModulePZFC.h 2 2010-02-02 12:59:50Z tcw $
+ */
+
 #ifndef _AIMC_MODULES_BMM_PZFC_H_
 #define _AIMC_MODULES_BMM_PZFC_H_
 
@@ -37,36 +38,44 @@ namespace aimc {
 using std::vector;
 class ModulePZFC : public Module {
  public:
-  ModulePZFC(Parameters *pParam);
+  explicit ModulePZFC(Parameters *pParam);
   virtual ~ModulePZFC();
 
-  //! \brief Process a buffer
+  /*! \brief Process a buffer
+   */
   virtual void Process(const SignalBank &input);
 
  private:
-   //! \brief Reset all internal state variables to their initial values
-   virtual void ResetInternal();
+  /*! \brief Reset all internal state variables to their initial values
+   */
+  virtual void ResetInternal();
 
-  //! \brief Prepare the module
-  //! \param input Input SignalBank
-  //! \param output true on success false on failure
+  /*! \brief Prepare the module
+   *  \param input Input SignalBank
+   *  \param output true on success false on failure
+   */
   virtual bool InitializeInternal(const SignalBank &input);
 
-  //! \brief Set the filterbank parameters according to a fit matrix from Unoki
-  //! and Lyon's fitting routine
+  /*! \brief Set the filterbank parameters according to a fit matrix from Unoki
+   *  and Lyon's fitting routine
+   */
   bool SetPZBankCoeffsERBFitted();
 
-  //! \brief Sets the general filterbank coefficients
+  /*! \brief Sets the general filterbank coefficients
+   */
   bool SetPZBankCoeffs();
 
-  //! \brief Automatic Gain Control
+  /*! \brief Automatic Gain Control
+   */
   void AGCDampStep();
 
-  //! \brief Detector function - halfwave rectification etc. Used internally,
-  //! but not applied to the output.
+  /*! \brief Detector function - halfwave rectification etc. Used internally,
+   *  but not applied to the output.
+   */
   float DetectFun(float fIN);
 
-  //! \brief Minimum
+  /*! \brief Minimum
+   */
   inline float Minimum(float a, float b);
 
   int channel_count_;

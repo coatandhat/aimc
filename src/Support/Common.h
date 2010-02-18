@@ -85,7 +85,7 @@
 #  define AIM_ASSERT(x) { \
      if (!(x)) { \
        LOG_ERROR("Assertion failed.\n"); \
-       *((char*)0) = 0; \
+       *(reinterpret_cast<char*>(0)) = 0; \
      } \
   }
 #else

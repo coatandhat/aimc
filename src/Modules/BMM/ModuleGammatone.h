@@ -23,6 +23,8 @@
  *  \date created 2009/11/13
  *  \version \$Id$
  */
+#ifndef _AIMC_MODULES_BMM_GAMMATONE_H_
+#define _AIMC_MODULES_BMM_GAMMATONE_H_
 
 #include <vector>
 
@@ -34,9 +36,10 @@ namespace aimc {
 using std::vector;
 class ModuleGammatone : public Module {
  public:
-  ModuleGammatone(Parameters *params);
+  explicit ModuleGammatone(Parameters *params);
   virtual ~ModuleGammatone();
-  //! \brief Process a buffer
+  /*! \brief Process a buffer
+   */
   virtual void Process(const SignalBank &input);
 
  private:
@@ -51,3 +54,4 @@ class ModuleGammatone : public Module {
   float min_frequency_;
 };
 }  // namespace aimc
+#endif  // _AIMC_MODULES_BMM_GAMMATONE_H_
