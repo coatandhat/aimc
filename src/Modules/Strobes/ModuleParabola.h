@@ -42,33 +42,33 @@ namespace aimc {
 using std::vector;
 class ModuleParabola : public Module {
  public:
-	ModuleParabola(Parameters *params);
-	virtual ~ModuleParabola();
-	void Process(const SignalBank& input);
+  ModuleParabola(Parameters *params);
+  virtual ~ModuleParabola();
+  void Process(const SignalBank& input);
 private:
   /*! \brief Prepare the module
-	 *  \param input Input signal bank
-	 *  \param output true on success false on failure
-	 */
-	virtual bool InitializeInternal(const SignalBank& input);
+   *  \param input Input signal bank
+   *  \param output true on success false on failure
+   */
+  virtual bool InitializeInternal(const SignalBank& input);
 
-	virtual void ResetInternal();
+  virtual void ResetInternal();
 
 
-	//! \brief Number of samples over which the strobe should be decayed to zero
-	int strobe_decay_samples_;
+  //! \brief Number of samples over which the strobe should be decayed to zero
+  int strobe_decay_samples_;
 
-	/*! \brief Current strobe thresholds, one for each bank channel.
-	 *
-	 *  This value is decayed over time.
-	 */
-	vector<float> threshold_;
+  /*! \brief Current strobe thresholds, one for each bank channel.
+   *
+   *  This value is decayed over time.
+   */
+  vector<float> threshold_;
 
-	/*! \brief Signal value at the last strobe, one for each bank channel.
-	 *
-	 *  This value is not decayed over time.
-	 */
-	vector<float> last_threshold_;
+  /*! \brief Signal value at the last strobe, one for each bank channel.
+   *
+   *  This value is not decayed over time.
+   */
+  vector<float> last_threshold_;
 
   //! \brief Parabola height parameter
   float height_;
