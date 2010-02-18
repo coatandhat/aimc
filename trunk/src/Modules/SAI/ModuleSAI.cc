@@ -69,7 +69,7 @@ bool ModuleSAI::InitializeInternal(const SignalBank &input) {
     LOG_ERROR("Failed to create output buffer in SAI module");
     return false;
   }
-  for (int i = 0; i < input.channel_count(); ++i ) {
+  for (int i = 0; i < input.channel_count(); ++i) {
     output_.set_centre_frequency(i, input.centre_frequency(i));
   }
 
@@ -114,7 +114,6 @@ void ModuleSAI::ResetInternal() {
 }
 
 void ModuleSAI::Process(const SignalBank &input) {
-
   // Reset the next strobe times
   next_strobes_.clear();
   next_strobes_.resize(output_.channel_count(), 0);
@@ -213,8 +212,7 @@ void ModuleSAI::Process(const SignalBank &input) {
       }
 
       next_strobes_[ch] = next_strobe_index;
-
-    } // End loop over channels
+    }  // End loop over channels
 
     fire_counter_--;
 
@@ -243,7 +241,7 @@ void ModuleSAI::Process(const SignalBank &input) {
       output_.set_start_time(input.start_time() + i);
       PushOutput();
     }
-  } // End loop over samples
+  }  // End loop over samples
 }
 
 ModuleSAI::~ModuleSAI() {

@@ -39,17 +39,18 @@
  */
 namespace aimc {
 using std::vector;
-class ModuleGaussians : public Module
-{
+class ModuleGaussians : public Module {
  public:
-  ModuleGaussians(Parameters *pParam);
+  explicit ModuleGaussians(Parameters *pParam);
   virtual ~ModuleGaussians();
 
-  //! \brief Process a buffer
+  /*! \brief Process a buffer
+   */
   virtual void Process(const SignalBank &input);
 
  private:
-  //! \brief Reset the internal state of the module
+  /*! \brief Reset the internal state of the module
+   */
   virtual void ResetInternal();
 
   /*! \brief Prepare the module
@@ -66,11 +67,11 @@ class ModuleGaussians : public Module
 
   /*! \brief Constant variance of Gaussians
    */
-  double m_fParamVar;
+  float m_fParamVar;
 
   /*! \brief posterior probability expansion exponent
    */
-  double m_fParamPosteriorExp;
+  float m_fParamPosteriorExp;
 
   /*! \brief Maximum Number of iterations
    */
@@ -78,19 +79,19 @@ class ModuleGaussians : public Module
 
   /*! \brief convergence criterion
    */
-  double m_fParamPriorsConverged;
+  float m_fParamPriorsConverged;
 
   /*! \brief The amplitudes of the components (priors)
    */
-  vector<double> m_pA;
+  vector<float> m_pA;
 
   /*! \brief The means of the components (priors)
    */
-  vector<double> m_pMu;
+  vector<float> m_pMu;
 
   /*! \brief The spectral profile of the incoming buffer
    */
-  vector<double> m_pSpectralProfile;
+  vector<float> m_pSpectralProfile;
 
   int m_iNumChannels;
 };

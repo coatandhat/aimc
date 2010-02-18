@@ -80,7 +80,7 @@ void ModuleHCL::Process(const SignalBank &input) {
       } else {
         float s = input[c][i];
         if (do_log_) {
-          s *= pow(2.0f,15);
+          s *= pow(2.0f, 15);
           if (s < 1.0f) s = 1.0f;
           s = 20.0f * log10(s);
         }
@@ -88,7 +88,7 @@ void ModuleHCL::Process(const SignalBank &input) {
       }
     }
     if (do_lowpass_) {
-      float b = exp( -1.0f / (input.sample_rate() * time_constant_));
+      float b = exp(-1.0f / (input.sample_rate() * time_constant_));
       float gain = 1.0f / (1.0f - b);
       for (int j = 0; j < lowpass_order_; j++) {
         for (int k = 0; k < output_.buffer_length(); ++k) {

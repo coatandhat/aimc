@@ -1,4 +1,4 @@
-// Copyright 2006-2010, Willem van Engen
+// Copyright 2006-2010, Willem van Engen, Thomas Walters
 //
 // AIM-C: A C++ implementation of the Auditory Image Model
 // http://www.acousticscale.org/AIMC
@@ -16,31 +16,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-//!
-//! \file
-//! \brief Main parameters store
-//!
-//! \author Willem van Engen <cnbh@willem.engen.nl>
-//! \date created 2006/09/21
-//! \version \$Id: Parameters.h 4 2010-02-03 18:44:58Z tcw $
+/*!
+ *  \file
+ *  \brief Main parameters store
+ *
+ *  \author Willem van Engen <cnbh@willem.engen.nl>
+ *  \author Thomas Walters <tom@acousticscale.org>
+ *  \date created 2006/09/21
+ *  \version \$Id: Parameters.h 4 2010-02-03 18:44:58Z tcw $
+ */
 
 #ifndef _AIMC_SUPPORT_PARAMETERS_H_
 #define _AIMC_SUPPORT_PARAMETERS_H_
 
 #include <string>
 
-// If not _WINDOWS, please compile in Support/ConvertUTF.c
-#ifdef _UNICODE
-// Here we want to use the ANSI version of all the non wxWidgets stuff, but
-// convert stribngs to Unicode when used in wxWidgets. This allows all the
-// string handling in the non-GUI version to use ANSI text only, but to pass
-// unicode text to the GUI
-#undef _UNICODE
 #include "Support/SimpleIni.h"
-#define _UNICODE
-#else
-#include "Support/SimpleIni.h"
-#endif
 
 namespace aimc {
 /*!
@@ -48,7 +39,7 @@ namespace aimc {
  * \brief Main parameter store for parameters
  */
 class Parameters {
-public:
+ public:
   Parameters();
   ~Parameters();
 
@@ -176,12 +167,13 @@ public:
    * \param sName pointer to a string
    * \return true on success
    */
-   std::string WriteString();
+  std::string WriteString();
 
-  //! \brief Maximum length of a parameter name in characters
+  /*! \brief Maximum length of a parameter name in characters
+   */
   static const unsigned int MaxParamNameLength = 128;
 
-protected:
+ protected:
   /*!
    * \brief Load parameter file
    * \param sParamFilename Filename of parameter file to read
@@ -203,11 +195,14 @@ protected:
    */
   static const char *m_SDefaultIniSection;
 
-  //! \brief Parameter file object
+  /*! \brief Parameter file object
+   */
   CSimpleIniCase *m_pIni;
-  //! \brief \c preset.include nesting counter to avoid loops
+  /*! \brief \c preset.include nesting counter to avoid loops
+   */
   unsigned int m_iNestCount;
-  //! \brief maximum value m_iNestCount may reach
+  /*! \brief maximum value m_iNestCount may reach
+   */
   static const unsigned int m_iNestCountMaximum = 16;
 };
 }

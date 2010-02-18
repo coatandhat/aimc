@@ -24,8 +24,8 @@
  *  \version \$Id$
  */
 
-#include <complex>
 #include <math.h>
+#include <complex>
 #include "Support/ERBTools.h"
 
 #include "Modules/BMM/ModuleGammatone.h"
@@ -64,8 +64,8 @@ bool ModuleGammatone::InitializeInternal(const SignalBank& input) {
   float erb_current = erb_min;
 
   for (int i = 0; i < num_channels_; ++i) {
-   centre_frequencies_[i] = ERBTools::ERB2Freq(erb_current);
-   erb_current += delta_erb;
+    centre_frequencies_[i] = ERBTools::ERB2Freq(erb_current);
+    erb_current += delta_erb;
   }
 
   forward_.resize(num_channels_);
@@ -82,8 +82,8 @@ bool ModuleGammatone::InitializeInternal(const SignalBank& input) {
     // Bandwidth parameter
     float b = 1.019f * 2.0f * M_PI * erb;
 
-    // All of the following expressions are derived in Apple TR #35, "An 
-    // Efficient Implementation of the Patterson-Holdsworth Cochlear 
+    // All of the following expressions are derived in Apple TR #35, "An
+    // Efficient Implementation of the Patterson-Holdsworth Cochlear
     // Filter Bank".
 
     // Calculate the gain:
@@ -152,7 +152,7 @@ void ModuleGammatone::Process(const SignalBank &input) {
 
   for (int ch = 0; ch < num_channels_; ++ch, ++a, ++b, ++s) {
     for (int i = 0; i < input.buffer_length(); ++i) {
-      // Direct-form-II IIR filter  
+      // Direct-form-II IIR filter
       float in = input.sample(audio_channel, i);
       float out = (*b)[0] * in + (*s)[0];
       for (unsigned int stage = 1; stage < s->size(); ++stage)
@@ -163,4 +163,4 @@ void ModuleGammatone::Process(const SignalBank &input) {
   PushOutput();
 }
 
-} // namespace aimc
+}  // namespace aimc

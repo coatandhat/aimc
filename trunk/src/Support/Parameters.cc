@@ -16,13 +16,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-//!
-//! \file
-//! \brief Main parameters store
-//!
-//! \author Willem van Engen <cnbh@willem.engen.nl>
-//! \date created 2006/09/21
-//! \version \$Id: Parameters.cc 4 2010-02-03 18:44:58Z tcw $
+/*!
+ * \file
+ * \brief Main parameters store
+ *
+ * \author Willem van Engen <cnbh@willem.engen.nl>
+ * \date created 2006/09/21
+ * \version \$Id: Parameters.cc 4 2010-02-03 18:44:58Z tcw $
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -130,14 +131,14 @@ unsigned int Parameters::GetUInt(const char *sName) {
 }
 
 float Parameters::GetFloat(const char *sName) {
-  return (float)atof(GetString(sName));
+  return atof(GetString(sName));
 }
 
 bool Parameters::GetBool(const char *sName) {
   const char *sVal = GetString(sName);
-  if (strcmp(sVal, "true")==0 || strcmp(sVal, "on")==0 ||
-      strcmp(sVal, "yes")==0 || strcmp(sVal, "1")==0 ||
-      strcmp(sVal, "y")==0 || strcmp(sVal, "t")==0)
+  if (strcmp(sVal, "true") == 0 || strcmp(sVal, "on") == 0 ||
+      strcmp(sVal, "yes") == 0 || strcmp(sVal, "1") == 0 ||
+      strcmp(sVal, "y") == 0 || strcmp(sVal, "t") == 0)
     return true;
   else
     return false;
@@ -145,11 +146,12 @@ bool Parameters::GetBool(const char *sName) {
 
 bool Parameters::IsSet(const char *sName) {
   AIM_ASSERT(m_pIni);
-  return m_pIni->GetValue(m_SDefaultIniSection, sName, NULL)!=NULL;
+  return m_pIni->GetValue(m_SDefaultIniSection, sName, NULL) != NULL;
 }
 
 bool Parameters::Parse(const char *sCmd) {
-  //! \todo There is some code duplication here from Parameters::Merge()
+  /*! \todo There is some code duplication here from Parameters::Merge()
+   */
 
   CSimpleIniCase *pIni2 = new CSimpleIniCase(false, false, true);
   AIM_ASSERT(pIni2);
@@ -193,9 +195,9 @@ bool Parameters::LoadFile(const char *sParamFilename) {
   }
   m_iNestCount++;
 
-  if ( (siErr=m_pIni->LoadFile(sParamFilename))<0 ) {
+  if ((siErr=m_pIni->LoadFile(sParamFilename)) < 0) {
     // Don't complain if file not found, but do return error
-    if (siErr!=SI_FILE)
+    if (siErr != SI_FILE)
       LOG_ERROR(_T("Couldn't parse parameters from '%s'"), sParamFilename);
     m_iNestCount--;
     return false;
@@ -255,7 +257,7 @@ bool Parameters::Save(const char *sParamFilename) {
       return false;
     }
 
-  if ((siErr = m_pIni->SaveFile(pSaveFile)) < 0 ) {
+  if ((siErr = m_pIni->SaveFile(pSaveFile)) < 0) {
     LOG_ERROR(_T("Couldn't save parameters in file '%s'"), sParamFilename);
     return false;
   }
@@ -270,7 +272,7 @@ std::string Parameters::WriteString() {
   SI_Error siErr;
   std::string output_string;
 
-  if ((siErr = m_pIni->Save(output_string)) < 0 ) {
+  if ((siErr = m_pIni->Save(output_string)) < 0) {
     LOG_ERROR(_T("Couldn't write parameters to string"));
     return false;
   }

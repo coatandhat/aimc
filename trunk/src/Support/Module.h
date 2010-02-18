@@ -107,7 +107,7 @@ class Module {
   /*! \brief Reset the internal state of this module and all its children to
    *  their initial state.
    */
-  void Reset() ;
+  void Reset();
 
   /*! \brief
    */

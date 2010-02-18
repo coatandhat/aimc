@@ -42,10 +42,10 @@ namespace aimc {
 using std::vector;
 class ModuleParabola : public Module {
  public:
-  ModuleParabola(Parameters *params);
+  explicit ModuleParabola(Parameters *params);
   virtual ~ModuleParabola();
   void Process(const SignalBank& input);
-private:
+ private:
   /*! \brief Prepare the module
    *  \param input Input signal bank
    *  \param output true on success false on failure
@@ -55,7 +55,9 @@ private:
   virtual void ResetInternal();
 
 
-  //! \brief Number of samples over which the strobe should be decayed to zero
+  /*! \brief Number of samples over which the strobe should be decayed to
+   *  zero
+   */
   int strobe_decay_samples_;
 
   /*! \brief Current strobe thresholds, one for each bank channel.
@@ -70,25 +72,32 @@ private:
    */
   vector<float> last_threshold_;
 
-  //! \brief Parabola height parameter
+  /*! \brief Parabola height parameter
+   */
   float height_;
 
-  //! \brief Parabola width paramters
+  /*! \brief Parabola width paramters
+   */
   float parabw_;
 
-  //! \brief Parabola a value
+  /*! \brief Parabola a value
+   */
   vector<float> parab_a_;
 
-  //! \brief Parabola b value
+  /*! \brief Parabola b value
+   */
   vector<float> parab_b_;
 
-  //! \brief Parabola calculation variable
+  /*! \brief Parabola calculation variable
+   */
   vector<float> parab_wnull_;
 
-  //! \brief Parabola calculation variable
+  /*! \brief Parabola calculation variable
+   */
   vector<int> parab_var_samples_;
 
-  //! \brief Storage for the number of samples since the last strobe
+  /*! \brief Storage for the number of samples since the last strobe
+   */
   vector<int> samples_since_last_strobe_;
 
   vector<float> prev_sample_;

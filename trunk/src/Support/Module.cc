@@ -131,5 +131,5 @@ void Module::PushOutput() {
     }
   }
 }
-} // namespace aimc
+}  // namespace aimc
 
