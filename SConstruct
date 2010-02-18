@@ -97,10 +97,13 @@ common_sources = ['Support/Common.cc',
                   'Support/Parameters.cc',
                   'Support/Module.cc',
                   'Modules/Input/ModuleFileInput.cc',
+                  'Modules/BMM/ModuleGammatone.cc',
                   'Modules/BMM/ModulePZFC.cc',
                   'Modules/NAP/ModuleHCL.cc',
-                  #'Modules/SAI/ModuleSAI.cc',
-                  'Modules/Features/ModuleGaussians.cc']
+                  'Modules/Strobes/ModuleParabola.cc',
+                  'Modules/SAI/ModuleSAI.cc',
+                  'Modules/Features/ModuleGaussians.cc',
+                  'Modules/Output/FileOutputHTK.cc']
     
 if not target_platform == 'win32':
   # On windows, utf support is builtin for SimpleIni

@@ -1,4 +1,4 @@
-// Copyright 2008-2010, Thomas Walters
+// Copyright 2010, Thomas Walters
 //
 // AIM-C: A C++ implementation of the Auditory Image Model
 // http://www.acousticscale.org/AIMC
@@ -24,6 +24,7 @@
 #include "Support/Parameters.h"
 #include "Support/SignalBank.h"
 #include "Modules/Features/ModuleGaussians.h"
+#include "Modules/BMM/ModuleGammatone.h"
 %}
 
 namespace aimc {
@@ -97,6 +98,15 @@ class ModuleGaussians : public Module
  public:
 	ModuleGaussians(Parameters *pParam);
 	virtual ~ModuleGaussians();
+	virtual void Process(const SignalBank &input);
+	void Reset();
+};
+
+class ModuleGammatone : public Module
+{
+ public:
+	ModuleGammatone(Parameters *pParam);
+	virtual ~ModuleGammatone();
 	virtual void Process(const SignalBank &input);
 	void Reset();
 };
