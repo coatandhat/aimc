@@ -102,6 +102,8 @@ common_sources = ['Support/Common.cc',
                   'Modules/NAP/ModuleHCL.cc',
                   'Modules/Strobes/ModuleParabola.cc',
                   'Modules/SAI/ModuleSAI.cc',
+                  'Modules/SSI/ModuleSSI.cc',
+                  'Modules/Profile/ModuleSlice.cc',
                   'Modules/Features/ModuleGaussians.cc',
                   'Modules/Output/FileOutputHTK.cc']
     
