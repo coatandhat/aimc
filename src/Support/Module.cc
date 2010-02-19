@@ -109,13 +109,13 @@ bool Module::AddTarget(Module* target_module) {
   return false;
 }
 
-bool Module::DeleteTarget(Module* target_module) {
+bool Module::RemoveTarget(Module* target_module) {
   if (targets_.erase(target_module) != 0)
     return true;
   return false;
 }
 
-void Module::DeleteAllTargets() {
+void Module::RemoveAllTargets() {
   targets_.clear();
 }
 

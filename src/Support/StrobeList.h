@@ -20,7 +20,7 @@
  * \file
  * \brief Modifiable List of Strobe Points - helper for SAI generation
  *
- * \author Tom Walters <tcw24@cam.ac.uk>
+ * \author Tom Walters <tom@acousticscale.org>
  * \date created 2007/08/22
  * \version \$Id: StrobeList.h 1 2010-02-02 11:04:50Z tcw $
  */
@@ -44,11 +44,6 @@ struct StrobePoint {
   }
 };
 
-/*!
- * \class Signal "Support/StrobeList.h"
- * \brief Modifiable List of Strobe Points, which must be ordered
- *
- */
 class StrobeList {
  public:
   /*! \brief Create a new strobe list

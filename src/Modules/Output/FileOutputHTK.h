@@ -18,7 +18,7 @@
 
 /*!
  * \file
- * \brief File output to HTK format class definition
+ * \brief File output to HTK format
  *
  * \author Tom Walters <tcw24@cam.ac.uk>
  * \author Willem van Engen <cnbh@willem.engen.nl>
@@ -69,13 +69,6 @@
 ((((uint32_t) n) >> 8) & 0x0000FF00) | \
 ((((uint32_t) n) >> 24) & 0x000000FF) )
 
-/*!
- * \class FileOutputHTK "Output/FileOutputHTK.h"
- * \brief File output to HTK class
- *
- * This class gives a method for saving either a signal or a profile to HTK format.
- * \sa Signal, SignalBank
- */
 namespace aimc {
 class FileOutputHTK : public Module {
  public:

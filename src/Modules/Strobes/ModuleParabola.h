@@ -34,10 +34,6 @@
 #include "Support/Parameters.h"
 #include "Support/SignalBank.h"
 
-/*!
- * \class ModuleParabola "Modules/SAI/ModuleParabola.h"
- * \brief SF 2003
- */
 namespace aimc {
 using std::vector;
 class ModuleParabola : public Module {
