@@ -22,6 +22,8 @@
  * \version \$Id$
  */
 
+#include <cmath>
+
 #include "Modules/SSI/ModuleSSI.h"
 
 namespace aimc {
@@ -31,7 +33,8 @@ ModuleSSI::ModuleSSI(Parameters *params) : Module(params) {
   module_type_ = "ssi";
   module_version_ = "$Id$";
 
-  do_pitch_cutoff_ = parameters_->DefaultBool("ssi.pitch_cutoff", false);
+  //do_pitch_cutoff_ = parameters_->DefaultBool("ssi.pitch_cutoff", false);
+  ssi_width_cycles_ = parameters_->DefaultFloat("ssi.width_cycles", 20.0f);
 }
 
 ModuleSSI::~ModuleSSI() {
@@ -44,17 +47,23 @@ bool ModuleSSI::InitializeInternal(const SignalBank &input) {
   buffer_length_ = input.buffer_length();
   channel_count_ = input.channel_count();
 
-  // If this module produces any output, then the output signal bank needs to
-  // be initialized here.
-  // Example:
-  // output_.Initialize(channel_count, buffer_length, sample_rate);
+  float lowest_cf = input.centre_frequency(0);
+  ssi_width_samples_ = sample_rate_ * ssi_width_cycles_ / lowest_cf;
+  if (ssi_width_samples_ > buffer_length_) {
+    ssi_width_samples_ = buffer_length_;
+    float cycles = ssi_width_samples_ * lowest_cf / sample_rate_;
+    LOG_INFO(_T("Requested SSI width of %f cycles is too long for the "
+                "input buffer length of %d samples. The SSI will be "
+                "truncated at %d samples wide. This corresponds to a width "
+                "of %f cycles."), ssi_width_cycles_, buffer_length_,
+                ssi_width_samples_, cycles);
+    ssi_width_cycles_ = cycles;
+  }
+  output_.Initialize(channel_count_, ssi_width_samples_, sample_rate_);
   return true;
 }
 
 void ModuleSSI::ResetInternal() {
-  // Reset any internal state variables to their default values here. After a
-  // call to ResetInternal(), the module should be in the same state as it is
-  // just after a call to InitializeInternal().
 }
 
 void ModuleSSI::Process(const SignalBank &input) {
@@ -74,13 +83,34 @@ void ModuleSSI::Process(const SignalBank &input) {
     return;
   }
 
-  // Input is read from the input signal bank using calls like
-  // float value = input_.sample(channel_number, sample_index);
+  output_.set_start_time(input.start_time());
 
-  // Output is fed into the output signal bank (assuming that it was
-  // initialized during the call to InitializeInternal()) like this:
-  // output_.set_sample(channel_number, sample_index, sample_value);
+  for (int ch = 0; ch < channel_count_; ++ch) {
+    // Copy the buffer from input to output, addressing by h-value
+    for (int i = 0; i < ssi_width_samples_; ++i) {
+      float h = static_cast<float>(i) * ssi_width_cycles_
+                / static_cast<float>(ssi_width_samples_);
+      float cycle_samples = sample_rate_ / input.centre_frequency(ch);
 
+      // The index into the input array is a floating-point number, which is
+      // split into a whole part and a fractional part. The whole part and
+      // fractional part are found, and are used to linearly interpolate
+      // between input samples to yield an output sample.
+      double whole_part;
+      float frac_part = modf(h * cycle_samples, &whole_part);
+      int sample = static_cast<int>(whole_part);
+
+      float val;
+      if (sample < buffer_length_ - 1) {
+        float curr_sample = input.sample(ch, sample);
+        float next_sample = input.sample(ch, sample + 1);
+        val = curr_sample + frac_part * (next_sample - curr_sample);
+      } else {
+        val = 0.0f;
+      }
+      output_.set_sample(ch, i, val);
+    }
+  }
   PushOutput();
 }
 }  // namespace aimc

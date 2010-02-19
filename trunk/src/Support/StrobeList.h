@@ -28,7 +28,7 @@
 #ifndef AIMC_SUPPORT_STROBELIST_H_
 #define AIMC_SUPPORT_STROBELIST_H_
 
-#include <math.h>
+#include <cmath>
 #include <deque>
 
 namespace aimc {

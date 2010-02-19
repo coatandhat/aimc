@@ -28,7 +28,7 @@
 #ifndef AIMC_SUPPORT_ERBTOOLS_H_
 #define AIMC_SUPPORT_ERBTOOLS_H_
 
-#include <math.h>
+#include <cmath>
 
 namespace aimc {
 class ERBTools {

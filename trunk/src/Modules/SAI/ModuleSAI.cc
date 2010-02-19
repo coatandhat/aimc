@@ -25,7 +25,7 @@
  * \date created 2007/08/29
  * \version \$Id: ModuleSAI.cc 4 2010-02-03 18:44:58Z tcw $
  */
-#include <math.h>
+#include <cmath>
 
 #include "Modules/SAI/ModuleSAI.h"
 

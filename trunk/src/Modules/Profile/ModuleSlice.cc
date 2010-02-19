@@ -110,6 +110,8 @@ void ModuleSlice::Process(const SignalBank &input) {
     return;
   }
 
+  output_.set_start_time(input.start_time());
+
   if (temporal_profile_) {
     for (int i = 0; i < input.buffer_length(); ++i) {
       float val = 0.0f;
