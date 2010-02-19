@@ -71,7 +71,7 @@ class SignalBank {
     int buffer_length() const;
     int start_time() const;
     void set_start_time(int start_time);
-    float get_centre_frequency(int i) const;
+    float centre_frequency(int i) const;
     void set_centre_frequency(int i, float cf);
     bool initialized() const;
     int channel_count() const;
@@ -84,8 +84,8 @@ class Module {
   bool Initialize(const SignalBank &input);
   bool initialized() const;
   bool AddTarget(Module* target_module);
-  bool DeleteTarget(Module* target_module);
-  void DeleteAllTargets();
+  bool RemoveTarget(Module* target_module);
+  void RemoveAllTargets();
   virtual void Process(const SignalBank &input) = 0;
   virtual void Reset() = 0;
   const SignalBank* GetOutputBank() const;

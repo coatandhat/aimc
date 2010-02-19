@@ -26,8 +26,8 @@
  *  \version \$Id: Common.h 1 2010-02-02 11:04:50Z tcw $
  */
 
-#ifndef _AIMC_SUPPORT_COMMON_H_
-#define _AIMC_SUPPORT_COMMON_H_
+#ifndef AIMC_SUPPORT_COMMON_H_
+#define AIMC_SUPPORT_COMMON_H_
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -99,4 +99,4 @@ void LOG_INFO(const char *sFmt, ...);
 void LOG_INFO_NN(const char *sFmt, ...);
 }  // namespace aimc
 
-#endif  // _AIMC_SUPPORT_COMMON_H_
+#endif  // AIMC_SUPPORT_COMMON_H_

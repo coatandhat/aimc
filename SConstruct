@@ -107,7 +107,7 @@ common_sources = ['Support/Common.cc',
     
 if not target_platform == 'win32':
   # On windows, utf support is builtin for SimpleIni
-  # bit not on other platforms
+  # but not on other platforms
   common_sources += ['Support/ConvertUTF.c']
 
 # Choose file which contains main()

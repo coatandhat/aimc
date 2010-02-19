@@ -24,8 +24,8 @@
  *  \date created 2007/08/29
  *  \version \$Id: ModuleSAI.h 4 2010-02-03 18:44:58Z tcw $
  */
-#ifndef _AIMC_MODULE_SAI_H_
-#define _AIMC_MODULE_SAI_H_
+#ifndef AIMC_MODULES_SAI_SAI_H_
+#define AIMC_MODULES_SAI_SAI_H_
 
 #include <vector>
 
@@ -102,4 +102,4 @@ class ModuleSAI : public Module {
 };
 }  // namespace aimc
 
-#endif  // _AIMC_MODULE_SAI_H_
+#endif  // AIMC_MODULES_SAI_SAI_H_

@@ -26,8 +26,8 @@
  *  \version \$Id: Parameters.h 4 2010-02-03 18:44:58Z tcw $
  */
 
-#ifndef _AIMC_SUPPORT_PARAMETERS_H_
-#define _AIMC_SUPPORT_PARAMETERS_H_
+#ifndef AIMC_SUPPORT_PARAMETERS_H_
+#define AIMC_SUPPORT_PARAMETERS_H_
 
 #include <string>
 
@@ -207,5 +207,5 @@ class Parameters {
 };
 }
 
-#endif  // _AIMC_SUPPORT_PARAMETERS_H_
+#endif  // AIMC_SUPPORT_PARAMETERS_H_
 

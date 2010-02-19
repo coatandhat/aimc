@@ -20,14 +20,14 @@
  * \file
  * \brief File output to HTK format
  *
- * \author Tom Walters <tcw24@cam.ac.uk>
+ * \author Thomas Walters <tom@acousticscale.org>
  * \author Willem van Engen <cnbh@willem.engen.nl>
  * \date created 2006/10/30
  * \version \$Header$
  */
 
-#ifndef _AIMC_MODULE_OUTPUT_HTK_H_
-#define _AIMC_MODULE_OUTPUT_HTK_H_
+#ifndef AIMC_MODULES_OUTPUT_HTK_H_
+#define AIMC_MODULES_OUTPUT_HTK_H_
 
 #include "Support/Module.h"
 #include "Support/SignalBank.h"
@@ -116,5 +116,5 @@ class FileOutputHTK : public Module {
 };
 }  // namespace aimc
 
-#endif  // _AIMC_MODULE_OUTPUT_HTK_H_
+#endif  // AIMC_MODULES_OUTPUT_HTK_H_
 
