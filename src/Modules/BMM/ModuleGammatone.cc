@@ -24,7 +24,7 @@
  *  \version \$Id$
  */
 
-#include <math.h>
+#include <cmath>
 #include <complex>
 #include "Support/ERBTools.h"
 

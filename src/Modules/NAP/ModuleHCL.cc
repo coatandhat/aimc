@@ -25,7 +25,7 @@
  * \version \$Id: ModuleHCL.cc 4 2010-02-03 18:44:58Z tcw $
  */
 
-#include <math.h>
+#include <cmath>
 
 #include "Modules/NAP/ModuleHCL.h"
 

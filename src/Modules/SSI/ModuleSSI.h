@@ -52,6 +52,8 @@ class ModuleSSI : public Module {
   float sample_rate_;
   int buffer_length_;
   int channel_count_;
+  int ssi_width_samples_;
+  float ssi_width_cycles_;
 
   bool do_pitch_cutoff_;
 };
