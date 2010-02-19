@@ -1,4 +1,4 @@
-// Copyright #YEAR#, #AUTHOR_NAME#
+// Copyright 2010, Thomas Walters
 //
 // AIM-C: A C++ implementation of the Auditory Image Model
 // http://www.acousticscale.org/AIMC
@@ -17,37 +17,27 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /*!
- * \author #AUTHOR_NAME# <#AUTHOR_EMAIL_ADDRESS#>
- * \date created #TODAYS_DATE#
+ * \author Thomas Walters <tom@acousticscale.org>
+ * \date created 2010/02/19
  * \version \$Id$
  */
 
-#include "Modules/#MODULE_TYPE#/#MODULE_NAME#.h"
+#include "Modules/SSI/ModuleSSI.h"
 
 namespace aimc {
-#MODULE_NAME#::#MODULE_NAME#(Parameters *params) : Module(params) {
-  module_description_ = "TODO: Short Description of the module";
-  module_identifier_ = "TODO: one-word id for the module";
-  module_type_ = "TODO: type code eg. bmm, sai";
+ModuleSSI::ModuleSSI(Parameters *params) : Module(params) {
+  module_description_ = "Size-shape image (aka the 'sscAI')";
+  module_identifier_ = "ssi";
+  module_type_ = "ssi";
   module_version_ = "$Id$";
 
-  // Read parameter values from the parameter store. Setting any default
-  // values as necessary. The module should set defaults for all parameters
-  // that is uses here. The parameters_->DefaultType() methods look for a
-  // parameter with a given name. If it already exists in the parameter
-  // store, they return the current value. If the parameter doesn't already
-  // exist, it is added, set to the default value given, and that value is
-  // returned.
-  // Examples:
-  // integer_param_ = parameters_->DefaultInt("module.param_name", 4);
-  // boolean_param_ = parameters_->DefaultBool("module.param_name", true);
-  // float_param_ = parameters_->DefaultFloat("module.param_name", 4.4f);
+  do_pitch_cutoff_ = parameters_->DefaultBool("ssi.pitch_cutoff", false);
 }
 
-#MODULE_NAME#::~#MODULE_NAME#() {
+ModuleSSI::~ModuleSSI() {
 }
 
-bool #MODULE_NAME#::InitializeInternal(const SignalBank &input) {
+bool ModuleSSI::InitializeInternal(const SignalBank &input) {
   // Copy the parameters of the input signal bank into internal variables, so
   // that they can be checked later.
   sample_rate_ = input.sample_rate();
@@ -61,17 +51,17 @@ bool #MODULE_NAME#::InitializeInternal(const SignalBank &input) {
   return true;
 }
 
-void #MODULE_NAME#::ResetInternal() {
+void ModuleSSI::ResetInternal() {
   // Reset any internal state variables to their default values here. After a
   // call to ResetInternal(), the module should be in the same state as it is
   // just after a call to InitializeInternal().
 }
 
-void #MODULE_NAME#::Process(const SignalBank &input) {
+void ModuleSSI::Process(const SignalBank &input) {
   // Check to see if the module has been initialized. If not, processing
   // should not continue.
   if (!initialized_) {
-    LOG_ERROR(_T("Module %s not initialized."), module_identifier_.c_str());
+    LOG_ERROR(_T("Module ModuleSSI not initialized."));
     return;
   }
 
@@ -80,7 +70,7 @@ void #MODULE_NAME#::Process(const SignalBank &input) {
   if (buffer_length_ != input.buffer_length()
       || channel_count_ != input.channel_count()) {
     LOG_ERROR(_T("Mismatch between input to Initialize() and input to "
-                 "Process() in module %s."), module_identifier_.c_str());
+                 "Process() in module %s"), module_identifier_.c_str());
     return;
   }
 
@@ -91,11 +81,7 @@ void #MODULE_NAME#::Process(const SignalBank &input) {
   // initialized during the call to InitializeInternal()) like this:
   // output_.set_sample(channel_number, sample_index, sample_value);
 
-  // If the output bank is set up, a call to PushOutput() will pass the output
-  // on to all the target modules of this module. PushOutput() can be called
-  // multiple times within each call to Process().
-  // Example:
-  // PushOutput();
+  PushOutput();
 }
 }  // namespace aimc
 
