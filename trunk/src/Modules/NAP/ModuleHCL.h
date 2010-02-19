@@ -1,4 +1,4 @@
-// Copyright 2007-2010, University of Cambridge
+// Copyright 2007-2010, Thomas Walters
 //
 // AIM-C: A C++ implementation of the Auditory Image Model
 // http://www.acousticscale.org/AIMC
@@ -21,7 +21,7 @@
  * \brief Halfwave rectification, compression and lowpass filtering
  */
 
-/* \author Tom Walters <tcw24@cam.ac.uk>
+/* \author Thomas Walters <tom@acousticscale.org>
  * \date created 2007/03/07
  * \version \$Id: ModuleHCL.h 4 2010-02-03 18:44:58Z tcw $
  */
