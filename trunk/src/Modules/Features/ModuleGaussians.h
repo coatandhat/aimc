@@ -34,9 +34,6 @@
 #include "Support/Parameters.h"
 #include "Support/SignalBank.h"
 
-/*! \class ModuleGaussians "Modules/Features/ModuleGaussians.h"
- *  \brief
- */
 namespace aimc {
 using std::vector;
 class ModuleGaussians : public Module {
