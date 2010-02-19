@@ -1,4 +1,4 @@
-// Copyright 2008-2010, University of Cambridge
+// Copyright 2008-2010, Thomas Walters
 //
 // AIM-C: A C++ implementation of the Auditory Image Model
 // http://www.acousticscale.org/AIMC
@@ -20,7 +20,7 @@
  *  \brief Gaussian features
  */
 
-/*! \author Tom Walters <tcw24@cam.ac.uk>
+/*! \author Thomas Walters <tom@acousticscale.org>
  *  \date created 2008/06/23
  *  \version \$Id: ModuleGaussians.h 2 2010-02-02 12:59:50Z tcw $
  */

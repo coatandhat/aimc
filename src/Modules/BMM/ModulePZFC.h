@@ -1,4 +1,4 @@
-// Copyright 2008-2010, University of Cambridge
+// Copyright 2008-2010, Thomas Walters
 //
 // AIM-C: A C++ implementation of the Auditory Image Model
 // http://www.acousticscale.org/AIMC
