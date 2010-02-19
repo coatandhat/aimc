@@ -61,7 +61,7 @@ void ModuleSSI::Process(const SignalBank &input) {
   // Check to see if the module has been initialized. If not, processing
   // should not continue.
   if (!initialized_) {
-    LOG_ERROR(_T("Module ModuleSSI not initialized."));
+    LOG_ERROR(_T("Module %s not initialized."), module_identifier_.c_str());
     return;
   }
 
@@ -70,7 +70,7 @@ void ModuleSSI::Process(const SignalBank &input) {
   if (buffer_length_ != input.buffer_length()
       || channel_count_ != input.channel_count()) {
     LOG_ERROR(_T("Mismatch between input to Initialize() and input to "
-                 "Process() in module %s"), module_identifier_.c_str());
+                 "Process() in module %s."), module_identifier_.c_str());
     return;
   }
 
