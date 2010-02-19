@@ -26,8 +26,8 @@
  * \version \$Id: ModuleHCL.h 4 2010-02-03 18:44:58Z tcw $
  */
 
-#ifndef _AIMC_MODULE_NAP_HCL_H_
-#define _AIMC_MODULE_NAP_HCL_H_
+#ifndef AIMC_MODULES_NAP_HCL_H_
+#define AIMC_MODULES_NAP_HCL_H_
 
 #include <vector>
 
@@ -85,4 +85,4 @@ class ModuleHCL : public Module {
 };
 }  // namespace aimc
 
-#endif  // _AIMC_MODULE_NAP_HCL_H_
+#endif  // AIMC_MODULES_NAP_HCL_H_

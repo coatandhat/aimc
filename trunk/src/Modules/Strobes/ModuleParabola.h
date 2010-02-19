@@ -20,13 +20,13 @@
  * \file
  * \brief SAI 2003 module - for any output frame rate
  *
- * \author Tom Walters <tcw24@cam.ac.uk>
+ * \author Thomas Walters <tom@acousticscale.org>
  * \date created 2007/03/28
  * \version \$Id$
  */
 
-#ifndef _AIMC_MODULE_STROBES_PARABOLA_H_
-#define _AIMC_MODULE_STROBES_PARABOLA_H_
+#ifndef AIMC_MODULES_STROBES_PARABOLA_H_
+#define AIMC_MODULES_STROBES_PARABOLA_H_
 
 #include <vector>
 
@@ -108,4 +108,4 @@ class ModuleParabola : public Module {
 };
 }  // namespace aimc
 
-#endif  // _AIM_MODULE_STROBES_PARABOLA_H_
+#endif  // AIMC_MODULES_STROBES_PARABOLA_H_

@@ -25,8 +25,8 @@
  *  \version \$Id: ERBTools.h 1 2010-02-02 11:04:50Z tcw $
  */
 
-#ifndef _AIMC_SUPPORT_ERBTOOLS_H_
-#define _AIMC_SUPPORT_ERBTOOLS_H_
+#ifndef AIMC_SUPPORT_ERBTOOLS_H_
+#define AIMC_SUPPORT_ERBTOOLS_H_
 
 #include <math.h>
 
@@ -47,4 +47,4 @@ class ERBTools {
 };
 }
 
-#endif  // _AIMC_SUPPORT_ERBTOOLS_H_
+#endif  // AIMC_SUPPORT_ERBTOOLS_H_

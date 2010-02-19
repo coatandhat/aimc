@@ -25,8 +25,8 @@
  *  \version \$Id: ModuleGaussians.h 2 2010-02-02 12:59:50Z tcw $
  */
 
-#ifndef _AIMC_MODULE_FEATURES_GAUSSIANS_H_
-#define _AIMC_MODULE_FEATURES_GAUSSIANS_H_
+#ifndef AIMC_MODULES_FEATURES_GAUSSIANS_H_
+#define AIMC_MODULES_FEATURES_GAUSSIANS_H_
 
 #include <vector>
 
@@ -94,4 +94,4 @@ class ModuleGaussians : public Module {
 };
 }  // namespace aimc
 
-#endif  // _AIMC_MODULE_FEATURES_GAUSSIANS_H_
+#endif  // AIMC_MODULES_FEATURES_GAUSSIANS_H_

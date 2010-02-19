@@ -21,7 +21,7 @@
  * \brief Parabola strobe detection module - Using the 'parabloa' strobe
  * criterion from the AIM-MAT sf2003 module
  *
- * \author Tom Walters <tcw24@cam.ac.uk>
+ * \author Thomas Walters <tom@acousticscale.org>
  * \date created 2007/08/01
  * \version \$Id:$
  */

@@ -35,7 +35,7 @@ def main():
   
   # The margin of error allowed between the returned values from AIM-C and
   # the stored MATLAB values.
-  epsilon = 0.000001;
+  epsilon = 0.00001;
   
   given_profiles = data["Templates"]
   matlab_features = data["feature"]

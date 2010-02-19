@@ -32,8 +32,8 @@
  *  \version \$Id: SignalBank.h 4 2010-02-03 18:44:58Z tcw $
  */
 
-#ifndef _AIMC_SUPPORT_SIGNALBANK_H_
-#define _AIMC_SUPPORT_SIGNALBANK_H_
+#ifndef AIMC_SUPPORT_SIGNALBANK_H_
+#define AIMC_SUPPORT_SIGNALBANK_H_
 
 #include <deque>
 #include <vector>
@@ -86,4 +86,4 @@ class SignalBank {
 };
 }
 
-#endif  // _AIMC_SUPPORT_SIGNALBANK_H_
+#endif  // AIMC_SUPPORT_SIGNALBANK_H_

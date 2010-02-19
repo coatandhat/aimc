@@ -25,8 +25,8 @@
  * \version \$Id: StrobeList.h 1 2010-02-02 11:04:50Z tcw $
  */
 
-#ifndef _AIMC_SUPPORT_STROBE_LIST_H_
-#define _AIMC_SUPPORT_STROBE_LIST_H_
+#ifndef AIMC_SUPPORT_STROBELIST_H_
+#define AIMC_SUPPORT_STROBELIST_H_
 
 #include <math.h>
 #include <deque>
@@ -107,5 +107,5 @@ class StrobeList {
 };
 }  // namespace aimc
 
-#endif /* _AIMC_STROBE_LIST_H_ */
+#endif /* AIMC_SUPPORT_STROBELIST_H_ */
 

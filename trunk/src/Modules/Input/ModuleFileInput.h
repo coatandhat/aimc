@@ -25,8 +25,8 @@
  *  \version \$Id$
  */
 
-#ifndef _AIMC_MODULES_INPUT_FILE_H_
-#define _AIMC_MODULES_INPUT_FILE_H_
+#ifndef AIMC_MODULES_INPUT_FILEINPUT_H_
+#define AIMC_MODULES_INPUT_FILEINPUT_H_
 
 #include <sndfile.h>
 
@@ -84,4 +84,4 @@ class ModuleFileInput : public Module {
 };
 }  // namespace aimc
 
-#endif  // _AIMC_MODULES_INPUT_FILE_H_
+#endif  // AIMC_MODULES_INPUT_FILEINPUT_H_
