@@ -47,7 +47,6 @@ FileOutputHTK::FileOutputHTK(Parameters *params) : Module(params) {
 
   file_handle_ = NULL;
   header_written_ = false;
-  filename_[0] = '\0';
   frame_period_ms_ = 0.0f;
 }
 
@@ -67,7 +66,6 @@ bool FileOutputHTK::OpenFile(const char* filename, float frame_period_ms) {
     LOG_ERROR(_T("Couldn't open output file '%s' for writing."), filename);
     return false;
   }
-  strcpy(filename_, filename);
   sample_count_ = 0;
   frame_period_ms_ = frame_period_ms;
   header_written_ = false;
@@ -115,7 +113,7 @@ void FileOutputHTK::WriteHeader(int num_elements, float period_ms) {
   int32_t sample_count = 0;
 
   int32_t sample_period = floor(1e4 * period_ms);
-  int16_t sample_size = num_elements * sizeof(float);
+  int16_t sample_size = num_elements * sizeof(float);  // NOLINT
 
   // User-defined coefficients with energy term
   int16_t parameter_kind = H_USER + H_E;

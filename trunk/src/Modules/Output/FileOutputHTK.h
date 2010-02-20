@@ -98,10 +98,6 @@ class FileOutputHTK : public Module {
    */
   bool header_written_;
 
-  /*! \brief Filename
-   */
-  char filename_[PATH_MAX];
-
   /*! \brief Internal pointer to the output file
    */
   FILE *file_handle_;

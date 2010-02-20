@@ -148,7 +148,7 @@ bool ModuleGammatone::InitializeInternal(const SignalBank& input) {
                        * sin(2.0f * cf * M_PI * dt) / exp(b * dt)) / 2.0f;
     double B14 = -(2.0f * dt * cos(2.0f * cf * M_PI * dt) / exp(b * dt)
                    - 2.0f * sqrt(3 - pow(2.0f, 1.5f)) * dt
-                       * sin(2.0f * cf * M_PI * dt) / exp(b * dt)) / 2.0f;;
+                       * sin(2.0f * cf * M_PI * dt) / exp(b * dt)) / 2.0f;
 
     a_[ch][0] = 1.0f;
     a_[ch][1] = -2.0f * cos(2.0f * cf * M_PI * dt) / exp(b * dt);
@@ -165,7 +165,6 @@ bool ModuleGammatone::InitializeInternal(const SignalBank& input) {
     b4_[ch][0] = B0;
     b4_[ch][1] = B14;
     b4_[ch][2] = B2;
-
   }
   return true;
 }
