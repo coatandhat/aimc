@@ -33,7 +33,7 @@ ModuleSSI::ModuleSSI(Parameters *params) : Module(params) {
   module_type_ = "ssi";
   module_version_ = "$Id$";
 
-  //do_pitch_cutoff_ = parameters_->DefaultBool("ssi.pitch_cutoff", false);
+  // do_pitch_cutoff_ = parameters_->DefaultBool("ssi.pitch_cutoff", false);
   ssi_width_cycles_ = parameters_->DefaultFloat("ssi.width_cycles", 20.0f);
 }
 

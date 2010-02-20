@@ -29,6 +29,29 @@ SConstruct file for the aimc project
 import os
 import shutil
 
+# Sources common to every version
+common_sources = ['Support/Common.cc',
+                  'Support/SignalBank.cc',
+                  'Support/Parameters.cc',
+                  'Support/Module.cc',
+                  'Modules/Input/ModuleFileInput.cc',
+                  'Modules/BMM/ModuleGammatone.cc',
+                  'Modules/BMM/ModulePZFC.cc',
+                  'Modules/NAP/ModuleHCL.cc',
+                  'Modules/Strobes/ModuleParabola.cc',
+                  'Modules/SAI/ModuleSAI.cc',
+                  'Modules/SSI/ModuleSSI.cc',
+                  'Modules/Profile/ModuleSlice.cc',
+                  'Modules/Features/ModuleGaussians.cc',
+                  'Modules/Output/FileOutputHTK.cc']
+
+# File which contains main()
+sources = common_sources + ['Main/aimc.cc']
+
+# Test sources
+test_sources = ['Modules/Profile/ModuleSlice_unittest.cc']
+test_sources += common_sources
+
 # Define the command-line options for running scons
 options = Variables()
 options.Add(BoolVariable('mingw', 
@@ -48,6 +71,7 @@ target_platform = build_platform
 # Build products location and executable name
 build_dir = os.path.join('build', target_platform + '-release')
 target_executable = 'aimc'
+test_executable = 'aimc_tests'
 
 # Create build products directory if necessary
 if not os.path.exists(build_dir):
@@ -90,33 +114,14 @@ elif compiler == 'gcc':
 else:
   print('Unsupported compiler: ' + compiler)
   Exit(1)
-
-# Sources common to every version
-common_sources = ['Support/Common.cc',
-                  'Support/SignalBank.cc',
-                  'Support/Parameters.cc',
-                  'Support/Module.cc',
-                  'Modules/Input/ModuleFileInput.cc',
-                  'Modules/BMM/ModuleGammatone.cc',
-                  'Modules/BMM/ModulePZFC.cc',
-                  'Modules/NAP/ModuleHCL.cc',
-                  'Modules/Strobes/ModuleParabola.cc',
-                  'Modules/SAI/ModuleSAI.cc',
-                  'Modules/SSI/ModuleSSI.cc',
-                  'Modules/Profile/ModuleSlice.cc',
-                  'Modules/Features/ModuleGaussians.cc',
-                  'Modules/Output/FileOutputHTK.cc']
     
 if not target_platform == 'win32':
   # On windows, utf support is builtin for SimpleIni
   # but not on other platforms
-  common_sources += ['Support/ConvertUTF.c']
-
-# Choose file which contains main()
-sources = common_sources + ['Main/aimc.cc']
+  sources += ['Support/ConvertUTF.c']
 
 # Place the build products in the corect place
-env.BuildDir('#' + build_dir, '#', duplicate = 0)
+env.VariantDir('#' + build_dir, '#', duplicate = 0)
 
 # Look for the sources in the correct place
 env.Append(CPPPATH = '#src')
@@ -129,8 +134,22 @@ for depname in deplibs:
 
 env.AppendUnique(LIBS = deplibs)
 
-# Set up the builder to build the program
+test_env = env
+test_libs = ['gtest', 'gtest_main']
+#for depname in test_libs:
+#  test_env.ParseConfig('pkg-config --cflags --libs ' + depname)
+test_env.AppendUnique(LIBPATH = '/usr/local/lib',
+                      CPPPATH = '/usr/local/lib',
+                      LIBS = test_libs)
+
+# Builder for the main program
 program = env.Program(target = os.path.join(build_dir, target_executable), 
                       source = map(lambda x: '#' + build_dir + '/src/' + x,
                                    sources))
+env.Alias(target_executable, os.path.join(build_dir, target_executable))
 env.Default(program)
+
+test = test_env.Program(target = os.path.join(build_dir, test_executable),
+                        source = map(lambda x: '#' + build_dir + '/src/' + x,
+                                     test_sources))
+env.Alias('test', os.path.join(build_dir, test_executable))
