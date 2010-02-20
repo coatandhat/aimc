@@ -48,9 +48,15 @@ ModuleGammatone::~ModuleGammatone() {
 }
 
 void ModuleGammatone::ResetInternal() {
-  state_.resize(num_channels_);
+  state_1_.resize(num_channels_);
+  state_2_.resize(num_channels_);
+  state_3_.resize(num_channels_);
+  state_4_.resize(num_channels_);
   for (int i = 0; i < num_channels_; ++i) {
-    state_[i].resize(9, 0.0f);
+    state_1_[i].resize(3, 0.0f);
+    state_2_[i].resize(3, 0.0f);
+    state_3_[i].resize(3, 0.0f);
+    state_4_[i].resize(3, 0.0f);
   }
 }
 
@@ -63,82 +69,104 @@ bool ModuleGammatone::InitializeInternal(const SignalBank& input) {
   centre_frequencies_.resize(num_channels_);
   float erb_current = erb_min;
 
-  for (int i = 0; i < num_channels_; ++i) {
-    centre_frequencies_[i] = ERBTools::ERB2Freq(erb_current);
-    erb_current += delta_erb;
-  }
-
-  forward_.resize(num_channels_);
-  back_.resize(num_channels_);
-  state_.resize(num_channels_);
-
-  for (int ch = 0; ch < num_channels_; ++ch) {
-    float cf = centre_frequencies_[ch];
-    float erb = ERBTools::Freq2ERBw(cf);
-
-    // Sample interval
-    float dt = 1.0f / input.sample_rate();
-
-    // Bandwidth parameter
-    float b = 1.019f * 2.0f * M_PI * erb;
-
-    // All of the following expressions are derived in Apple TR #35, "An
-    // Efficient Implementation of the Patterson-Holdsworth Cochlear
-    // Filter Bank".
-
-    // Calculate the gain:
-    float cpt = cf * M_PI * dt;
-    complex<float> exponent(0.0f, 2.0f * cpt);
-    complex<float> ec = exp(2.0f * exponent);
-    complex<float> two_cf_pi_t(2.0f * cpt, 0.0f);
-    complex<float> two_pow(pow(2.0f, (3.0f / 2.0f)), 0.0f);
-    complex<float> p = -2.0f * ec * dt
-                       + 2.0f * exp(-(b * dt) + exponent) * dt;
-    complex<float> b_dt(b * dt, 0.0f);
-
-    float gain = abs(
-      (p * (cos(two_cf_pi_t) - sqrt(3.0f - two_pow) * sin(two_cf_pi_t)))
-      * (p * (cos(two_cf_pi_t) + sqrt(3.0f - two_pow) * sin(two_cf_pi_t)))
-      * (p * (cos(two_cf_pi_t) - sqrt(3.0f + two_pow) * sin(two_cf_pi_t)))
-      * (p * (cos(two_cf_pi_t) + sqrt(3.0f + two_pow) * sin(two_cf_pi_t)))
-      / pow(-2.0f / exp(2.0f * b_dt) - 2.0f * ec + 2.0f * (1.0f + ec)
-            / exp(b_dt), 4.0f));
-
-    // The filter coefficients themselves:
-    const int coeff_count = 9;
-    forward_[ch].resize(coeff_count, 0.0f);
-    back_[ch].resize(coeff_count, 0.0f);
-    state_[ch].resize(coeff_count, 0.0f);
-
-    forward_[ch][0] = pow(dt, 4.0f) / gain;
-    forward_[ch][1] = (-4.0f * pow(dt, 4.0f) * cos(2.0f * cpt)
-                      / exp(b * dt) / gain);
-    forward_[ch][2] = (6.0f * pow(dt, 4.0f) * cos(4.0f * cpt)
-                      / exp(2.0f * b * dt) / gain);
-    forward_[ch][3] = (-4.0f * pow(dt, 4.0f) * cos(6.0f * cpt)
-                      / exp(3.0f * b * dt) / gain);
-    forward_[ch][4] = (pow(dt, 4.0f) * cos(8.0f * cpt)
-                      / exp(4.0f * b * dt) / gain);
-    // Note: the remainder of the forward vector is zero-padded
-
-    back_[ch][0] = 1.0f;
-    back_[ch][1] = -8.0f * cos(2.0f * cpt) / exp(b * dt);
-    back_[ch][2] = (4.0f * (4.0f + 3.0f * cos(4.0f * cpt))
-                    / exp(2.0f * b * dt));
-    back_[ch][3] = (-8.0f * (6.0f * cos(2.0f * cpt) + cos(6.0f * cpt))
-                    / exp(3.0f * b * dt));
-    back_[ch][4] = (2.0f * (18.0f + 16.0f * cos(4.0f * cpt) + cos(8.0f * cpt))
-                    / exp(4.0f * b * dt));
-    back_[ch][5] = (-8.0f * (6.0f * cos(2.0f * cpt) + cos(6.0f * cpt))
-                    / exp(5.0f * b * dt));
-    back_[ch][6] = (4.0f * (4.0f + 3.0f * cos(4.0f * cpt))
-                    / exp(6.0f * b * dt));
-    back_[ch][7] = -8.0f * cos(2.0f * cpt) / exp(7.0f * b * dt);
-    back_[ch][8] = exp(-8.0f * b * dt);
-  }
   output_.Initialize(num_channels_,
                      input.buffer_length(),
                      input.sample_rate());
+
+  for (int i = 0; i < num_channels_; ++i) {
+    centre_frequencies_[i] = ERBTools::ERB2Freq(erb_current);
+    erb_current += delta_erb;
+    output_.set_centre_frequency(i, centre_frequencies_[i]);
+  }
+
+  a_.resize(num_channels_);
+  b1_.resize(num_channels_);
+  b2_.resize(num_channels_);
+  b3_.resize(num_channels_);
+  b4_.resize(num_channels_);
+  state_1_.resize(num_channels_);
+  state_2_.resize(num_channels_);
+  state_3_.resize(num_channels_);
+  state_4_.resize(num_channels_);
+
+  for (int ch = 0; ch < num_channels_; ++ch) {
+    double cf = centre_frequencies_[ch];
+    double erb = ERBTools::Freq2ERBw(cf);
+
+    // Sample interval
+    double dt = 1.0f / input.sample_rate();
+
+    // Bandwidth parameter
+    double b = 1.019f * 2.0f * M_PI * erb;
+
+    // The following expressions are derived in Apple TR #35, "An
+    // Efficient Implementation of the Patterson-Holdsworth Cochlear
+    // Filter Bank" and used in Malcolm Slaney's auditory toolbox, where he
+    // defines this alternaltive four stage cascade of second-order filters.
+
+    // Calculate the gain:
+    double cpt = cf * M_PI * dt;
+    complex<double> exponent(0.0, 2.0 * cpt);
+    complex<double> ec = exp(2.0 * exponent);
+    complex<double> two_cf_pi_t(2.0 * cpt, 0.0);
+    complex<double> two_pow(pow(2.0, (3.0 / 2.0)), 0.0);
+    complex<double> p = -2.0 * ec * dt
+                       + 2.0 * exp(-(b * dt) + exponent) * dt;
+    complex<double> b_dt(b * dt, 0.0);
+
+    double gain = abs(
+      (p * (cos(two_cf_pi_t) - sqrt(3.0 - two_pow) * sin(two_cf_pi_t)))
+      * (p * (cos(two_cf_pi_t) + sqrt(3.0 - two_pow) * sin(two_cf_pi_t)))
+      * (p * (cos(two_cf_pi_t) - sqrt(3.0 + two_pow) * sin(two_cf_pi_t)))
+      * (p * (cos(two_cf_pi_t) + sqrt(3.0 + two_pow) * sin(two_cf_pi_t)))
+      / pow(-2.0 / exp(2.0 * b_dt) - 2.0 * ec + 2.0 * (1.0 + ec)
+            / exp(b_dt), 4.0));
+
+    // The filter coefficients themselves:
+    const int coeff_count = 3;
+    a_[ch].resize(coeff_count, 0.0f);
+    b1_[ch].resize(coeff_count, 0.0f);
+    b2_[ch].resize(coeff_count, 0.0f);
+    b3_[ch].resize(coeff_count, 0.0f);
+    b4_[ch].resize(coeff_count, 0.0f);
+    state_1_[ch].resize(coeff_count, 0.0f);
+    state_2_[ch].resize(coeff_count, 0.0f);
+    state_3_[ch].resize(coeff_count, 0.0f);
+    state_4_[ch].resize(coeff_count, 0.0f);
+
+    double B0 = dt;
+    double B2 = 0.0f;
+
+    double B11 = -(2.0f * dt * cos(2.0f * cf * M_PI * dt) / exp(b * dt)
+                   + 2.0f * sqrt(3 + pow(2.0f, 1.5f)) * dt
+                       * sin(2.0f * cf * M_PI * dt) / exp(b * dt)) / 2.0f;
+    double B12 = -(2.0f * dt * cos(2.0f * cf * M_PI * dt) / exp(b * dt)
+                   - 2.0f * sqrt(3 + pow(2.0f, 1.5f)) * dt
+                       * sin(2.0f * cf * M_PI * dt) / exp(b * dt)) / 2.0f;
+    double B13 = -(2.0f * dt * cos(2.0f * cf * M_PI * dt) / exp(b * dt)
+                   + 2.0f * sqrt(3 - pow(2.0f, 1.5f)) * dt
+                       * sin(2.0f * cf * M_PI * dt) / exp(b * dt)) / 2.0f;
+    double B14 = -(2.0f * dt * cos(2.0f * cf * M_PI * dt) / exp(b * dt)
+                   - 2.0f * sqrt(3 - pow(2.0f, 1.5f)) * dt
+                       * sin(2.0f * cf * M_PI * dt) / exp(b * dt)) / 2.0f;;
+
+    a_[ch][0] = 1.0f;
+    a_[ch][1] = -2.0f * cos(2.0f * cf * M_PI * dt) / exp(b * dt);
+    a_[ch][2] = exp(-2.0f * b * dt);
+    b1_[ch][0] = B0 / gain;
+    b1_[ch][1] = B11 / gain;
+    b1_[ch][2] = B2 / gain;
+    b2_[ch][0] = B0;
+    b2_[ch][1] = B12;
+    b2_[ch][2] = B2;
+    b3_[ch][0] = B0;
+    b3_[ch][1] = B13;
+    b3_[ch][2] = B2;
+    b4_[ch][0] = B0;
+    b4_[ch][1] = B14;
+    b4_[ch][2] = B2;
+
+  }
   return true;
 }
 
@@ -146,18 +174,52 @@ void ModuleGammatone::Process(const SignalBank &input) {
   output_.set_start_time(input.start_time());
   int audio_channel = 0;
 
-  vector<vector<float> >::iterator b = forward_.begin();
-  vector<vector<float> >::iterator a = back_.begin();
-  vector<vector<float> >::iterator s = state_.begin();
+  vector<vector<double> >::iterator b1 = b1_.begin();
+  vector<vector<double> >::iterator b2 = b2_.begin();
+  vector<vector<double> >::iterator b3 = b3_.begin();
+  vector<vector<double> >::iterator b4 = b4_.begin();
+  vector<vector<double> >::iterator a = a_.begin();
+  vector<vector<double> >::iterator s1 = state_1_.begin();
+  vector<vector<double> >::iterator s2 = state_2_.begin();
+  vector<vector<double> >::iterator s3 = state_3_.begin();
+  vector<vector<double> >::iterator s4 = state_4_.begin();
 
-  for (int ch = 0; ch < num_channels_; ++ch, ++a, ++b, ++s) {
+  // Temporary storage between filter stages
+  vector<double> out(input.buffer_length());
+  for (int ch = 0; ch < num_channels_;
+       ++ch, ++b1, ++b2, ++b3, ++b4, ++a, ++s1, ++s2, ++s3, ++s4) {
     for (int i = 0; i < input.buffer_length(); ++i) {
       // Direct-form-II IIR filter
-      float in = input.sample(audio_channel, i);
-      float out = (*b)[0] * in + (*s)[0];
-      for (unsigned int stage = 1; stage < s->size(); ++stage)
-        (*s)[stage - 1] = (*b)[stage] * in - (*a)[stage] * out + (*s)[stage];
-      output_.set_sample(ch, i, out);
+      double in = input.sample(audio_channel, i);
+      out[i] = (*b1)[0] * in + (*s1)[0];
+      for (unsigned int stage = 1; stage < s1->size(); ++stage)
+        (*s1)[stage - 1] = (*b1)[stage] * in
+                           - (*a)[stage] * out[i] + (*s1)[stage];
+    }
+    for (int i = 0; i < input.buffer_length(); ++i) {
+      // Direct-form-II IIR filter
+      double in = out[i];
+      out[i] = (*b2)[0] * in + (*s2)[0];
+      for (unsigned int stage = 1; stage < s2->size(); ++stage)
+        (*s2)[stage - 1] = (*b2)[stage] * in
+                           - (*a)[stage] * out[i] + (*s2)[stage];
+    }
+    for (int i = 0; i < input.buffer_length(); ++i) {
+      // Direct-form-II IIR filter
+      double in = out[i];
+      out[i] = (*b3)[0] * in + (*s3)[0];
+      for (unsigned int stage = 1; stage < s3->size(); ++stage)
+        (*s3)[stage - 1] = (*b3)[stage] * in
+                           - (*a)[stage] * out[i] + (*s3)[stage];
+    }
+    for (int i = 0; i < input.buffer_length(); ++i) {
+      // Direct-form-II IIR filter
+      double in = out[i];
+      out[i] = (*b4)[0] * in + (*s4)[0];
+      for (unsigned int stage = 1; stage < s4->size(); ++stage)
+        (*s4)[stage - 1] = (*b4)[stage] * in
+                           - (*a)[stage] * out[i] + (*s4)[stage];
+      output_.set_sample(ch, i, out[i]);
     }
   }
   PushOutput();
