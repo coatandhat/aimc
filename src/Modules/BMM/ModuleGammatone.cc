@@ -92,6 +92,7 @@ bool ModuleGammatone::InitializeInternal(const SignalBank& input) {
   for (int ch = 0; ch < num_channels_; ++ch) {
     double cf = centre_frequencies_[ch];
     double erb = ERBTools::Freq2ERBw(cf);
+    // LOG_INFO("%e", erb);
 
     // Sample interval
     double dt = 1.0f / input.sample_rate();
@@ -110,17 +111,18 @@ bool ModuleGammatone::InitializeInternal(const SignalBank& input) {
     complex<double> ec = exp(2.0 * exponent);
     complex<double> two_cf_pi_t(2.0 * cpt, 0.0);
     complex<double> two_pow(pow(2.0, (3.0 / 2.0)), 0.0);
-    complex<double> p = -2.0 * ec * dt
-                       + 2.0 * exp(-(b * dt) + exponent) * dt;
+    complex<double> p1 = -2.0 * ec * dt;
+    complex<double> p2 = 2.0 * exp(-(b * dt) + exponent) * dt;
     complex<double> b_dt(b * dt, 0.0);
 
     double gain = abs(
-      (p * (cos(two_cf_pi_t) - sqrt(3.0 - two_pow) * sin(two_cf_pi_t)))
-      * (p * (cos(two_cf_pi_t) + sqrt(3.0 - two_pow) * sin(two_cf_pi_t)))
-      * (p * (cos(two_cf_pi_t) - sqrt(3.0 + two_pow) * sin(two_cf_pi_t)))
-      * (p * (cos(two_cf_pi_t) + sqrt(3.0 + two_pow) * sin(two_cf_pi_t)))
-      / pow(-2.0 / exp(2.0 * b_dt) - 2.0 * ec + 2.0 * (1.0 + ec)
-            / exp(b_dt), 4.0));
+      (p1 + p2 * (cos(two_cf_pi_t) - sqrt(3.0 - two_pow) * sin(two_cf_pi_t)))
+      * (p1 + p2 * (cos(two_cf_pi_t) + sqrt(3.0 - two_pow) * sin(two_cf_pi_t)))
+      * (p1 + p2 * (cos(two_cf_pi_t) - sqrt(3.0 + two_pow) * sin(two_cf_pi_t)))
+      * (p1 + p2 * (cos(two_cf_pi_t) + sqrt(3.0 + two_pow) * sin(two_cf_pi_t)))
+      / pow((-2.0 / exp(2.0 * b_dt) - 2.0 * ec + 2.0 * (1.0 + ec)
+            / exp(b_dt)), 4));
+    LOG_INFO("%e", gain);
 
     // The filter coefficients themselves:
     const int coeff_count = 3;
