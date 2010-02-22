@@ -79,6 +79,10 @@ bool ModuleGaussians::InitializeInternal(const SignalBank &input) {
 void ModuleGaussians::ResetInternal() {
   m_pSpectralProfile.clear();
   m_pSpectralProfile.resize(m_iNumChannels, 0.0f);
+  m_pA.clear();
+  m_pA.resize(m_iParamNComp, 0.0f);
+  m_pMu.clear();
+  m_pMu.resize(m_iParamNComp, 0.0f);
 }
 
 void ModuleGaussians::Process(const SignalBank &input) {

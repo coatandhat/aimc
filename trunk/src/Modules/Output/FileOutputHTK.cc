@@ -69,6 +69,9 @@ bool FileOutputHTK::OpenFile(const char* filename, float frame_period_ms) {
   sample_count_ = 0;
   frame_period_ms_ = frame_period_ms;
   header_written_ = false;
+  if (initialized_) {
+    WriteHeader(channel_count_ * buffer_length_, frame_period_ms_);
+  }
   return true;
 }
 
@@ -79,7 +82,7 @@ bool FileOutputHTK::InitializeInternal(const SignalBank &input) {
     return false;
   }
   if (header_written_) {
-    LOG_ERROR(_T("A header has already been written on the output file."
+    LOG_ERROR(_T("A header has already been written on the output file. "
                  "Please call FileOutputHTK::CloseFile to close that file, "
                  "and FileOutputHTK::OpenFile to open an new one before "
                  "calling FileOutputHTK::Initialize again."));
@@ -95,6 +98,8 @@ void FileOutputHTK::ResetInternal() {
   if (file_handle_ != NULL && !header_written_) {
     WriteHeader(channel_count_ * buffer_length_, frame_period_ms_);
   }
+  if (file_handle_ != NULL)
+    CloseFile();
 }
 
 void FileOutputHTK::WriteHeader(int num_elements, float period_ms) {
@@ -144,7 +149,7 @@ void FileOutputHTK::Process(const SignalBank &input) {
   }
 
   if (!header_written_) {
-    LOG_ERROR(_T("No header has been written on the output file yet. Please"
+    LOG_ERROR(_T("No header has been written on the output file yet. Please "
                  "call FileOutputHTK::Initialize() before calling "
                  "FileOutputHTK::Process()"));
     return;
@@ -177,6 +182,7 @@ bool FileOutputHTK::CloseFile() {
   // And close the file
   fclose(file_handle_);
   file_handle_ = NULL;
+  header_written_ = false;
   return true;
 }
 

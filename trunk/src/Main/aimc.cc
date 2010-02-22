@@ -28,19 +28,27 @@
 #include "Modules/SAI/ModuleSAI.h"
 #include "Modules/SSI/ModuleSSI.h"
 #include "Modules/Profile/ModuleSlice.h"
+#include "Modules/Profile/ModuleScaler.h"
 #include "Modules/Features/ModuleGaussians.h"
 #include "Modules/Output/FileOutputHTK.h"
 
 int main(int argc, char* argv[]) {
   aimc::Parameters params;
+
+  int buffer_length = 480;
+  params.SetInt("input.buffersize", buffer_length);
+  params.SetBool("slice.normalize", true);
+  params.SetFloat("nap.lowpass_cutoff", 100.0f);
+
   aimc::ModuleFileInput input(&params);
   aimc::ModuleGammatone bmm(&params);
   // aimc::ModulePZFC bmm(&params);
   aimc::ModuleHCL nap(&params);
-  aimc::ModuleParabola strobes(&params);
-  aimc::ModuleSAI sai(&params);
-  aimc::ModuleSSI ssi(&params);
+  // aimc::ModuleParabola strobes(&params);
+  // aimc::ModuleSAI sai(&params);
+  // aimc::ModuleSSI ssi(&params);
   aimc::ModuleSlice profile(&params);
+  aimc::ModuleScaler scaler(&params);
   aimc::ModuleGaussians features(&params);
   aimc::FileOutputHTK output(&params);
 
@@ -49,14 +57,26 @@ int main(int argc, char* argv[]) {
 
   input.AddTarget(&bmm);
   bmm.AddTarget(&nap);
-  nap.AddTarget(&strobes);
-  strobes.AddTarget(&sai);
-  sai.AddTarget(&ssi);
-  ssi.AddTarget(&profile);
-  profile.AddTarget(&features);
+  nap.AddTarget(&profile);
+  //strobes.AddTarget(&sai);
+  //sai.AddTarget(&ssi);
+  //ssi.AddTarget(&profile);
+  profile.AddTarget(&scaler);
+  scaler.AddTarget(&features);
   features.AddTarget(&output);
 
-  output.OpenFile("test_output.htk", params.GetFloat("sai.frame_period_ms"));
+  float frame_period_ms = 1000.0f * buffer_length
+                          / input.GetOutputBank()->sample_rate();
+
+  output.OpenFile("test_output.htk", frame_period_ms);
+  if (input.LoadFile("test.wav")) {
+    input.Process();
+  } else {
+    printf("LoadFile failed");
+  }
+
+  input.Reset();
+  output.OpenFile("test_output_2.htk", frame_period_ms);
   if (input.LoadFile("test.wav")) {
     input.Process();
   } else {

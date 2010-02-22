@@ -87,6 +87,7 @@ void Module::Reset() {
   if (!initialized_)
     return;
 
+  LOG_INFO("Resetting module %s", module_identifier_.c_str());
   ResetInternal();
 
   // Iterate through all the targets of this module, resetting
