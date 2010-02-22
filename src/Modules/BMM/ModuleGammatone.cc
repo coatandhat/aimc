@@ -122,7 +122,7 @@ bool ModuleGammatone::InitializeInternal(const SignalBank& input) {
       * (p1 + p2 * (cos(two_cf_pi_t) + sqrt(3.0 + two_pow) * sin(two_cf_pi_t)))
       / pow((-2.0 / exp(2.0 * b_dt) - 2.0 * ec + 2.0 * (1.0 + ec)
             / exp(b_dt)), 4));
-    LOG_INFO("%e", gain);
+    // LOG_INFO("%e", gain);
 
     // The filter coefficients themselves:
     const int coeff_count = 3;
