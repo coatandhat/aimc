@@ -46,8 +46,10 @@ ModuleFileInput::ModuleFileInput(Parameters *params) : Module(params) {
 }
 
 ModuleFileInput::~ModuleFileInput() {
-  if (file_handle_)
+  if (file_handle_ != NULL) {
     sf_close(file_handle_);
+    file_handle_ = NULL;
+  }
 }
 
 void ModuleFileInput::ResetInternal() {
@@ -56,9 +58,15 @@ void ModuleFileInput::ResetInternal() {
 }
 
 bool ModuleFileInput::LoadFile(const char* filename) {
+  // If there's a file open. Close it.
+  if (file_handle_ != NULL) {
+    sf_close(file_handle_);
+    file_handle_ = NULL;
+  }
   // Open the file
   SF_INFO sfinfo;
   memset(reinterpret_cast<void*>(&sfinfo), 0, sizeof(SF_INFO));
+
   file_handle_ = sf_open(filename, SFM_READ, &sfinfo);
 
   if (file_handle_ == NULL) {

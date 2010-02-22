@@ -125,6 +125,7 @@ void ModuleSlice::Process(const SignalBank &input) {
     }
   } else {
     for (int ch = 0; ch < input.channel_count(); ++ch) {
+      output_.set_centre_frequency(ch, input.centre_frequency(ch));
       float val = 0.0f;
       for (int i = lower_limit_; i < upper_limit_; ++i) {
         val += input.sample(ch, i);

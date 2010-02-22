@@ -42,6 +42,7 @@ common_sources = ['Support/Common.cc',
                   'Modules/SAI/ModuleSAI.cc',
                   'Modules/SSI/ModuleSSI.cc',
                   'Modules/Profile/ModuleSlice.cc',
+                  'Modules/Profile/ModuleScaler.cc',
                   'Modules/Features/ModuleGaussians.cc',
                   'Modules/Output/FileOutputHTK.cc']
 

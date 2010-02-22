@@ -30,6 +30,7 @@
 #include "Modules/SAI/ModuleSAI.h"
 #include "Modules/SSI/ModuleSSI.h"
 #include "Modules/Profile/ModuleSlice.h"
+#include "Modules/Profile/ModuleScaler.h"
 #include "Modules/Features/ModuleGaussians.h"
 #include "Modules/Output/FileOutputHTK.h"
 %}
@@ -44,5 +45,6 @@
 %include "Modules/SAI/ModuleSAI.h"
 %include "Modules/SSI/ModuleSSI.h"
 %include "Modules/Profile/ModuleSlice.h"
+%include "Modules/Profile/ModuleScaler.h"
 %include "Modules/Features/ModuleGaussians.h"
 %include "Modules/Output/FileOutputHTK.h"

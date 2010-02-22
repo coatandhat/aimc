@@ -22,17 +22,17 @@
  * \version \$Id$
  */
 
-#ifndef AIMC_MODULES_PROFILE_SCALER_H_
-#define AIMC_MODULES_PROFILE_SCALER_H_
+#ifndef AIMC_MODULES_PROFILE_SLICE_H_
+#define AIMC_MODULES_PROFILE_SLICE_H_
 
 #include "Support/Module.h"
 
 namespace aimc {
 using std::vector;
-class ModuleSlice : public Module {
+class ModuleScaler : public Module {
  public:
-  explicit ModuleSlice(Parameters *pParam);
-  virtual ~ModuleSlice();
+  explicit ModuleScaler(Parameters *pParam);
+  virtual ~ModuleScaler();
 
   /*! \brief Process a buffer
    */
@@ -52,14 +52,7 @@ class ModuleSlice : public Module {
   float sample_rate_;
   int buffer_length_;
   int channel_count_;
-
-  bool temporal_profile_;
-  bool take_all_;
-  int lower_limit_;
-  int upper_limit_;
-  bool normalize_slice_;
-  int slice_length_;
 };
 }  // namespace aimc
 
-#endif  // AIMC_MODULES_PROFILE_SCALER_H_
+#endif  // AIMC_MODULES_PROFILE_SLICE_H_
