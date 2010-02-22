@@ -125,7 +125,7 @@ if not target_platform == 'win32':
 env.VariantDir('#' + build_dir, '#', duplicate = 0)
 
 # Look for the sources in the correct place
-env.Append(CPPPATH = '#src')
+env.Append(CPPPATH = ['#src'])
 
 # Dependencies
 deplibs = ['sndfile']
@@ -135,13 +135,6 @@ for depname in deplibs:
 
 env.AppendUnique(LIBS = deplibs)
 
-test_env = env
-test_libs = ['gtest', 'gtest_main']
-#for depname in test_libs:
-#  test_env.ParseConfig('pkg-config --cflags --libs ' + depname)
-test_env.AppendUnique(LIBPATH = '/usr/local/lib',
-                      CPPPATH = '/usr/local/lib',
-                      LIBS = test_libs)
 
 # Builder for the main program
 program = env.Program(target = os.path.join(build_dir, target_executable), 
@@ -150,7 +143,15 @@ program = env.Program(target = os.path.join(build_dir, target_executable),
 env.Alias(target_executable, os.path.join(build_dir, target_executable))
 env.Default(program)
 
-test = test_env.Program(target = os.path.join(build_dir, test_executable),
-                        source = map(lambda x: '#' + build_dir + '/src/' + x,
-                                     test_sources))
-env.Alias('test', os.path.join(build_dir, test_executable))
+#test_env = env.Clone()
+#test_libs = ['gtest', 'gtest_main']
+#for depname in test_libs:
+#  test_env.ParseConfig('pkg-config --cflags --libs ' + depname)
+#test_env.AppendUnique(LIBPATH = ['/usr/local/lib'],
+#                      CPPPATH = ['/usr/local/lib'],
+#                      LIBS = test_libs)
+
+#test = test_env.Program(target = os.path.join(build_dir, test_executable),
+#                        source = map(lambda x: '#' + build_dir + '/src/' + x,
+#                                     test_sources))
+#env.Alias('test', os.path.join(build_dir, test_executable))

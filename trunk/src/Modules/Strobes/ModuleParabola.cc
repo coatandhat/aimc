@@ -26,6 +26,7 @@
  * \version \$Id:$
  */
 
+#include <limits.h>
 #include <cmath>
 
 #include "Modules/Strobes/ModuleParabola.h"

@@ -32,6 +32,8 @@
 #  include <sys/types.h>
 #  include <dirent.h>  // for opendir&friends
 #endif
+
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include <cmath>
