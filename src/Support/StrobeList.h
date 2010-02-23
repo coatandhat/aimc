@@ -22,7 +22,7 @@
  *
  * \author Tom Walters <tom@acousticscale.org>
  * \date created 2007/08/22
- * \version \$Id: StrobeList.h 1 2010-02-02 11:04:50Z tcw $
+ * \version \$Id$
  */
 
 #ifndef AIMC_SUPPORT_STROBELIST_H_

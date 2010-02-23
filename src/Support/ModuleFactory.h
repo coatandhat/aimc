@@ -1,4 +1,4 @@
-// Copyright 2006-2010, Thomas Walters
+// Copyright 2008-2010, Thomas Walters
 //
 // AIM-C: A C++ implementation of the Auditory Image Model
 // http://www.acousticscale.org/AIMC
@@ -17,34 +17,38 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /*! \file
- *  \brief ERB calculations
+ *  \brief Factory class for AIM-C modules.
  */
 
 /*! \author: Thomas Walters <tom@acousticscale.org>
- *  \date 2010/01/23
+ *  \date 2010/02/23
  *  \version \$Id$
  */
 
-#ifndef AIMC_SUPPORT_ERBTOOLS_H_
-#define AIMC_SUPPORT_ERBTOOLS_H_
+#ifndef AIMC_SUPPORT_MODULE_FACTORY_H_
+#define AIMC_SUPPORT_MODULE_FACTORY_H_
 
-#include <cmath>
+#include <string>
+
+#include "Support/Module.h"
+#include "Support/Parameters.h"
 
 namespace aimc {
-class ERBTools {
+/*! \brief Factory class for AIM-C modules.
+ *
+ * This class is the basis for a more complete module registration scheme to
+ * be implemented in future. For now, all modules which are created have to
+ * be added to this class individually. The goal is to eventally replace this
+ * with a REGISTER_MODULE macro which can be added to the header file for 
+ * every module.
+ */
+
+class ModuleFactory {
  public:
-  static float Freq2ERB(float freq) {
-    return 21.4f * log10(4.37f * freq / 1000.0f + 1.0f);
-  }
-
-  static float Freq2ERBw(float freq) {
-    return 24.7f * (4.37f * freq / 1000.0f + 1.0f);
-  }
-
-  static float ERB2Freq(float erb) {
-    return (pow(10, (erb / 21.4f)) - 1.0f) / 4.37f * 1000.0f;
-  }
+  static Module* Create(string module_name_, Parameters *params);
+ private:
+  DISALLOW_COPY_AND_ASSIGN(ModuleFactory);
 };
 }
 
-#endif  // AIMC_SUPPORT_ERBTOOLS_H_
+#endif  // AIMC_SUPPORT_MODULE_FACTORY_H_

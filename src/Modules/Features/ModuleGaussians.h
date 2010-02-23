@@ -22,7 +22,7 @@
 
 /*! \author Thomas Walters <tom@acousticscale.org>
  *  \date created 2008/06/23
- *  \version \$Id: ModuleGaussians.h 2 2010-02-02 12:59:50Z tcw $
+ *  \version \$Id$
  */
 
 #ifndef AIMC_MODULES_FEATURES_GAUSSIANS_H_

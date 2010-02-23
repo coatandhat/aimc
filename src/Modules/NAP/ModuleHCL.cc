@@ -22,7 +22,7 @@
  *
  * \author Thomas Walters <tom@acousticscale.org>
  * \date created 2007/03/07
- * \version \$Id: ModuleHCL.cc 4 2010-02-03 18:44:58Z tcw $
+ * \version \$Id$
  */
 
 #include <cmath>
@@ -35,7 +35,7 @@ ModuleHCL::ModuleHCL(Parameters *parameters) : Module(parameters) {
   module_type_ = "nap";
   module_description_ = "Halfwave rectification, compression "
                         "and lowpass filtering";
-  module_version_ = "$Id: ModuleHCL.cc 4 2010-02-03 18:44:58Z tcw $";
+  module_version_ = "$Id$";
 
   do_lowpass_ = parameters_->DefaultBool("nap.do_lowpass", true);
   do_log_ = parameters_->DefaultBool("nap.do_log_compression", false);

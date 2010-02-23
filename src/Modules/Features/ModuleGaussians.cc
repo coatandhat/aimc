@@ -23,7 +23,7 @@
 /*!
  * \author Thomas Walters <tom@acousticscale.org>
  * \date created 2008/06/23
- * \version \$Id: ModuleGaussians.cc 2 2010-02-02 12:59:50Z tcw $
+ * \version \$Id$
  */
 
 #include <math.h>
@@ -37,7 +37,7 @@ ModuleGaussians::ModuleGaussians(Parameters *params) : Module(params) {
   module_description_ = "Gaussian Fitting to SSI profile";
   module_identifier_ = "gaussians";
   module_type_ = "features";
-  module_version_ = "$Id: ModuleGaussians.cc 2 2010-02-02 12:59:50Z tcw $";
+  module_version_ = "$Id$";
 
   m_iParamNComp = parameters_->DefaultInt("features.gaussians.ncomp", 4);
   m_fParamVar = parameters_->DefaultFloat("features.gaussians.var", 115.0);

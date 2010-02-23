@@ -23,7 +23,7 @@
  *  \author Willem van Engen <cnbh@willem.engen.nl>
  *  \author Thomas Walters <tom@acousticscale.org>
  *  \date created 2006/09/21
- *  \version \$Id: Parameters.h 4 2010-02-03 18:44:58Z tcw $
+ *  \version \$Id$
  */
 
 #ifndef AIMC_SUPPORT_PARAMETERS_H_

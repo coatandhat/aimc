@@ -23,7 +23,7 @@
 /*! \author: Thomas Walters <tom@acousticscale.org>
  *  \author: Willem van Engen <cnbh@willem.engen.nl>
  *  \date 2010/01/30
- *  \version \$Id: Common.h 1 2010-02-02 11:04:50Z tcw $
+ *  \version \$Id$
  */
 
 #ifndef AIMC_SUPPORT_COMMON_H_

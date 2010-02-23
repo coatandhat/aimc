@@ -45,7 +45,7 @@ Module::~Module() {
 };
 
 bool Module::Initialize(const SignalBank &input) {
-  LOG_INFO_NN(_T("-> %s "), module_identifier_.c_str());
+  // LOG_INFO_NN(_T("-> %s "), module_identifier_.c_str());
   // Validate the input
   if (!input.Validate()) {
     LOG_ERROR(_T("Input SignalBank not valid"));
@@ -77,7 +77,7 @@ bool Module::Initialize(const SignalBank &input) {
           return false;
     }
   } else {
-    LOG_INFO(_T("|"));
+    // LOG_INFO(_T("|"));
   }
   initialized_ = true;
   return true;
@@ -87,7 +87,7 @@ void Module::Reset() {
   if (!initialized_)
     return;
 
-  LOG_INFO("Resetting module %s", module_identifier_.c_str());
+  // LOG_INFO("Resetting module %s", module_identifier_.c_str());
   ResetInternal();
 
   // Iterate through all the targets of this module, resetting

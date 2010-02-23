@@ -22,7 +22,7 @@
  *
  * \author Willem van Engen <cnbh@willem.engen.nl>
  * \date created 2006/09/21
- * \version \$Id: Parameters.cc 4 2010-02-03 18:44:58Z tcw $
+ * \version \$Id$
  */
 
 #include <stdio.h>

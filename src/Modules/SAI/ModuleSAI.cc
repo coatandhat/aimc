@@ -23,7 +23,7 @@
 /*
  * \author Thomas Walters <tom@acousticscale.org>
  * \date created 2007/08/29
- * \version \$Id: ModuleSAI.cc 4 2010-02-03 18:44:58Z tcw $
+ * \version \$Id$
  */
 #include <cmath>
 
@@ -34,7 +34,7 @@ ModuleSAI::ModuleSAI(Parameters *parameters) : Module(parameters) {
   module_identifier_ = "weighted_sai";
   module_type_ = "sai";
   module_description_ = "Stabilised auditory image";
-  module_version_ = "$Id: ModuleSAI.cc 4 2010-02-03 18:44:58Z tcw $";
+  module_version_ = "$Id$";
 
   min_delay_ms_ = parameters_->DefaultFloat("sai.min_delay_ms", 0.0f);
   max_delay_ms_ = parameters_->DefaultFloat("sai.max_delay_ms", 35.0f);
