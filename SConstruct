@@ -129,7 +129,7 @@ else:
 #  env.Replace(CC = ['gcc-4.0'])
 #  env.Replace(CXX = ['gcc-4.0'])
 #  env.AppendUnique(CPPFLAGS = ['-fno-stack-protector','-isysroot', '/Developer/SDKs/MacOSX10.5.sdk', '-mmacosx-version-min=10.4'])
-    
+#  deplibs = ['sndfile', 'flac', 'vorbis', 'vorbisenc', 'ogg']  
 if not target_platform == 'win32':
   # On windows, utf support is builtin for SimpleIni
   # but not on other platforms
@@ -142,7 +142,7 @@ env.VariantDir('#' + build_dir, '#', duplicate = 0)
 env.Append(CPPPATH = ['#src'])
 
 # Dependencies
-deplibs = ['sndfile', 'flac', 'vorbis', 'vorbisenc', 'ogg']
+deplibs = ['sndfile']
 
 for depname in deplibs:
   env.ParseConfig('pkg-config --cflags --libs ' + depname)
