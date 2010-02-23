@@ -26,6 +26,7 @@
  * \version \$Id$
  */
 
+#include <limits.h>
 #include "Support/FileList.h"
 
 namespace aimc {

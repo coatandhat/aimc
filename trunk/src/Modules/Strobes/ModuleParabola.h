@@ -104,7 +104,6 @@ class ModuleParabola : public Module {
   int channel_count_;
   float sample_rate_;
   float strobe_decay_time_;
-  int max_strobes_;
 };
 }  // namespace aimc
 

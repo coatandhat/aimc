@@ -73,7 +73,7 @@ target_platform = build_platform
 
 # Build products location and executable name
 build_dir = os.path.join('build', target_platform + '-release')
-target_executable = 'aimc'
+target_executable = 'AIMCopy'
 test_executable = 'aimc_tests'
 
 # Create build products directory if necessary
@@ -117,10 +117,18 @@ elif compiler == 'gcc':
 else:
   print('Unsupported compiler: ' + compiler)
   Exit(1)
-  
-if build_platform == 'darwin':
-  env.AppendUnique(CPPFLAGS = ['-arch', 'i386'])
-  env.AppendUnique(LINKFLAGS = ['-arch', 'i386'])
+ 
+# To make a statically-linked version for os 10.4 and up... 
+#if build_platform == 'darwin':
+#  env.AppendUnique(CPPFLAGS = ['-arch', 'i386'])
+#  env.AppendUnique(LINKFLAGS = ['-arch', 'i386'])
+#  env.AppendUnique(LINKFLAGS = ['-Wl'])
+#  env.AppendUnique(LINKFLAGS = ['-search_paths_first'])
+#  env.AppendUnique(MACOSX_DEPLOYMENT_TARGET = ['10.4'])
+#  env.AppendUnique(GCC_VERSION = ['4.0'])
+#  env.Replace(CC = ['gcc-4.0'])
+#  env.Replace(CXX = ['gcc-4.0'])
+#  env.AppendUnique(CPPFLAGS = ['-fno-stack-protector','-isysroot', '/Developer/SDKs/MacOSX10.5.sdk', '-mmacosx-version-min=10.4'])
     
 if not target_platform == 'win32':
   # On windows, utf support is builtin for SimpleIni
@@ -134,7 +142,7 @@ env.VariantDir('#' + build_dir, '#', duplicate = 0)
 env.Append(CPPPATH = ['#src'])
 
 # Dependencies
-deplibs = ['sndfile']
+deplibs = ['sndfile', 'flac', 'vorbis', 'vorbisenc', 'ogg']
 
 for depname in deplibs:
   env.ParseConfig('pkg-config --cflags --libs ' + depname)
@@ -151,12 +159,12 @@ env.Default(program)
 
 #test_env = env.Clone()
 #test_libs = ['gtest', 'gtest_main']
-#for depname in test_libs:
-#  test_env.ParseConfig('pkg-config --cflags --libs ' + depname)
+##for depname in test_libs:
+##  test_env.ParseConfig('pkg-config --cflags --libs ' + depname)
 #test_env.AppendUnique(LIBPATH = ['/usr/local/lib'],
 #                      CPPPATH = ['/usr/local/lib'],
 #                      LIBS = test_libs)
-
+#
 #test = test_env.Program(target = os.path.join(build_dir, test_executable),
 #                        source = map(lambda x: '#' + build_dir + '/src/' + x,
 #                                     test_sources))
