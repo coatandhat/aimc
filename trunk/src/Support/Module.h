@@ -22,7 +22,7 @@
 
 /*! \author: Thomas Walters <tom@acousticscale.org>
  *  \date 2010/01/23
- *  \version \$Id: Module.h 4 2010-02-03 18:44:58Z tcw $
+ *  \version \$Id$
  */
 
 #ifndef AIMC_SUPPORT_MODULE_H_
@@ -159,6 +159,22 @@ class Module {
    * output.
    */
   const SignalBank* GetOutputBank() const;
+
+  string version() const {
+    return module_version_;
+  }
+
+  string id() const {
+    return module_identifier_;
+  }
+
+  string description() const {
+    return module_description_;
+  }
+
+  string type() const {
+    return module_type_;
+  }
 
  protected:
   void PushOutput();

@@ -23,7 +23,7 @@
 
 /*! \author Thomas Walters <tom@acousticscale.org>
  *  \date created 2008/02/05
- *  \version \$Id: ModulePZFC.cc 4 2010-02-03 18:44:58Z tcw $
+ *  \version \$Id$
  */
 
 #include "Support/ERBTools.h"
@@ -35,7 +35,7 @@ ModulePZFC::ModulePZFC(Parameters *parameters) : Module(parameters) {
   module_identifier_ = "pzfc";
   module_type_ = "bmm";
   module_description_ = "Pole-Zero Filter Cascade";
-  module_version_ = "$Id: ModulePZFC.cc 4 2010-02-03 18:44:58Z tcw $";
+  module_version_ = "$Id$";
 
   // Get parameter values, setting default values where necessary
   // Each parameter is set here only if it has not already been set elsewhere.

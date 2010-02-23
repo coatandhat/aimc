@@ -22,7 +22,7 @@
 
 /*! \author Thomas Walters <tom@acousticscale.org>
  *  \date created 2007/08/29
- *  \version \$Id: ModuleSAI.h 4 2010-02-03 18:44:58Z tcw $
+ *  \version \$Id$
  */
 #ifndef AIMC_MODULES_SAI_SAI_H_
 #define AIMC_MODULES_SAI_SAI_H_

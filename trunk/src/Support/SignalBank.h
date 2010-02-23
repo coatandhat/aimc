@@ -29,7 +29,7 @@
 
 /*! \author: Thomas Walters <tom@acousticscale.org>
  *  \date 2010/01/23
- *  \version \$Id: SignalBank.h 4 2010-02-03 18:44:58Z tcw $
+ *  \version \$Id$
  */
 
 #ifndef AIMC_SUPPORT_SIGNALBANK_H_

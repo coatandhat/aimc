@@ -23,7 +23,7 @@
 
 /* \author Thomas Walters <tom@acousticscale.org>
  * \date created 2007/03/07
- * \version \$Id: ModuleHCL.h 4 2010-02-03 18:44:58Z tcw $
+ * \version \$Id$
  */
 
 #ifndef AIMC_MODULES_NAP_HCL_H_

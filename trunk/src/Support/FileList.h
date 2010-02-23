@@ -1,4 +1,4 @@
-// Copyright 2006-2010, Thomas Walters
+// Copyright 2010, Thomas Walters
 //
 // AIM-C: A C++ implementation of the Auditory Image Model
 // http://www.acousticscale.org/AIMC
@@ -16,35 +16,28 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-/*! \file
- *  \brief ERB calculations
+/*!
+ * \file 
+ * \brief Convert a file containing a list of pairs of tab-separated
+ * items, one per line, and convert it to a vector<pair<string, string> >
+ *
+ * \author Thomas Walters <tom@acousticscale.org>
+ * \date created 2010/02/23
+ * \version \$Id$
  */
 
-/*! \author: Thomas Walters <tom@acousticscale.org>
- *  \date 2010/01/23
- *  \version \$Id$
- */
+#include <string>
+#include <utility>
+#include <vector>
 
-#ifndef AIMC_SUPPORT_ERBTOOLS_H_
-#define AIMC_SUPPORT_ERBTOOLS_H_
-
-#include <cmath>
+#include "Support/Common.h"
 
 namespace aimc {
-class ERBTools {
+using std::vector;
+using std::pair;
+using std::string;
+class FileList {
  public:
-  static float Freq2ERB(float freq) {
-    return 21.4f * log10(4.37f * freq / 1000.0f + 1.0f);
-  }
-
-  static float Freq2ERBw(float freq) {
-    return 24.7f * (4.37f * freq / 1000.0f + 1.0f);
-  }
-
-  static float ERB2Freq(float erb) {
-    return (pow(10, (erb / 21.4f)) - 1.0f) / 4.37f * 1000.0f;
-  }
+  static vector<pair<string, string> > Load(string filename);
 };
-}
-
-#endif  // AIMC_SUPPORT_ERBTOOLS_H_
+}  // namespace aimc

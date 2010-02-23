@@ -31,9 +31,11 @@ import shutil
 
 # Sources common to every version
 common_sources = ['Support/Common.cc',
+                  'Support/FileList.cc',
                   'Support/SignalBank.cc',
                   'Support/Parameters.cc',
                   'Support/Module.cc',
+                  'Support/ModuleFactory.cc',
                   'Modules/Input/ModuleFileInput.cc',
                   'Modules/BMM/ModuleGammatone.cc',
                   'Modules/BMM/ModulePZFC.cc',
@@ -47,7 +49,7 @@ common_sources = ['Support/Common.cc',
                   'Modules/Output/FileOutputHTK.cc']
 
 # File which contains main()
-sources = common_sources + ['Main/aimc.cc']
+sources = common_sources + ['Main/AIMCopy.cc']
 
 # Test sources
 test_sources = ['Modules/Profile/ModuleSlice_unittest.cc']

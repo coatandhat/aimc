@@ -22,7 +22,7 @@
  *
  *  \author Thomas Walters <tom@acousticscale.org>
  *  \date created 2008/02/05
- * \version \$Id: ModulePZFC.h 2 2010-02-02 12:59:50Z tcw $
+ * \version \$Id$
  */
 
 #ifndef _AIMC_MODULES_BMM_PZFC_H_

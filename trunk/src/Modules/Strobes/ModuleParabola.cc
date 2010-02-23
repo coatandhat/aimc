@@ -23,7 +23,7 @@
  *
  * \author Thomas Walters <tom@acousticscale.org>
  * \date created 2007/08/01
- * \version \$Id:$
+ * \version \$Id$
  */
 
 #include <limits.h>
