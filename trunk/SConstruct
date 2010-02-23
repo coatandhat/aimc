@@ -117,6 +117,10 @@ elif compiler == 'gcc':
 else:
   print('Unsupported compiler: ' + compiler)
   Exit(1)
+  
+if build_platform == 'darwin':
+  env.AppendUnique(CPPFLAGS = ['-arch', 'i386'])
+  env.AppendUnique(LINKFLAGS = ['-arch', 'i386'])
     
 if not target_platform == 'win32':
   # On windows, utf support is builtin for SimpleIni
