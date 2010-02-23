@@ -28,7 +28,6 @@
 #include "Support/Module.h"
 
 namespace aimc {
-using std::vector;
 class #MODULE_NAME# : public Module {
  public:
   explicit #MODULE_NAME#(Parameters *pParam);

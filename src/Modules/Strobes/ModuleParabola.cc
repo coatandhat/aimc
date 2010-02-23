@@ -43,7 +43,6 @@ ModuleParabola::ModuleParabola(Parameters *params) : Module(params) {
   parabw_ = parameters_->DefaultFloat("parabola.width_cycles", 1.5f);
   strobe_decay_time_ = parameters_->DefaultFloat("parabla.strobe_decay_time",
                                                  0.02f);
-  max_strobes_ = parameters_->DefaultInt("parabola.max_strobes", 50);
   channel_count_ = 0;
 }
 
