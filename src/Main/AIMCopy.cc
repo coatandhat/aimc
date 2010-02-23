@@ -42,6 +42,7 @@
 #include <vector>
 
 #include <stdlib.h>
+#include <time.h>
 
 #include "Modules/Input/ModuleFileInput.h"
 #include "Modules/BMM/ModuleGammatone.h"
@@ -171,7 +172,20 @@ int main(int argc, char* argv[]) {
                       data_file.c_str());
       return -1;
     }
+    time_t rawtime;
+    struct tm * timeinfo;
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+
+
     outfile << "# AIM-C AIMCopy\n";
+    outfile << "# Run on: " << asctime(timeinfo);
+    char * descr = getenv("USER");
+    if (descr) {
+      outfile << "# By user: " << descr <<"\n";
+    }
+    outfile << "# Module chain: file_input->gt->hcl->slice->scaler->";
+    outfile << "gaussians->out_htk\n";
     outfile << "# Module versions:\n";
     outfile << "# " << input.id() << " : " << input.version() << "\n";
     outfile << "# " << bmm.id() << " : " << bmm.version() << "\n";
