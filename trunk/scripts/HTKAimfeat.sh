@@ -46,10 +46,10 @@ MFCC_FEATURES=
 SOUND_SOURCE="/media/sound-database/cnbh-sounds"
 
 # Location of the AIMCopy binary if not in the path
-AIMCOPY_PREFIX="./aimc-read-only/build/posix-release/"
+AIMCOPY_PREFIX="../aimc-read-only/build/posix-release/"
 
 # Location of HTK binaries if not in the path
-HTK_PREFIX="/media/sound-database/htk/bin/"
+HTK_PREFIX=""
 
 # Names of various internal files and directories. 
 # Rename here if you don't like them for some reason.
