@@ -43,7 +43,7 @@ MACHINE_CORES=4
 MFCC_FEATURES=
 
 # Source directory for all the sound files
-SOUND_SOURCE="/media/sound-database/cnbh-sounds"
+SOUND_SOURCE="/media/sounds-database/cnbh-sounds"
 
 # Location of the AIMCopy binary if not in the path
 AIMCOPY_PREFIX="../aimc-read-only/build/posix-release/"
