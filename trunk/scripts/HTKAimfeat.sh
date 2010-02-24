@@ -43,13 +43,13 @@ MACHINE_CORES=4
 MFCC_FEATURES=
 
 # Source directory for all the sound files
-SOUND_SOURCE="Sounds"
+SOUND_SOURCE="/media/sound-database/cnbh-sounds"
 
 # Location of the AIMCopy binary if not in the path
-AIMCOPY_PREFIX="/Users/Tom/Documents/Work/AIM/AIM-C/aimc/trunk/build/darwin-release/"
+AIMCOPY_PREFIX="./aimc-read-only/build/posix-release/"
 
 # Location of HTK binaries if not in the path
-HTK_PREFIX=""
+HTK_PREFIX="/media/sound-database/htk/bin/"
 
 # Names of various internal files and directories. 
 # Rename here if you don't like them for some reason.
