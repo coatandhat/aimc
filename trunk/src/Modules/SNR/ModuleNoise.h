@@ -18,21 +18,22 @@
 
 /*!
  * \author Thomas Walters <tom@acousticscale.org>
- * \date created 2010/02/19
+ * \date created 2010/02/24
  * \version \$Id$
  */
 
-#ifndef AIMC_MODULES_SSI_SSI_H_
-#define AIMC_MODULES_SSI_SSI_H_
+#ifndef AIMC_MODULES_SNR_NOISE_H_
+#define AIMC_MODULES_SNR_NOISE_H_
+
+#include <boost/random.hpp>
 
 #include "Support/Module.h"
 
 namespace aimc {
-using std::vector;
-class ModuleSSI : public Module {
+class ModuleNoise : public Module {
  public:
-  explicit ModuleSSI(Parameters *pParam);
-  virtual ~ModuleSSI();
+  explicit ModuleNoise(Parameters *pParam);
+  virtual ~ModuleNoise();
 
   /*! \brief Process a buffer
    */
@@ -49,21 +50,18 @@ class ModuleSSI : public Module {
    */
   virtual bool InitializeInternal(const SignalBank &input);
 
-  int ExtractPitchIndex(const SignalBank &input) const;
-
   float sample_rate_;
   int buffer_length_;
   int channel_count_;
-  int ssi_width_samples_;
-  float ssi_width_cycles_;
-  float pivot_cf_;
 
-  bool do_pitch_cutoff_;
-  bool weight_by_cutoff_;
-  bool weight_by_scaling_;
-  bool log_cycles_axis_;
-  float pitch_search_start_ms_;
+  float multiplier_;
+
+  // Random number generator which yeilds Gaussian-distributed values by
+  // The generator is a Mersenne twister
+  boost::variate_generator<boost::mt19937,
+                           boost::normal_distribution<float> >
+                           gaussian_variate_;
 };
 }  // namespace aimc
 
-#endif  // AIMC_MODULES_SSI_SSI_H_
+#endif  // AIMC_MODULES_SNR_NOISE_H_

@@ -34,13 +34,15 @@ aimc_module = Extension('_aimc',
                                    '../src/Modules/BMM/ModulePZFC.cc',
                                    '../src/Modules/NAP/ModuleHCL.cc',
                                    '../src/Modules/Strobes/ModuleParabola.cc',
+                                   '../src/Modules/Strobes/ModuleLocalMax.cc',
                                    '../src/Modules/SAI/ModuleSAI.cc',
                                    '../src/Modules/SSI/ModuleSSI.cc',
+                                   '../src/Modules/SNR/ModuleNoise.cc',
                                    '../src/Modules/Profile/ModuleSlice.cc',
                                    '../src/Modules/Profile/ModuleScaler.cc',
                                    '../src/Modules/Output/FileOutputHTK.cc'],
                         swig_opts = ['-c++','-I../src/'], 
-                        include_dirs=['../src/']
+                        include_dirs=['../src/', '/opt/local/include/']
                         )
 
 setup (name = 'aimc',

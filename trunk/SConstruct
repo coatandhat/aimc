@@ -41,7 +41,9 @@ common_sources = ['Support/Common.cc',
                   'Modules/BMM/ModulePZFC.cc',
                   'Modules/NAP/ModuleHCL.cc',
                   'Modules/Strobes/ModuleParabola.cc',
+                  'Modules/Strobes/ModuleLocalMax.cc',
                   'Modules/SAI/ModuleSAI.cc',
+                  'Modules/SNR/ModuleNoise.cc',
                   'Modules/SSI/ModuleSSI.cc',
                   'Modules/Profile/ModuleSlice.cc',
                   'Modules/Profile/ModuleScaler.cc',
@@ -49,7 +51,7 @@ common_sources = ['Support/Common.cc',
                   'Modules/Output/FileOutputHTK.cc']
 
 # File which contains main()
-sources = common_sources + ['Main/AIMCopy.cc']
+sources = common_sources + ['Main/AIMCopy_SSI_Features.cc']
 
 # Test sources
 test_sources = ['Modules/Profile/ModuleSlice_unittest.cc']

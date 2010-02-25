@@ -53,7 +53,7 @@ bool ModuleSlice::InitializeInternal(const SignalBank &input) {
   buffer_length_ = input.buffer_length();
   channel_count_ = input.channel_count();
 
-  if (lower_limit_ < 0) {
+  if (lower_limit_ < 0 || take_all_) {
     lower_limit_ = 0;
   }
 
@@ -62,14 +62,14 @@ bool ModuleSlice::InitializeInternal(const SignalBank &input) {
   }
 
   if (temporal_profile_) {
-    if (upper_limit_ > channel_count_) {
+    if (upper_limit_ > channel_count_ || take_all_) {
       upper_limit_ = channel_count_;
     }
     if (lower_limit_ > channel_count_) {
       lower_limit_ = channel_count_;
     }
   } else {
-    if (upper_limit_ > buffer_length_) {
+    if (upper_limit_ > buffer_length_ || take_all_) {
       upper_limit_ = buffer_length_;
     }
     if (lower_limit_ > buffer_length_) {

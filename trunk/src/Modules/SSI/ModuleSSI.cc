@@ -33,8 +33,36 @@ ModuleSSI::ModuleSSI(Parameters *params) : Module(params) {
   module_type_ = "ssi";
   module_version_ = "$Id$";
 
-  // do_pitch_cutoff_ = parameters_->DefaultBool("ssi.pitch_cutoff", false);
-  ssi_width_cycles_ = parameters_->DefaultFloat("ssi.width_cycles", 20.0f);
+  // Cut off the SSI at the end of the first cycle
+  do_pitch_cutoff_ = parameters_->DefaultBool("ssi.pitch_cutoff", false);
+
+  // Weight the values in each channel more strongly if the channel was
+  // truncated due to the pitch cutoff. This ensures that the same amount of
+  // energy remains in the SSI spectral profile
+  weight_by_cutoff_ = parameters_->DefaultBool("ssi.weight_by_cutoff", false);
+
+  // Weight the values in each channel more strongly if the channel was
+  // scaled such that the end goes off the edge of the computed SSI.
+  // Again, this ensures that the overall energy of the spectral profile
+  // remains the same.
+  weight_by_scaling_ = parameters_->DefaultBool("ssi.weight_by_scaling",
+                                                false);
+
+  // Time from the zero-lag line of the SAI from which to start searching
+  // for a maximum in the input SAI's temporal profile.
+  pitch_search_start_ms_ = parameters_->DefaultFloat(
+    "ssi.pitch_search_start_ms", 2.0f);
+
+  // Total width in cycles of the whole SSI
+  ssi_width_cycles_ = parameters_->DefaultFloat("ssi.width_cycles", 10.0f);
+
+  // Set to true to make the cycles axis logarithmic (ie indexing by gamma
+  // rather than by cycles) 
+  log_cycles_axis_ = parameters_->DefaultBool("ssi.log_cycles_axis", true);
+
+  // The centre frequency of the channel which will just fill the complete
+  // width of the SSI buffer
+  pivot_cf_ = parameters_->DefaultFloat("ssi.pivot_cf", 1000.0f);
 }
 
 ModuleSSI::~ModuleSSI() {
@@ -47,11 +75,10 @@ bool ModuleSSI::InitializeInternal(const SignalBank &input) {
   buffer_length_ = input.buffer_length();
   channel_count_ = input.channel_count();
 
-  float lowest_cf = input.centre_frequency(0);
-  ssi_width_samples_ = sample_rate_ * ssi_width_cycles_ / lowest_cf;
+  ssi_width_samples_ = sample_rate_ * ssi_width_cycles_ / pivot_cf_;
   if (ssi_width_samples_ > buffer_length_) {
     ssi_width_samples_ = buffer_length_;
-    float cycles = ssi_width_samples_ * lowest_cf / sample_rate_;
+    float cycles = ssi_width_samples_ * pivot_cf_ / sample_rate_;
     LOG_INFO(_T("Requested SSI width of %f cycles is too long for the "
                 "input buffer length of %d samples. The SSI will be "
                 "truncated at %d samples wide. This corresponds to a width "
@@ -64,6 +91,30 @@ bool ModuleSSI::InitializeInternal(const SignalBank &input) {
 }
 
 void ModuleSSI::ResetInternal() {
+}
+
+int ModuleSSI::ExtractPitchIndex(const SignalBank &input) const {
+  // Generate temporal profile of the SAI
+  vector<float> sai_temporal_profile(buffer_length_, 0.0f);
+  for (int i = 0; i < buffer_length_; ++i) {
+    float val = 0.0f;
+    for (int ch = 0; ch < channel_count_; ++ch) {
+      val += input.sample(ch, i);
+    }
+    sai_temporal_profile[i] = val;
+  }
+
+  // Find pitch value
+  int start_sample = floor(pitch_search_start_ms_ * sample_rate_ / 1000.0f);
+  int max_idx = 0;
+  float max_val = 0.0f;
+  for (int i = start_sample; i < buffer_length_; ++i) {
+    if (sai_temporal_profile[i] > max_val) {
+      max_idx = i;
+      max_val = sai_temporal_profile[i];
+    }
+  }
+  return max_idx;
 }
 
 void ModuleSSI::Process(const SignalBank &input) {
@@ -85,12 +136,28 @@ void ModuleSSI::Process(const SignalBank &input) {
 
   output_.set_start_time(input.start_time());
 
+  int pitch_index = buffer_length_ - 1;
+  if (do_pitch_cutoff_) {
+    pitch_index = ExtractPitchIndex(input);
+  }
+
   for (int ch = 0; ch < channel_count_; ++ch) {
+    float centre_frequency = input.centre_frequency(ch);
     // Copy the buffer from input to output, addressing by h-value
     for (int i = 0; i < ssi_width_samples_; ++i) {
-      float h = static_cast<float>(i) * ssi_width_cycles_
-                / static_cast<float>(ssi_width_samples_);
-      float cycle_samples = sample_rate_ / input.centre_frequency(ch);
+      float h;
+      float cycle_samples = sample_rate_ / centre_frequency;
+      if (log_cycles_axis_) {
+        float gamma_min = -1.0f;
+        float gamma_max = log2(ssi_width_cycles_);
+        float gamma = gamma_min + (gamma_max - gamma_min)
+                                   * static_cast<float>(i)
+                                   / static_cast<float>(ssi_width_samples_);
+        h = pow(2.0f, gamma);
+      } else {
+        h = static_cast<float>(i) * ssi_width_cycles_
+            / static_cast<float>(ssi_width_samples_);
+      }
 
       // The index into the input array is a floating-point number, which is
       // split into a whole part and a fractional part. The whole part and
@@ -98,15 +165,38 @@ void ModuleSSI::Process(const SignalBank &input) {
       // between input samples to yield an output sample.
       double whole_part;
       float frac_part = modf(h * cycle_samples, &whole_part);
-      int sample = static_cast<int>(whole_part);
+      int sample = floor(whole_part);
+
+      float weight = 1.0f;
+
+      int cutoff_index = buffer_length_ - 1;
+      if (do_pitch_cutoff_) {
+        if (pitch_index < cutoff_index) {
+          if (weight_by_cutoff_) {
+            weight *= static_cast<float>(buffer_length_)
+                      / static_cast<float>(pitch_index);
+          }
+          cutoff_index = pitch_index;
+        }
+      }
+
+      if (weight_by_scaling_) {
+        if (centre_frequency > pivot_cf_) {
+          weight *= (centre_frequency / pivot_cf_);
+        }
+      }
 
       float val;
-      if (sample < buffer_length_ - 1) {
+      if (sample < cutoff_index) {
         float curr_sample = input.sample(ch, sample);
         float next_sample = input.sample(ch, sample + 1);
-        val = curr_sample + frac_part * (next_sample - curr_sample);
+        val = weight * (curr_sample
+                        + frac_part * (next_sample - curr_sample));
       } else {
-        val = 0.0f;
+        // Set out-of-range values to a negative number to signify that 
+        // they really don't exist, and shouldn't be used in feature
+        // calculations.
+        val = -1.0f;
       }
       output_.set_sample(ch, i, val);
     }

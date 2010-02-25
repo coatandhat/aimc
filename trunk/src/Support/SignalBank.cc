@@ -115,14 +115,6 @@ bool SignalBank::Validate() const {
   return true;
 }
 
-float SignalBank::sample(int channel, int index) const {
-  return signals_[channel][index];
-}
-
-void SignalBank::set_sample(int channel, int index, float value) {
-  signals_[channel][index] = value;
-}
-
 int SignalBank::strobe(int channel, int index) const {
   return strobes_[channel][index];
 }

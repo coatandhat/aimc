@@ -75,12 +75,18 @@ bool ModuleParabola::InitializeInternal(const SignalBank &input) {
 }
 
 void ModuleParabola::ResetInternal() {
+  threshold_.clear();
   threshold_.resize(channel_count_, 0.0f);
+  last_threshold_.clear();
   last_threshold_.resize(channel_count_, 0.0f);
+  samples_since_last_strobe_.clear();
   samples_since_last_strobe_.resize(channel_count_, 0);
 
+  prev_sample_.clear();
   prev_sample_.resize(channel_count_, 10000.0f);
+  curr_sample_.clear();
   curr_sample_.resize(channel_count_, 5000.0f);
+  next_sample_.clear();
   next_sample_.resize(channel_count_, 0.0f);
 }
 
