@@ -18,21 +18,22 @@
 
 /*!
  * \author Thomas Walters <tom@acousticscale.org>
- * \date created 2010/02/19
+ * \date created 2010/02/23
  * \version \$Id$
  */
 
-#ifndef AIMC_MODULES_SSI_SSI_H_
-#define AIMC_MODULES_SSI_SSI_H_
+#ifndef AIMC_MODULES_STROBES_LOCAL_MAX_H_
+#define AIMC_MODULES_STROBES_LOCAL_MAX_H_
 
+#include <vector>
 #include "Support/Module.h"
 
 namespace aimc {
 using std::vector;
-class ModuleSSI : public Module {
+class ModuleLocalMax : public Module {
  public:
-  explicit ModuleSSI(Parameters *pParam);
-  virtual ~ModuleSSI();
+  explicit ModuleLocalMax(Parameters *pParam);
+  virtual ~ModuleLocalMax();
 
   /*! \brief Process a buffer
    */
@@ -49,21 +50,22 @@ class ModuleSSI : public Module {
    */
   virtual bool InitializeInternal(const SignalBank &input);
 
-  int ExtractPitchIndex(const SignalBank &input) const;
-
   float sample_rate_;
   int buffer_length_;
   int channel_count_;
-  int ssi_width_samples_;
-  float ssi_width_cycles_;
-  float pivot_cf_;
 
-  bool do_pitch_cutoff_;
-  bool weight_by_cutoff_;
-  bool weight_by_scaling_;
-  bool log_cycles_axis_;
-  float pitch_search_start_ms_;
+  float decay_time_ms_;
+  float timeout_ms_;
+  int strobe_timeout_samples_;
+  int strobe_decay_samples_;
+
+  vector<float> threshold_;
+  vector<float> decay_constant_;
+
+  vector<float> prev_sample_;
+  vector<float> curr_sample_;
+  vector<float> next_sample_;
 };
 }  // namespace aimc
 
-#endif  // AIMC_MODULES_SSI_SSI_H_
+#endif  // AIMC_MODULES_STROBES_LOCAL_MAX_H_

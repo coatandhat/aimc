@@ -59,8 +59,14 @@ class SignalBank {
     return signals_[channel];
   };
 
-  float sample(int channel, int index) const;
-  void set_sample(int channel, int index, float value);
+  inline float sample(int channel, int index) const {
+    return signals_[channel][index];
+  }
+
+  inline void set_sample(int channel, int index, float value) {
+    signals_[channel][index] = value;
+  }
+
   int strobe(int channel, int index) const;
   int strobe_count(int channel) const;
   void AddStrobe(int channel, int time);
