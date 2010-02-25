@@ -49,6 +49,7 @@
 #include "Modules/BMM/ModulePZFC.h"
 #include "Modules/NAP/ModuleHCL.h"
 #include "Modules/Strobes/ModuleParabola.h"
+#include "Modules/Strobes/ModuleLocalMax.h"
 #include "Modules/SAI/ModuleSAI.h"
 #include "Modules/SSI/ModuleSSI.h"
 #include "Modules/SNR/ModuleNoise.h"
@@ -152,32 +153,40 @@ int main(int argc, char* argv[]) {
 
   // Set up AIM-C processor here
   aimc::ModuleFileInput input(&params);
-  //aimc::ModuleNoise noise_maker(&params);
+  aimc::ModuleNoise noise_maker(&params);
   aimc::ModuleGammatone bmm(&params);
   aimc::ModuleHCL nap(&params);
-  aimc::ModuleParabola strobes(&params);
+  aimc::ModuleLocalMax strobes(&params);
   aimc::ModuleSAI sai(&params);
   aimc::ModuleSSI ssi(&params);
 
   params.SetBool("slice.all", false);
-  params.SetInt("slice.lower_index", 40);
-  params.SetInt("slice.upper_index", 56);
+  params.SetInt("slice.lower_index", 77);
+  params.SetInt("slice.upper_index", 150);
   aimc::ModuleSlice slice_1(&params);
 
-  params.SetInt("slice.lower_index", 88);
-  params.SetInt("slice.upper_index", 104);
+  params.SetInt("slice.lower_index", 210);
+  params.SetInt("slice.upper_index", 240);
   aimc::ModuleSlice slice_2(&params);
 
-  params.SetInt("slice.lower_index", 184);
-  params.SetInt("slice.upper_index", 200);
+  params.SetInt("slice.lower_index", 280);
+  params.SetInt("slice.upper_index", 304);
   aimc::ModuleSlice slice_3(&params);
 
-  params.SetInt("slice.lower_index", 376);
-  params.SetInt("slice.upper_index", 392);
+  params.SetInt("slice.lower_index", 328);
+  params.SetInt("slice.upper_index", 352);
   aimc::ModuleSlice slice_4(&params);
 
   params.SetBool("slice.all", true);
   aimc::ModuleSlice slice_5(&params);
+
+  params.SetFloat("nap.lowpass_cutoff", 100.0);
+  aimc::ModuleHCL smooth_nap(&params);
+  params.SetBool("slice.all", true);
+  aimc::ModuleSlice nap_profile(&params);
+  aimc::ModuleScaler nap_scaler(&params);
+  aimc::ModuleGaussians nap_features(&params);
+  aimc::FileOutputHTK nap_out(&params);
 
   aimc::ModuleGaussians features_1(&params);
   aimc::ModuleGaussians features_2(&params);
@@ -191,10 +200,14 @@ int main(int argc, char* argv[]) {
   aimc::FileOutputHTK output_4(&params);
   aimc::FileOutputHTK output_5(&params);
 
-  input.AddTarget(&bmm);
-  // No noise for now
-  //noise_maker.AddTarget(&bmm);
+  input.AddTarget(&noise_maker);
+  noise_maker.AddTarget(&bmm);
   bmm.AddTarget(&nap);
+  bmm.AddTarget(&smooth_nap);
+  smooth_nap.AddTarget(&nap_profile);
+  nap_profile.AddTarget(&nap_scaler);
+  nap_scaler.AddTarget(&nap_features);
+  nap_features.AddTarget(&nap_out);
   nap.AddTarget(&strobes);
   strobes.AddTarget(&sai);
   sai.AddTarget(&ssi);
@@ -236,26 +249,33 @@ int main(int argc, char* argv[]) {
     if (descr) {
       outfile << "# By user: " << descr <<"\n";
     }
-    outfile << "# Module chain: ";
+    outfile << "#Module chain: ";
+    outfile << "#input";
+    outfile << "# noise_maker";
     outfile << "#  gt";
-    outfile << "#   parabola";
-    outfile << "#    sai_weighted";
-    outfile << "#     ssi";
-    outfile << "#      slice";
-    outfile << "#       features";
-    outfile << "#         output";
-    outfile << "#      slice";
-    outfile << "#       features";
-    outfile << "#         output";
-    outfile << "#      slice";
-    outfile << "#       features";
-    outfile << "#         output";
-    outfile << "#      slice";
-    outfile << "#       features";
-    outfile << "#         output";
-    outfile << "#      slice";
-    outfile << "#       features";
-    outfile << "#         output";
+    outfile << "#   nap";
+    outfile << "#    slice";
+    outfile << "#     scaler";
+    outfile << "#      features";
+    outfile << "#       output";
+    outfile << "#    local_max";
+    outfile << "#     sai_weighted";
+    outfile << "#      ssi";
+    outfile << "#       slice";
+    outfile << "#        features";
+    outfile << "#          output";
+    outfile << "#       slice";
+    outfile << "#        features";
+    outfile << "#          output";
+    outfile << "#       slice";
+    outfile << "#        features";
+    outfile << "#          output";
+    outfile << "#       slice";
+    outfile << "#        features";
+    outfile << "#          output";
+    outfile << "#       slice";
+    outfile << "#        features";
+    outfile << "#          output";
     outfile << "# ";
     outfile << "# Module versions:\n";
     outfile << "# " << input.id() << " : " << input.version() << "\n";
@@ -275,19 +295,21 @@ int main(int argc, char* argv[]) {
   }
 
   for (unsigned int i = 0; i < file_list.size(); ++i) {
-    aimc::LOG_INFO(_T("In:  %s"), file_list[i].first.c_str());
+    // aimc::LOG_INFO(_T("In:  %s"), file_list[i].first.c_str());
     aimc::LOG_INFO(_T("Out: %s"), file_list[i].second.c_str());
 
-    string filename = file_list[i].second + "_1";
+    string filename = file_list[i].second + ".slice_1";
     output_1.OpenFile(filename.c_str(), 10.0f);
-    filename = file_list[i].second + "_2";
+    filename = file_list[i].second + ".slice_2";
     output_2.OpenFile(filename.c_str(), 10.0f);
-    filename = file_list[i].second + "_3";
+    filename = file_list[i].second + ".slice_3";
     output_3.OpenFile(filename.c_str(), 10.0f);
-    filename = file_list[i].second + "_4";
+    filename = file_list[i].second + ".slice_4";
     output_4.OpenFile(filename.c_str(), 10.0f);
-    filename = file_list[i].second + "_5";
+    filename = file_list[i].second + ".ssi_profile";
     output_5.OpenFile(filename.c_str(), 10.0f);
+    filename = file_list[i].second + ".smooth_nap_profile";
+    nap_out.OpenFile(filename.c_str(), 10.0f);
 
     if (input.LoadFile(file_list[i].first.c_str())) {
       input.Process();
