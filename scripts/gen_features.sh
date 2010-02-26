@@ -43,9 +43,10 @@ cp -p $0  $WORK
 echo "Generating syllable list..."
 
 for v in $VOWELS; do
-  echo $v$v >> $WORK/$SYLLIST.tmp
+  #echo $v$v >> $WORK/$SYLLIST.tmp
   for c in $CONSONANTS; do
-    echo $v$c >> $WORK/$SYLLIST.tmp
+    #echo $v$c >> $WORK/$SYLLIST.tmp
+    echo $c$v >> $WORK/$SYLLIST.tmp
   done
 done
 
