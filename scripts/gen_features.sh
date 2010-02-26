@@ -6,10 +6,10 @@
 # Author: Thomas Walters <tom@acousticscale.org>
 
 # Source directory for all the sound files
-SOUND_SOURCE="/Users/Tom/Documents/Work/PhD/HTK-AIM/Sounds/"
+SOUND_SOURCE="/media/sounds-database/cnbh-sounds/"
 
 # Location of the AIMCopy binary if not in the path
-AIMCOPY_PREFIX="../build/darwin-release/"
+AIMCOPY_PREFIX="../build/posix-release/"
 
 MACHINE_CORES=2
 
@@ -43,9 +43,9 @@ cp -p $0  $WORK
 echo "Generating syllable list..."
 
 for v in $VOWELS; do
-  #echo $v$v >> $WORK/$SYLLIST.tmp
+  echo $v$v >> $WORK/$SYLLIST.tmp
   for c in $CONSONANTS; do
-    #echo $v$c >> $WORK/$SYLLIST.tmp
+    echo $v$c >> $WORK/$SYLLIST.tmp
     echo $c$v >> $WORK/$SYLLIST.tmp
   done
 done
