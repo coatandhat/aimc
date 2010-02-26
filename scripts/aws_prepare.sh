@@ -10,6 +10,9 @@ sudo mount /dev/sdg1 /media/results/
 #sudo make install
 su ubuntu
 cd /mnt/
+sudo mkdir work
+sudo chown ubuntu work
+cd work
 svn checkout http://aimc.googlecode.com/svn/trunk/ aimc-read-only
 cd aimc-read-only
 scons
@@ -18,7 +21,7 @@ mkdir experiments
 cd experiments
 cp ../aimc-read-only/scripts/gen_features.sh ./
 chmod u+x gen_features.sh
-./gen_features.sh $SNR_VALUE
+screen ./gen_features.sh $SNR_VALUE
 tar -cf snr$SNR_VALUE.tar snr$SNR_VALUE/
 cp snr$SNR_VALUE.tar /media/results/snr/
 #sudo shutdown -h now
