@@ -193,10 +193,7 @@ void ModuleSSI::Process(const SignalBank &input) {
         val = weight * (curr_sample
                         + frac_part * (next_sample - curr_sample));
       } else {
-        // Set out-of-range values to a negative number to signify that 
-        // they really don't exist, and shouldn't be used in feature
-        // calculations.
-        val = -1.0f;
+        val = 0.0f;
       }
       output_.set_sample(ch, i, val);
     }
