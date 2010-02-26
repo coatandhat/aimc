@@ -3,9 +3,11 @@
 sudo apt-get -y update
 sudo apt-get -y install subversion scons pkg-config libsndfile-dev build-essential libboost-dev
 sudo mkdir /media/sounds-database
+sudo mkdir /media/results
 sudo mount /dev/sdf1 /media/sounds-database/
-cd /media/sounds-database/htk/htk/
-sudo make install
+sudo mount /dev/sdg1 /media/results/
+#cd /media/sounds-database/htk/htk/
+#sudo make install
 su ubuntu
 cd /mnt/
 svn checkout http://aimc.googlecode.com/svn/trunk/ aimc-read-only
@@ -14,9 +16,9 @@ scons
 cd ..
 mkdir experiments
 cd experiments
-cp ../aimc-read-only/scripts/HTKAimfeat.sh ./
-chmod u+x HTKAimfeat.sh
-./HTKAimfeat.sh _ec2_first_try
-tar -cf work_ec2_first_try.tar work_ec2_first_try/
-cp work_ec2_first_try.tar /media/sounds-database/experiment-results/
+cp ../aimc-read-only/scripts/gen_features.sh ./
+chmod u+x gen_features.sh
+./gen_features.sh $SNR_VALUE
+tar -cf snr$SNR_VALUE.tar snr$SNR_VALUE/
+cp snr$SNR_VALUE.tar /media/results/snr/
 #sudo shutdown -h now
