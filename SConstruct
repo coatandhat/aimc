@@ -62,6 +62,9 @@ options = Variables()
 options.Add(BoolVariable('mingw', 
                          'Compile on Windows using mingw rather than msvc',
                          False))
+options.Add(BoolVariable('symbols', 
+                         'Add debuging symbols when compiling on gcc',
+                         False))
 
 # Environment variables
 env = Environment(options = options, ENV = os.environ)
@@ -112,6 +115,8 @@ elif compiler == 'gcc':
   env['STRIP'] = 'strip'
   env.AppendUnique(CPPFLAGS = ['-Wall'])
   env.AppendUnique(CPPFLAGS = ['-O3', '-fomit-frame-pointer'])
+  if env['symbols']:
+    env.AppendUnique(CPPFLAGS = ['-g'])
   if env['mingw']:
     if not env['PLATFORM'] == 'win32':
       print('Cross-compilation for Windows is not supported')
