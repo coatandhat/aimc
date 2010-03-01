@@ -6,12 +6,13 @@
 # Author: Thomas Walters <tom@acousticscale.org>
 
 # Source directory for all the sound files
+#SOUND_SOURCE="/Users/Tom/Documents/Work/PhD/HTk-AIM/Sounds/"
 SOUND_SOURCE="/media/sounds-database/cnbh-sounds/"
 
 # Location of the AIMCopy binary if not in the path
-AIMCOPY_PREFIX="../build/posix-release/"
+AIMCOPY_PREFIX="../aimc-read-only/build/posix-release/"
 
-MACHINE_CORES=2
+MACHINE_CORES=1
 
 # Names of various internal files and directories. 
 # Rename here if you don't like them for some reason.
