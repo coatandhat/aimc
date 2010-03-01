@@ -51,7 +51,7 @@ common_sources = ['Support/Common.cc',
                   'Modules/Output/FileOutputHTK.cc']
 
 # File which contains main()
-sources = common_sources + ['Main/AIMCopy_SSI_Features.cc']
+sources = common_sources + ['Main/AIMCopy_SSI_Features_v2.cc']
 
 # Test sources
 test_sources = ['Modules/Profile/ModuleSlice_unittest.cc']
