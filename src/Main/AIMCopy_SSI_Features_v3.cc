@@ -207,10 +207,10 @@ int main(int argc, char* argv[]) {
   sai.AddTarget(&ssi_no_cutoff);
   sai.AddTarget(&ssi_cutoff);
 
-  ssi_no_cutoff.AddTarget(&output_ssi_slice1_no_cutoff);
-  ssi_no_cutoff.AddTarget(&output_ssi_all_no_cutoff);
-  ssi_cutoff.AddTarget(&output_ssi_slice1_cutoff);
-  ssi_cutoff.AddTarget(&output_ssi_all_cutoff);
+  ssi_no_cutoff.AddTarget(&slice_ssi_slice_1_no_cutoff);
+  ssi_no_cutoff.AddTarget(&slice_ssi_all_no_cutoff);
+  ssi_cutoff.AddTarget(&slice_ssi_slice_1_cutoff);
+  ssi_cutoff.AddTarget(&slice_ssi_all_cutoff);
 
   slice_ssi_slice_1_no_cutoff.AddTarget(&features_ssi_slice1_no_cutoff);
   slice_ssi_all_no_cutoff.AddTarget(&features_ssi_all_no_cutoff);
