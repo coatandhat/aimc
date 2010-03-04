@@ -7,12 +7,13 @@
 
 # Source directory for all the sound files
 #SOUND_SOURCE="/Users/Tom/Documents/Work/PhD/HTk-AIM/Sounds/"
-SOUND_SOURCE="/media/sounds-database/cnbh-sounds/"
+#SOUND_SOURCE="/media/sounds-database/cnbh-sounds/"
+SOUND_SOURCE="/mnt/sounds/snr_+0dB/"
 
 # Location of the AIMCopy binary if not in the path
 AIMCOPY_PREFIX="../aimc-read-only/build/posix-release/"
 
-MACHINE_CORES=1
+MACHINE_CORES=8
 
 # Names of various internal files and directories. 
 # Rename here if you don't like them for some reason.
@@ -163,7 +164,6 @@ cat <<"EOF" > $WORK/$AIMCOPY_CONFIG
 input.buffersize=480
 sai.frame_period_ms=10.0
 slice.normalize=true
-ssi.pitch_cutoff=true
 ssi.weight_by_cutoff=false
 ssi.weight_by_scaling=true
 ssi.log_cycles_axis=true
