@@ -15,6 +15,10 @@ AIMCOPY_PREFIX="../aimc-read-only/build/posix-release/"
 
 MACHINE_CORES=8
 
+# Set to true / 1 to enable MFCC features rather than AIM features
+# (leave blank for AIM features)
+MFCC_FEATURES=
+
 # Names of various internal files and directories. 
 # Rename here if you don't like them for some reason.
 SYLLIST=syls
@@ -26,8 +30,10 @@ TEST_LIST=test.list
 COMBINED_LIST=combined.list
 FEATURES_DIR=features
 AIMCOPY_CONFIG=aimcopy.cfg
+HCOPY_CONFIG=hcopy.cfg
 AIMCOPY_LOG_TRAIN=aimcopy_train.log
 AIMCOPY_LOG_TEST=aimcopy_test.log
+HTK_PREFIX=""
 
 
 # The vowels and consonants that make up the CNBH database
@@ -169,6 +175,23 @@ ssi.weight_by_scaling=true
 ssi.log_cycles_axis=true
 EOF
 echo "noise.level_db=$1" >> $WORK/$AIMCOPY_CONFIG
+
+echo "Creating HCopy config file..."
+cat <<"EOF" > $WORK/$HCOPY_CONFIG
+# Coding parameters
+SOURCEFORMAT= WAV
+TARGETKIND = MFCC_0_D_A
+TARGETRATE = 100000.0
+SAVECOMPRESSED = T
+SAVEWITHCRC = T
+WINDOWSIZE = 250000.0
+USEHAMMING = T
+PREEMCOEF = 0.97
+NUMCHANS = 200
+CEPLIFTER = 22
+NUMCEPS = 12
+ENORMALISE = F
+EOF
  
 echo "Splitting data files..."
 cat $WORK/${TRAIN_LIST} $WORK/${TEST_LIST} > $WORK/${COMBINED_LIST}
@@ -188,7 +211,12 @@ element=0
 echo "Spawning tasks..."
 for ((c=1;c<=$MACHINE_CORES;c+=1)); do
   s=${splits[$element]}
-  ${AIMCOPY_PREFIX}AIMCopy -C $WORK/$AIMCOPY_CONFIG -S $s &
+  if [ "$MFCC_FEATURES" ]
+  then
+    ${HTK_PREFIX}HCopy -T 1 -C $WORK/$HCOPY_CONFIG -S $s &
+  else
+    ${AIMCOPY_PREFIX}AIMCopy -C $WORK/$AIMCOPY_CONFIG -S $s &
+  fi
   let element=element+1
 done
 
