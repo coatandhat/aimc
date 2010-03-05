@@ -309,13 +309,9 @@ void ModulePZFC::AGCDampStep() {
     // Set up now.
     /*! \todo Make a separate InitAGC function which does this.
      */
-    detect_.resize(channel_count_);
-    for (int c = 0; c < channel_count_; ++c)
-      detect_[c] = 1.0f;
-
-    float fDetectZero = DetectFun(0.0f);
-    for (int c = 0; c < channel_count_; c++)
-      detect_[c] *= fDetectZero;
+    detect_.clear();
+    float detect_zero = DetectFun(0.0f);
+    detect_.resize(channel_count_, detect_zero);
 
     for (int c = 0; c < channel_count_; c++)
       for (int st = 0; st < agc_stage_count_; st++)
@@ -360,7 +356,7 @@ void ModulePZFC::AGCDampStep() {
     }
   }
 
-  float fOffset = 1.0f - agc_factor_ * DetectFun(0.0f);
+  float offset = 1.0f - agc_factor_ * DetectFun(0.0f);
 
   for (int i = 0; i < channel_count_; ++i) {
     float fAGCStateMean = 0.0f;
@@ -370,7 +366,7 @@ void ModulePZFC::AGCDampStep() {
     fAGCStateMean /= static_cast<float>(agc_stage_count_);
 
     pole_damps_mod_[i] = pole_dampings_[i] *
-                           (fOffset + agc_factor_ * fAGCStateMean);
+                           (offset + agc_factor_ * fAGCStateMean);
   }
 }
 
@@ -393,14 +389,14 @@ void ModulePZFC::Process(const SignalBank& input) {
   // Set the start time of the output buffer
   output_.set_start_time(input.start_time());
 
-  for (int iSample = 0; iSample < input.buffer_length(); ++iSample) {
-    float fInput = input[0][iSample];
+  for (int s = 0; s < input.buffer_length(); ++s) {
+    float input_sample = input.sample(0, s);
 
     // Lowpass filter the input with a zero at PI
-    fInput = 0.5f * fInput + 0.5f * last_input_;
-    last_input_ = input[0][iSample];
+    input_sample = 0.5f * input_sample + 0.5f * last_input_;
+    last_input_ = input.sample(0, s);
 
-    inputs_[channel_count_ - 1] = fInput;
+    inputs_[channel_count_ - 1] = input_sample;
     for (int c = 0; c < channel_count_ - 1; ++c)
       inputs_[c] = previous_out_[c + 1];
 
@@ -409,8 +405,7 @@ void ModulePZFC::Process(const SignalBank& input) {
     float damp_rate = 1.0f / (maxdamp_ - mindamp_);
 
     for (int c = channel_count_ - 1; c > -1; --c) {
-      float interp_factor = (pole_damps_mod_[c]
-                             - mindamp_) * damp_rate;
+      float interp_factor = (pole_damps_mod_[c] - mindamp_) * damp_rate;
 
       float x = xmin_[c] + (xmax_[c] - xmin_[c]) * interp_factor;
       float r = rmin_[c] + (rmax_[c] - rmin_[c]) * interp_factor;
@@ -434,9 +429,9 @@ void ModulePZFC::Process(const SignalBank& input) {
                                          + za2_[c] * state_2_[c];
 
       // cubic compression nonlinearity
-      output = output - 0.0001f * pow(output, 3);
+      output -= 0.0001f * pow(output, 3);
 
-      output_.set_sample(c, iSample, output);
+      output_.set_sample(c, s, output);
       detect_[c] = DetectFun(output);
       state_2_[c] = state_1_[c];
       state_1_[c] = new_state;
@@ -446,7 +441,7 @@ void ModulePZFC::Process(const SignalBank& input) {
       AGCDampStep();
 
     for (int c = 0; c < channel_count_; ++c)
-      previous_out_[c] = output_[c][iSample];
+      previous_out_[c] = output_[c][s];
   }
   PushOutput();
 }
