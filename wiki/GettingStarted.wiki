@@ -1,0 +1,15 @@
+#summary Quick-start for using AIM-C in your projects
+#labels Phase-Deploy
+
+Getting started with AIM-C.
+TODO(tomwalters)
+
+
+= Compilation =
+
+= Concepts =
+
+= Running a model =
+
+= Output formats =
+
