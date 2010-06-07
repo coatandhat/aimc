@@ -63,7 +63,7 @@ class FileOutputAIMC : public Module {
 
   /*! \brief Count of the number of samples in the file, written on close
    */
-  int sample_count_;
+  int frame_count_;
 
   int channel_count_;
   int buffer_length_;
