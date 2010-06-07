@@ -50,6 +50,7 @@ ModulePZFC::ModulePZFC(Parameters *parameters) : Module(parameters) {
                                                 27.0f);
   agc_factor_ = parameters_->DefaultFloat("pzfc.agc_factor", 12.0f);
   do_agc_step_ = parameters_->DefaultBool("pzfc.do_agc", true);
+  use_fitted_parameters_ = parameters_->DefaultBool("pzfc.use_fit", false);
 
   detect_.resize(0);
 }
@@ -116,18 +117,185 @@ void ModulePZFC::ResetInternal() {
   last_input_ = 0.0f;
 }
 
+bool ModulePZFC::SetPZBankCoeffsOrig() {
+  // This function sets the following variables:
+  // channel_count_
+  // pole_dampings_
+  // pole_frequencies_
+  // za0_, za1_, za2
+  // output_
+  
+  // TODO(tomwalters): There's significant code-duplication between this function
+  // and SetPZBankCoeffsERBFitted, and SetPZBankCoeffs
+  
+  // Normalised maximum pole frequency
+  float pole_frequency = cf_max_ / sample_rate_ * (2.0f * M_PI);
+  channel_count_ = 0;
+  while ((pole_frequency / (2.0f * M_PI)) * sample_rate_ > cf_min_) {
+	float bw = bandwidth_over_cf_ * pole_frequency + 2 * M_PI * min_bandwidth_hz_ / sample_rate_;
+    pole_frequency -= step_factor_ * bw;
+    channel_count_++;
+  }
+  
+  // Now the number of channels is known, various buffers for the filterbank
+  // coefficients can be initialised
+  pole_dampings_.clear();
+  pole_dampings_.resize(channel_count_, pole_damping_);
+  pole_frequencies_.clear();
+  pole_frequencies_.resize(channel_count_, 0.0f);
+
+  // Direct-form coefficients
+  za0_.clear();
+  za0_.resize(channel_count_, 0.0f);
+  za1_.clear();
+  za1_.resize(channel_count_, 0.0f);
+  za2_.clear();
+  za2_.resize(channel_count_, 0.0f);
+
+  // The output signal bank
+  output_.Initialize(channel_count_, buffer_length_, sample_rate_);
+  
+  // Reset the pole frequency to maximum
+  pole_frequency = cf_max_ / sample_rate_ * (2.0f * M_PI);
+
+  for (int i = channel_count_ - 1; i > -1; --i) {
+    // Store the normalised pole frequncy
+    pole_frequencies_[i] = pole_frequency;
+
+    // Calculate the real pole frequency from the normalised pole frequency
+    float frequency = pole_frequency / (2.0f * M_PI) * sample_rate_;
+
+    // Store the real pole frequency as the 'centre frequency' of the filterbank
+    // channel
+    output_.set_centre_frequency(i, frequency);
+
+	float zero_frequency = Minimum(M_PI, zero_factor_ * pole_frequency);
+
+    // Impulse-invariance mapping
+    float z_plane_theta = zero_frequency * sqrt(1.0f - pow(zero_damping_, 2));
+    float z_plane_rho = exp(-zero_damping_ * zero_frequency);
+
+    // Direct-form coefficients from z-plane rho and theta
+    float a1 = -2.0f * z_plane_rho * cos(z_plane_theta);
+    float a2 = z_plane_rho * z_plane_rho;
+
+    // Normalised to unity gain at DC
+    float a_sum = 1.0f + a1 + a2;
+    za0_[i] = 1.0f / a_sum;
+    za1_[i] = a1 / a_sum;
+    za2_[i] = a2 / a_sum;
+
+    // Subtract step factor (1/n2) times current bandwidth from the pole
+    // frequency
+	float bw = bandwidth_over_cf_ * pole_frequency + 2 * M_PI * min_bandwidth_hz_ / sample_rate_;
+    pole_frequency -= step_factor_ * bw;
+  }
+  return true;
+}
+
+
+bool ModulePZFC::SetPZBankCoeffsERB() {
+  // This function sets the following variables:
+  // channel_count_
+  // pole_dampings_
+  // pole_frequencies_
+  // za0_, za1_, za2
+  // output_
+  
+  // TODO(tomwalters): There's significant code-duplication between here,
+  // SetPZBankCoeffsERBFitted, and SetPZBankCoeffs
+  
+  // Normalised maximum pole frequency
+  float pole_frequency = cf_max_ / sample_rate_ * (2.0f * M_PI);
+  channel_count_ = 0;
+  while ((pole_frequency / (2.0f * M_PI)) * sample_rate_ > cf_min_) {
+    float bw = ERBTools::Freq2ERBw(pole_frequency
+                                  / (2.0f * M_PI) * sample_rate_);
+    pole_frequency -= step_factor_ * (bw * (2.0f * M_PI) / sample_rate_);
+    channel_count_++;
+  }
+  
+  // Now the number of channels is known, various buffers for the filterbank
+  // coefficients can be initialised
+  pole_dampings_.clear();
+  pole_dampings_.resize(channel_count_, pole_damping_);
+  pole_frequencies_.clear();
+  pole_frequencies_.resize(channel_count_, 0.0f);
+
+  // Direct-form coefficients
+  za0_.clear();
+  za0_.resize(channel_count_, 0.0f);
+  za1_.clear();
+  za1_.resize(channel_count_, 0.0f);
+  za2_.clear();
+  za2_.resize(channel_count_, 0.0f);
+
+  // The output signal bank
+  output_.Initialize(channel_count_, buffer_length_, sample_rate_);
+  
+  // Reset the pole frequency to maximum
+  pole_frequency = cf_max_ / sample_rate_ * (2.0f * M_PI);
+
+  for (int i = channel_count_ - 1; i > -1; --i) {
+    // Store the normalised pole frequncy
+    pole_frequencies_[i] = pole_frequency;
+
+    // Calculate the real pole frequency from the normalised pole frequency
+    float frequency = pole_frequency / (2.0f * M_PI) * sample_rate_;
+
+    // Store the real pole frequency as the 'centre frequency' of the filterbank
+    // channel
+    output_.set_centre_frequency(i, frequency);
+
+	float zero_frequency = Minimum(M_PI, zero_factor_ * pole_frequency);
+
+    // Impulse-invariance mapping
+    float z_plane_theta = zero_frequency * sqrt(1.0f - pow(zero_damping_, 2));
+    float z_plane_rho = exp(-zero_damping_ * zero_frequency);
+
+    // Direct-form coefficients from z-plane rho and theta
+    float a1 = -2.0f * z_plane_rho * cos(z_plane_theta);
+    float a2 = z_plane_rho * z_plane_rho;
+
+    // Normalised to unity gain at DC
+    float a_sum = 1.0f + a1 + a2;
+    za0_[i] = 1.0f / a_sum;
+    za1_[i] = a1 / a_sum;
+    za2_[i] = a2 / a_sum;
+
+    float bw = ERBTools::Freq2ERBw(pole_frequency
+                                  / (2.0f * M_PI) * sample_rate_);
+    pole_frequency -= step_factor_ * (bw * (2.0f * M_PI) / sample_rate_);
+  }
+  return true;
+}
+
 bool ModulePZFC::SetPZBankCoeffsERBFitted() {
+  //float parameter_values[3 * 7] = {
+    //// Filed, Nfit = 524, 11-3 parameters, PZFC, cwt 0, fit time 9915 sec
+    //1.14827,   0.00000,   0.00000,  // % SumSqrErr=  10125.41
+    //0.53571,  -0.70128,   0.63246,  // % RMSErr   =   2.81586
+    //0.76779,   0.00000,   0.00000,  // % MeanErr  =   0.00000
+    //// Inf   0.00000   0.00000 % RMSCost  = NaN
+    //0.00000,   0.00000,   0.00000,
+    //6.00000,   0.00000,   0.00000,
+    //1.08869,  -0.09470,   0.07844,
+    //10.56432,   2.52732,   1.86895
+    //// -3.45865  -1.31457   3.91779 % Kv
+  //};
+  
   float parameter_values[3 * 7] = {
-    // Filed, Nfit = 524, 11-3 parameters, PZFC, cwt 0, fit time 9915 sec
-    1.14827,   0.00000,   0.00000,  // % SumSqrErr=  10125.41
-    0.53571,  -0.70128,   0.63246,  // % RMSErr   =   2.81586
-    0.76779,   0.00000,   0.00000,  // % MeanErr  =   0.00000
-    // Inf   0.00000   0.00000 % RMSCost  = NaN
-    0.00000,   0.00000,   0.00000,
-    6.00000,   0.00000,   0.00000,
-    1.08869,  -0.09470,   0.07844,
-    10.56432,   2.52732,   1.86895
-    // -3.45865  -1.31457   3.91779 % Kv
+  // Fit 515 from Dick
+  // Final, Nfit = 515, 9-3 parameters, PZFC, cwt 0
+     1.72861,   0.00000,   0.00000,  // SumSqrErr =  13622.24
+     0.56657,  -0.93911,   0.89163,  // RMSErr    =  3.26610
+     0.39469,   0.00000,   0.00000,  // MeanErr   =  0.00000
+  // Inf,       0.00000,   0.00000,  // RMSCost   =  NaN - would set coefc to infinity, but this isn't passed on
+     0.00000,   0.00000,   0.00000,
+     2.00000,   0.00000,   0.00000,  //
+     1.27393,   0.00000,   0.00000,
+    11.46247,  5.46894,   0.11800
+  // -4.15525,  1.54874,   2.99858   // Kv
   };
 
   // Precalculate the number of channels required - this method is ugly but it
@@ -253,8 +421,13 @@ return true;
 bool ModulePZFC::SetPZBankCoeffs() {
   /*! \todo Re-implement the alternative parameter settings
    */
-  if (!SetPZBankCoeffsERBFitted())
-    return false;
+  if (use_fitted_parameters_) {
+    if (!SetPZBankCoeffsERBFitted())
+      return false;
+  } else {
+    if (!SetPZBankCoeffsOrig())
+	  return false;
+  }
 
   /*! \todo Make fMindamp and fMaxdamp user-settable?
    */

@@ -59,7 +59,17 @@ class ModulePZFC : public Module {
    *  and Lyon's fitting routine
    */
   bool SetPZBankCoeffsERBFitted();
-
+  
+  /*! \brief Set the filterbank parameters using the non-fitted parameter
+   * values, spaced along an ERB scale
+   */
+  bool SetPZBankCoeffsERB();
+  
+  /*! \brief Set the filterbank parameters using the non-fitted parameter
+   * values, using the Greenwood formula (?) for channel spacing.
+   */
+  bool SetPZBankCoeffsOrig(); 
+  
   /*! \brief Sets the general filterbank coefficients
    */
   bool SetPZBankCoeffs();
@@ -84,7 +94,7 @@ class ModulePZFC : public Module {
   float last_input_;
 
   // Parameters
-  // User-settable scalars
+  // User-settable values
   float pole_damping_;
   float zero_damping_;
   float zero_factor_;
@@ -97,6 +107,7 @@ class ModulePZFC : public Module {
   float mindamp_;
   float maxdamp_;
   bool do_agc_step_;
+  bool use_fitted_parameters_;
 
   // Internal Buffers
   // Initialised once
