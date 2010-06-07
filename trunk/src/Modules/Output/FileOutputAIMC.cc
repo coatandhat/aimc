@@ -67,7 +67,7 @@ bool FileOutputAIMC::OpenFile(const char* filename, float frame_period_ms) {
     LOG_ERROR(_T("Couldn't open output file '%s' for writing."), filename);
     return false;
   }
-  sample_count_ = 0;
+  frame_count_ = 0;
   frame_period_ms_ = frame_period_ms;
   header_written_ = false;
   if (initialized_) {
@@ -119,13 +119,13 @@ void FileOutputAIMC::WriteHeader() {
    * f1c1t1,f1c1t2,f1c1t3...
    */
 
-  uint32_t sample_count_out = sample_count_;
+  uint32_t frame_count_out = frame_count_;
   float sample_period_out = frame_period_ms_;
   uint32_t channels_out = channel_count_;
   uint32_t samples_out = buffer_length_;
   float sample_rate = sample_rate_;
 
-  fwrite(&sample_count_out, sizeof(sample_count_out), 1, file_handle_);
+  fwrite(&frame_count_out, sizeof(frame_count_out), 1, file_handle_);
   fwrite(&sample_period_out, sizeof(sample_period_out), 1, file_handle_);
   fwrite(&channels_out, sizeof(channels_out), 1, file_handle_);
   fwrite(&samples_out, sizeof(samples_out), 1, file_handle_);
@@ -156,7 +156,7 @@ void FileOutputAIMC::Process(const SignalBank &input) {
       fwrite(&s, sizeof(s), 1, file_handle_);
     }
   }
-  sample_count_++;
+  frame_count_++;
 }
 
 bool FileOutputAIMC::CloseFile() {
@@ -168,8 +168,8 @@ bool FileOutputAIMC::CloseFile() {
   fflush(file_handle_);
   rewind(file_handle_);
   fflush(file_handle_);
-  uint32_t samples = sample_count_;
-  fwrite(&samples, sizeof(samples), 1, file_handle_);
+  uint32_t frame_count = frame_count_;
+  fwrite(&frame_count, sizeof(frame_count), 1, file_handle_);
 
   // And close the file
   fclose(file_handle_);
