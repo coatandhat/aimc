@@ -52,7 +52,7 @@ common_sources = ['Support/Common.cc',
 
 # File which contains main()
 #sources = common_sources + ['Main/AIMCopy_SSI_Features_v4_PZFC.cc']
-sources = common_sources + ['Main/aimc.cc']
+sources = common_sources + ['Main/AIMCopy_SSI_Features_v5_smooth_nap.cc']
 
 # Test sources
 test_sources = ['Modules/Profile/ModuleSlice_unittest.cc']
@@ -79,7 +79,8 @@ target_platform = build_platform
 
 # Build products location and executable name
 build_dir = os.path.join('build', target_platform + '-release')
-target_executable = 'aimc'
+#target_executable = 'aimc'
+target_executable = 'AIMCopy'
 test_executable = 'aimc_tests'
 
 # Create build products directory if necessary

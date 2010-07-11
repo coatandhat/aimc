@@ -92,6 +92,8 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 
+  bool use_config_file = false;
+
   // Parse command-line arguments
   for (int i = 1; i < argc; i++) {
     if (strcmp(argv[i],"-A") == 0) {
@@ -107,6 +109,7 @@ int main(int argc, char* argv[]) {
         return(-1);
       }
       config_file = argv[i];
+      use_config_file = true;
       continue;
     }
     if (strcmp(argv[i],"-S") == 0) {
@@ -138,10 +141,12 @@ int main(int argc, char* argv[]) {
 
   aimc::Parameters params;
 
-  if (!params.Load(config_file.c_str())) {
-    aimc::LOG_ERROR(_T("Couldn't load parameters from file %s"),
-                    config_file.c_str());
-    return -1;
+  if (use_config_file) {
+    if (!params.Load(config_file.c_str())) {
+      aimc::LOG_ERROR(_T("Couldn't load parameters from file %s"),
+                      config_file.c_str());
+      return -1;
+    }
   }
 
   vector<pair<string, string> > file_list = aimc::FileList::Load(script_file);
@@ -152,76 +157,21 @@ int main(int argc, char* argv[]) {
 
   // Set up AIM-C processor here
   aimc::ModuleFileInput input(&params);
-  //aimc::ModuleNoise noise_maker(&params);
   aimc::ModuleGammatone bmm(&params);
-  aimc::ModuleHCL nap(&params);
-  aimc::ModuleLocalMax strobes(&params);
-  aimc::ModuleSAI sai(&params);
-  params.SetBool("ssi.pitch_cutoff", false);
-  aimc::ModuleSSI ssi_no_cutoff(&params);
-
-  params.SetBool("ssi.pitch_cutoff", true);
-  params.SetFloat("ssi.pitch_search_start_ms", 4.6f);
-  aimc::ModuleSSI ssi_cutoff(&params);
-
-  params.SetBool("slice.all", false);
-  params.SetInt("slice.lower_index", 77);
-  params.SetInt("slice.upper_index", 150);
-  aimc::ModuleSlice slice_ssi_slice_1_no_cutoff(&params);
-  aimc::ModuleSlice slice_ssi_slice_1_cutoff(&params);
-
-  params.SetBool("slice.all", true);
-  aimc::ModuleSlice slice_ssi_all_no_cutoff(&params);
-  aimc::ModuleSlice slice_ssi_all_cutoff(&params);
-
   params.SetFloat("nap.lowpass_cutoff", 100.0);
   aimc::ModuleHCL smooth_nap(&params);
   params.SetBool("slice.all", true);
   aimc::ModuleSlice nap_profile(&params);
   aimc::ModuleScaler nap_scaler(&params);
-
   aimc::ModuleGaussians nap_features(&params);
-  aimc::ModuleGaussians features_ssi_slice1_no_cutoff(&params);
-  aimc::ModuleGaussians features_ssi_slice1_cutoff(&params);
-  aimc::ModuleGaussians features_ssi_all_no_cutoff(&params);
-  aimc::ModuleGaussians features_ssi_all_cutoff(&params);
-
   aimc::FileOutputHTK nap_out(&params);
-  aimc::FileOutputHTK output_ssi_slice1_no_cutoff(&params);
-  aimc::FileOutputHTK output_ssi_slice1_cutoff(&params);
-  aimc::FileOutputHTK output_ssi_all_no_cutoff(&params);
-  aimc::FileOutputHTK output_ssi_all_cutoff(&params);
 
   input.AddTarget(&bmm);
-  //noise_maker.AddTarget(&bmm);
-  bmm.AddTarget(&nap);
   bmm.AddTarget(&smooth_nap);
   smooth_nap.AddTarget(&nap_profile);
   nap_profile.AddTarget(&nap_scaler);
   nap_scaler.AddTarget(&nap_features);
   nap_features.AddTarget(&nap_out);
-
-  nap.AddTarget(&strobes);
-  strobes.AddTarget(&sai);
-  sai.AddTarget(&ssi_no_cutoff);
-  sai.AddTarget(&ssi_cutoff);
-
-  ssi_no_cutoff.AddTarget(&slice_ssi_slice_1_no_cutoff);
-  ssi_no_cutoff.AddTarget(&slice_ssi_all_no_cutoff);
-  ssi_cutoff.AddTarget(&slice_ssi_slice_1_cutoff);
-  ssi_cutoff.AddTarget(&slice_ssi_all_cutoff);
-
-  slice_ssi_slice_1_no_cutoff.AddTarget(&features_ssi_slice1_no_cutoff);
-  slice_ssi_all_no_cutoff.AddTarget(&features_ssi_all_no_cutoff);
-  slice_ssi_slice_1_cutoff.AddTarget(&features_ssi_slice1_cutoff);
-  slice_ssi_all_cutoff.AddTarget(&features_ssi_all_cutoff);
-
-
-  features_ssi_slice1_no_cutoff.AddTarget(&output_ssi_slice1_no_cutoff);
-  features_ssi_all_no_cutoff.AddTarget(&output_ssi_all_no_cutoff);
-  features_ssi_slice1_cutoff.AddTarget(&output_ssi_slice1_cutoff);
-  features_ssi_all_cutoff.AddTarget(&output_ssi_all_cutoff);
-
 
   if (write_data) {
     ofstream outfile(data_file.c_str());
@@ -243,31 +193,18 @@ int main(int argc, char* argv[]) {
       outfile << "# By user: " << descr <<"\n";
     }
     outfile << "# Module chain:\n";
-    outfile << "#";
+    outfile << "# ";
     input.PrintTargets(outfile);
     outfile << "\n";
-    outfile << "#\n";
-    input.PrintVersions(outfile);
-    outfile << "\n";
-    outfile << "#\n";
     outfile << "# Parameters:\n";
     outfile << params.WriteString();
     outfile.close();
   }
 
   for (unsigned int i = 0; i < file_list.size(); ++i) {
-    // aimc::LOG_INFO(_T("In:  %s"), file_list[i].first.c_str());
     aimc::LOG_INFO(_T("Out: %s"), file_list[i].second.c_str());
 
-    string filename = file_list[i].second + ".slice_1_no_cutoff";
-    output_ssi_slice1_no_cutoff.OpenFile(filename.c_str(), 10.0f);
-    filename = file_list[i].second + ".ssi_profile_no_cutoff";
-    output_ssi_all_no_cutoff.OpenFile(filename.c_str(), 10.0f);
-    filename = file_list[i].second + ".slice_1_cutoff";
-    output_ssi_slice1_cutoff.OpenFile(filename.c_str(), 10.0f);
-    filename = file_list[i].second + ".ssi_profile_cutoff";
-    output_ssi_all_cutoff.OpenFile(filename.c_str(), 10.0f);
-    filename = file_list[i].second + ".smooth_nap_profile";
+    string filename = file_list[i].second + ".smooth_nap_profile";
     nap_out.OpenFile(filename.c_str(), 10.0f);
 
     if (input.LoadFile(file_list[i].first.c_str())) {
