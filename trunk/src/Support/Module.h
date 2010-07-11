@@ -27,6 +27,7 @@
 #ifndef AIMC_SUPPORT_MODULE_H_
 #define AIMC_SUPPORT_MODULE_H_
 
+#include <iostream>
 #include <set>
 #include <string>
 
@@ -35,6 +36,7 @@
 #include "Support/SignalBank.h"
 
 namespace aimc {
+using std::ostream;
 using std::set;
 using std::string;
 
@@ -158,6 +160,10 @@ class Module {
    * output.
    */
   const SignalBank* GetOutputBank() const;
+
+  void PrintTargets(ostream &out);
+
+  void PrintVersions(ostream &out);
 
   string version() const {
     return module_version_;

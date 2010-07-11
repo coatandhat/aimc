@@ -30,6 +30,7 @@
 
 namespace aimc {
 using std::pair;
+using std::ostream;
 Module::Module(Parameters *parameters) {
   initialized_ = false;
   targets_.clear();
@@ -129,6 +130,29 @@ void Module::PushOutput() {
     for (it = targets_.begin(); it != targets_.end(); ++it) {
       (*it)->Process(output_);
     }
+  }
+}
+
+void Module::PrintTargets(ostream &out) {
+  out << id();
+  if (targets_.size() > 0) {
+    out << "->(";
+    set<Module*>::const_iterator it;
+    for (it = targets_.begin(); it != targets_.end(); ++it) {
+      (*it)->PrintTargets(out);
+      if (targets_.size() > 1) {
+         out << ",";
+      }
+    }
+    out << ")";
+  }
+}
+
+void Module::PrintVersions(ostream &out) {
+  out << version() << "\n";
+  set<Module*>::const_iterator it;
+  for (it = targets_.begin(); it != targets_.end(); ++it) {
+     (*it)->PrintVersions(out);
   }
 }
 }  // namespace aimc

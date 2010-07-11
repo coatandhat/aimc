@@ -33,7 +33,7 @@ ModuleLocalMax::ModuleLocalMax(Parameters *params) : Module(params) {
                         "with timeout";
   module_identifier_ = "local_max";
   module_type_ = "strobes";
-  module_version_ = "$Id$";
+  module_version_ = "$Id: $";
 
   decay_time_ms_ = parameters_->DefaultFloat("strobes.decay_time_ms", 20.0f);
   timeout_ms_ = parameters_->DefaultFloat("strobes.timeout_ms", 3.0f);
