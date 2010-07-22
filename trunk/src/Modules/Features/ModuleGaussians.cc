@@ -117,7 +117,7 @@ void ModuleGaussians::Process(const SignalBank &input) {
   for (int iChannel = 0;
        iChannel < input.channel_count();
        ++iChannel) {
-    m_pSpectralProfile[iChannel] = pow(m_pSpectralProfile[iChannel], 0.8);
+    m_pSpectralProfile[iChannel] = pow(m_pSpectralProfile[iChannel], 0.8f);
   }
 
   RubberGMMCore(2, true);

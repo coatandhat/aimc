@@ -24,7 +24,7 @@
 #include "Modules/SSI/ModuleSSI.h"
 #include "Modules/Profile/ModuleSlice.h"
 #include "Modules/Profile/ModuleScaler.h"
-#include "Modules/Features/ModuleGaussians.h"
+//#include "Modules/Features/ModuleGaussians.h"
 #include "Modules/Output/FileOutputHTK.h"
 
 #include "Support/ModuleFactory.h"
@@ -37,8 +37,8 @@ Module* ModuleFactory::Create(string module_name_, Parameters* params) {
   if (module_name_.compare("pzfc") == 0)
     return new ModulePZFC(params);
 
-  if (module_name_.compare("gaussians") == 0)
-    return new ModuleGaussians(params);
+  //if (module_name_.compare("gaussians") == 0)
+  //  return new ModuleGaussians(params);
 
   if (module_name_.compare("file_input") == 0)
     return new ModuleFileInput(params);

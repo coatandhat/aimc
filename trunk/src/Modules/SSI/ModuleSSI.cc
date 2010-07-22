@@ -26,6 +26,13 @@
 #include "Modules/SSI/ModuleSSI.h"
 
 namespace aimc {
+#ifdef _MSC_VER
+// MSVC doesn't define log2()
+float log2(float n) {
+  return log(n) / log(2.0);  
+}
+#endif
+
 ModuleSSI::ModuleSSI(Parameters *params) : Module(params) {
   module_description_ = "Size-shape image (aka the 'sscAI')";
   module_identifier_ = "ssi";

@@ -45,17 +45,20 @@ common_sources = ['Support/Common.cc',
                   'Modules/Strobes/ModuleParabola.cc',
                   'Modules/Strobes/ModuleLocalMax.cc',
                   'Modules/SAI/ModuleSAI.cc',
-                  'Modules/SNR/ModuleNoise.cc',
                   'Modules/SSI/ModuleSSI.cc',
                   'Modules/Profile/ModuleSlice.cc',
                   'Modules/Profile/ModuleScaler.cc',
-                  'Modules/Features/ModuleGaussians.cc',
                   'Modules/Output/FileOutputHTK.cc',
                   'Modules/Output/FileOutputAIMC.cc']
 
+# List of currently incative source files which we may want to add back in
+sources_disabled = ['Modules/SNR/ModuleNoise.cc',
+                    'Modules/Features/ModuleGaussians.cc']
+
 # File which contains main()
 #sources = common_sources + ['Main/AIMCopy_SSI_Features_v4_PZFC.cc']
-sources = common_sources + ['Main/AIMCopy_SSI_Features_v5_smooth_nap.cc']
+#sources = common_sources + ['Main/AIMCopy_SSI_Features_v5_smooth_nap.cc']
+sources = common_sources + ['Main/aimc.cc']
 
 # Test sources
 test_sources = ['Modules/Profile/ModuleSlice_unittest.cc']
@@ -82,8 +85,8 @@ target_platform = build_platform
 
 # Build products location and executable name
 build_dir = os.path.join('build', target_platform + '-release')
-#target_executable = 'aimc'
-target_executable = 'AIMCopy'
+target_executable = 'aimc'
+#target_executable = 'AIMCopy'
 test_executable = 'aimc_tests'
 
 # Create build products directory if necessary
@@ -159,7 +162,6 @@ deplibs = ['sndfile']
 if target_platform != 'win32':
   for depname in deplibs:
     env.ParseConfig('pkg-config --cflags --libs ' + depname)
-  env.AppendUnique(LIBS = deplibs)
 else:
   #env.AppendUnique(LIBS = ['wsock32', 'winmm'])
   if 'sndfile' in deplibs:
@@ -171,13 +173,14 @@ else:
     if compiler=='msvc':
       shutil.copyfile(windows_libsndfile_location + '/libsndfile-1.def',
                       build_dir+'/libsndfile-1.def')
-      env.Command(build_dir + '/libsndfile.lib', build_dir + '/libsndfile.def',
+      env.Command(build_dir + '/libsndfile-1.lib', build_dir + '/libsndfile-1.def',
                   env['AR'] + ' /nologo /machine:i386 /def:$SOURCE /out:$TARGET')
-      env.Append(CPPPATH = [windows_libsndfile_location])
+      env.Append(CPPPATH = [windows_libsndfile_location + '/include/'])
       env.AppendUnique(LIBPATH = [build_dir])
       # Replace 'sndfile' with 'sndfile-1'
       deplibs.remove('sndfile')
-      deplibs.append('sndfile-1')
+      deplibs.append('libsndfile-1')
+env.AppendUnique(LIBS = deplibs)
 
 
 
