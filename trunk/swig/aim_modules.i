@@ -17,6 +17,7 @@
 
 %module aimc
 %include "std_string.i"
+%include stl.i
 %{
 #include "Support/Common.h"
 #include "Support/Module.h"
@@ -29,16 +30,36 @@
 #include "Modules/Strobes/ModuleLocalMax.h"
 #include "Modules/SAI/ModuleSAI.h"
 #include "Modules/SSI/ModuleSSI.h"
-#include "Modules/SNR/ModuleNoise.h"
 #include "Modules/Profile/ModuleSlice.h"
 #include "Modules/Profile/ModuleScaler.h"
-#include "Modules/Features/ModuleGaussians.h"
-#include "Modules/Output/FileOutputHTK.h"
 %}
 
 %include "Support/Parameters.h"
 %include "Support/SignalBank.h"
-%include "Support/Module.h"
+
+namespace aimc {
+using std::ostream;
+using std::set;
+using std::string;
+class Module {
+ public:
+  explicit Module(Parameters *parameters);
+  virtual ~Module();
+  virtual bool Initialize(const SignalBank &input);
+  bool initialized() const;
+  bool AddTarget(Module* target_module);
+  bool RemoveTarget(Module* target_module);
+  void RemoveAllTargets();
+  virtual void Process(const SignalBank &input) = 0;
+  void Reset();
+  const SignalBank* GetOutputBank() const;
+  string version() const;
+  string id() const;
+  string description() const;
+  string type() const;
+};
+}
+
 %include "Modules/BMM/ModuleGammatone.h"
 %include "Modules/BMM/ModulePZFC.h"
 %include "Modules/NAP/ModuleHCL.h"
@@ -46,8 +67,5 @@
 %include "Modules/Strobes/ModuleLocalMax.h"
 %include "Modules/SAI/ModuleSAI.h"
 %include "Modules/SSI/ModuleSSI.h"
-%include "Modules/SNR/ModuleNoise.h"
 %include "Modules/Profile/ModuleSlice.h"
 %include "Modules/Profile/ModuleScaler.h"
-%include "Modules/Features/ModuleGaussians.h"
-%include "Modules/Output/FileOutputHTK.h"
