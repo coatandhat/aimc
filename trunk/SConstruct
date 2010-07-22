@@ -28,6 +28,9 @@ SConstruct file for the aimc project
 import os
 import shutil
 
+# Location of libsndfile on Windows
+windows_libsndfile_location = "C:\\Program Files\\Mega-Nerd\\libsndfile\\"
+
 # Sources common to every version
 common_sources = ['Support/Common.cc',
                   'Support/FileList.cc',
@@ -153,10 +156,29 @@ env.Append(CPPPATH = ['#src'])
 # Dependencies
 deplibs = ['sndfile']
 
-for depname in deplibs:
-  env.ParseConfig('pkg-config --cflags --libs ' + depname)
+if target_platform != 'win32':
+  for depname in deplibs:
+    env.ParseConfig('pkg-config --cflags --libs ' + depname)
+  env.AppendUnique(LIBS = deplibs)
+else:
+  #env.AppendUnique(LIBS = ['wsock32', 'winmm'])
+  if 'sndfile' in deplibs:
+    ###### libsndfile ########################################
+    # This one is only valid for win32 and already precompiled
+    # Only need to create .lib file from .def
+    shutil.copyfile(windows_libsndfile_location + '/libsndfile-1.dll',
+                    build_dir+'/libsndfile-1.dll')
+    if compiler=='msvc':
+      shutil.copyfile(windows_libsndfile_location + '/libsndfile-1.def',
+                      build_dir+'/libsndfile-1.def')
+      env.Command(build_dir + '/libsndfile.lib', build_dir + '/libsndfile.def',
+                  env['AR'] + ' /nologo /machine:i386 /def:$SOURCE /out:$TARGET')
+      env.Append(CPPPATH = [windows_libsndfile_location])
+      env.AppendUnique(LIBPATH = [build_dir])
+      # Replace 'sndfile' with 'sndfile-1'
+      deplibs.remove('sndfile')
+      deplibs.append('sndfile-1')
 
-env.AppendUnique(LIBS = deplibs)
 
 
 # Builder for the main program
