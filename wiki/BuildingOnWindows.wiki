@@ -1,0 +1,25 @@
+#summary Building AIM-C on Windows
+
+= Introduction =
+Windows build instructions tested on Windows XP. If you know about building on Windows 7 or other platforms, please add the details here.
+
+Install [http://www.python.org/download/ Python 2.7] (default options)
+
+Install [http://www.scons.org/download.php SCons 2.0.0.final.0]
+
+Add C:\Python27\Scripts to the path
+Control Panel->System->Advanced->Environment Variables->System Variables>PATH->Edit->Add ';C:\Python27\Scripts' sans quotes to the end of the line
+
+Install subversion
+There's a list [http://subversion.apache.org/packages.html#windows here], I used [http://www.sliksvn.com/en/download this one].
+
+Install [http://www.mega-nerd.com/libsndfile/#Download libsndfile]
+
+Download and install [http://www.microsoft.com/express/Downloads/#2010-Visual-CPP MS Visual C++ Express 2010]
+Defaults should be fine for installing
+
+Open Command Prompt
+cd to the directory of your choice
+svn checkout http://aimc.googlecode.com/svn/trunk/ aimc-read-only
+Execute the command:
+scons
