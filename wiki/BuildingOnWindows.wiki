@@ -26,6 +26,5 @@ cd to the directory of your choice
 
  svn checkout http://aimc.googlecode.com/svn/trunk/ aimc-read-only
 
-
-Execute the command:
-scons
+Run the 'Visual Studio Command Prompt' and execute the command:
+ scons
