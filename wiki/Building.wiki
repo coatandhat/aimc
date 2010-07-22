@@ -38,4 +38,5 @@ On Mac OS X, I'd recommend using MacPorts. It's a handy way of installing all so
 
 Alternatively, in either case, you can just download and install a tarball from the [http://www.scons.org/ SCons site].
 
-(TODO) On Windows...
+On Windows
+See BuildingOnWindows
