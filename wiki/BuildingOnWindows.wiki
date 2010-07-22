@@ -8,18 +8,24 @@ Install [http://www.python.org/download/ Python 2.7] (default options)
 Install [http://www.scons.org/download.php SCons 2.0.0.final.0]
 
 Add C:\Python27\Scripts to the path
-Control Panel->System->Advanced->Environment Variables->System Variables>PATH->Edit->Add ';C:\Python27\Scripts' sans quotes to the end of the line
+Control Panel->System->Advanced->Environment Variables->System Variables>PATH->Edit->Add ';C:\Python27\Scripts' (sans quotes) to the end of the line
 
 Install subversion
-There's a list [http://subversion.apache.org/packages.html#windows here], I used [http://www.sliksvn.com/en/download this one].
+
+There's a  [http://subversion.apache.org/packages.html#windows list of various subversion packages for Windows here], I used [http://www.sliksvn.com/en/download SilkSVN].
 
 Install [http://www.mega-nerd.com/libsndfile/#Download libsndfile]
 
 Download and install [http://www.microsoft.com/express/Downloads/#2010-Visual-CPP MS Visual C++ Express 2010]
-Defaults should be fine for installing
+
+The defaults should be fine for installing just VC++ 2010
 
 Open Command Prompt
+
 cd to the directory of your choice
-svn checkout http://aimc.googlecode.com/svn/trunk/ aimc-read-only
+
+ svn checkout http://aimc.googlecode.com/svn/trunk/ aimc-read-only
+
+
 Execute the command:
 scons
