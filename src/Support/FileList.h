@@ -25,6 +25,13 @@
  * \version \$Id$
  */
 
+#if defined(_WINDOWS)
+#  include <windows.h>
+#  ifndef PATH_MAX
+#    define PATH_MAX _MAX_PATH
+#  endif
+#endif
+#include <limits.h>
 #include <string>
 #include <utility>
 #include <vector>

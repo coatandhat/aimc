@@ -31,6 +31,10 @@
 #include "Support/Common.h"
 #include "Support/Parameters.h"
 
+#ifdef _MSC_VER
+#define snprintf _snprintf
+#endif
+
 namespace aimc {
 const char *Parameters::m_SDefaultIniSection = "";
 

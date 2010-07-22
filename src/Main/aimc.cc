@@ -39,20 +39,14 @@ int main(int argc, char* argv[]) {
   params.SetInt("input.buffersize", buffer_length);
 
   aimc::ModuleFileInput input(&params);
-  aimc::ModuleGammatone bmm(&params);
-  aimc::ModuleHCL nap(&params);
-  aimc::ModuleLocalMax strobes(&params);
-  aimc::ModuleSAI sai(&params);
+  aimc::ModulePZFC bmm(&params);
   aimc::FileOutputAIMC output(&params);
 
   std::string parameters_string = params.WriteString();
   printf("%s", parameters_string.c_str());
 
   input.AddTarget(&bmm);
-  bmm.AddTarget(&nap);
-  nap.AddTarget(&strobes);
-  strobes.AddTarget(&sai);
-  sai.AddTarget(&output);
+  bmm.AddTarget(&output);
 
   output.OpenFile("test_output.aimc", params.GetFloat("sai.frame_period_ms"));
   if (input.LoadFile("test.wav")) {
