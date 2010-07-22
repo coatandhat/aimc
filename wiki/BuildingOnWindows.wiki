@@ -1,6 +1,6 @@
 #summary Building AIM-C on Windows
 
-= Introduction =
+= Windows build =
 Windows build instructions tested on Windows XP. If you know about building on Windows 7 or other platforms, please add the details here.
 
 Install [http://www.python.org/download/ Python 2.7] (default options)
@@ -28,3 +28,6 @@ cd to the directory of your choice
 
 Run the 'Visual Studio Command Prompt' and execute the command:
  scons
+
+== Building the Python Module ==
+Download [http://www.swig.org/download.html SWIG]
