@@ -31,3 +31,7 @@ Run the 'Visual Studio Command Prompt' and execute the command:
 
 == Building the Python Module ==
 Download [http://www.swig.org/download.html SWIG]
+
+If using MSVC 2010
+Edit
+C:\Python27\Lib\distutils\msvc9compiler.py line 243 to be  toolskey = "VS100COMNTOOLS"
