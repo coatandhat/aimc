@@ -61,6 +61,10 @@ class SignalBank {
   inline const vector<float> &get_signal(int channel) const {
     return signals_[channel];
   };
+  
+  inline void set_signal(int channel, vector<float> input) {
+    signals_[channel] = input;
+  }
 
   inline float sample(int channel, int index) const {
     return signals_[channel][index];
