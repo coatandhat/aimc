@@ -18,6 +18,12 @@
 %module aimc
 %include "std_string.i"
 %include stl.i
+%include "std_vector.i"
+
+namespace std {
+   %template(FloatVector) vector<float>;
+}
+
 %{
 #include "Support/Common.h"
 #include "Support/Module.h"
@@ -35,6 +41,7 @@
 %}
 
 %include "Support/Parameters.h"
+using namespace std;
 %include "Support/SignalBank.h"
 
 namespace aimc {
