@@ -14,7 +14,7 @@ sudo apt-get -y install subversion scons pkg-config libsndfile1-dev build-essent
 # For 64-bit systems, uncomment this line:
 # sudo apt-get -y install libc6-dev-i386
 
-sudo mkdir /mnt/aimc
+sudo mkdir -p /mnt/aimc
 sudo chown ubuntu /mnt/aimc
 cd /mnt/aimc
 svn checkout http://aimc.googlecode.com/svn/trunk/ aimc-read-only

@@ -148,7 +148,7 @@ EOF
 #echo "Splitting data files..."
 #cat $WORK/${TRAIN_LIST} $WORK/${TEST_LIST} > $WORK/${COMBINED_LIST}
 
-for TALKER in $(cat $FEATURES_DIR/$TALKERS); do
+for TALKER in $(cat $FEATURES_DIR/${TALKERS}.tmp); do
   cp $FEATURES_DIR/${HCOPY_CONFIG} $FEATURES_DIR/${HCOPY_CONFIG}_$TALKER
   scale=`echo $speaker | sed 's/.*p//' | sed 's/s.*//'`
   warpfactor=0`echo "scale=4; 100.0/$scale" | bc`

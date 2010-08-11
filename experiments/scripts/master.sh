@@ -16,7 +16,7 @@ HMMS_ROOT=/mnt/experiments/hmms/
 
 # Number of cores on the experimental machine. Various scripts will try to use
 # this if it's set.
-NUMBER_OF_CORES=2
+NUMBER_OF_CORES=1
 
 # Fail if any command fails
 set -e
@@ -71,7 +71,7 @@ if [ ! -e /mnt/experiments/htk/.htk_installed_success ]; then
   ./HTK/install_htk.sh
 fi
 
-if [ ! -e /mnt/experiments/aimc/.aimc_build_success]; then
+if [ ! -e /mnt/experiments/aimc/.aimc_build_success ]; then
 # ./aimc/build_aimc.sh
   cd ../../
   scons
