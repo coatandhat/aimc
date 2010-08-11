@@ -2,7 +2,7 @@
 
 # Test for the existence of AIMCopy in the path
 AIMCOPY=`which AIMCopy`
-if [ $AIMCOPY == "" ]; then
+if [ "$AIMCOPY" == "" ]; then
   echo "Please build AIM-C and make AIMCopy available in the path"
 fi
 

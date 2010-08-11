@@ -71,6 +71,14 @@ if [ ! -e /mnt/experiments/htk/.htk_installed_success ]; then
   ./HTK/install_htk.sh
 fi
 
+if [ ! -e /mnt/experiments/aimc/.aimc_build_success]; then
+# ./aimc/build_aimc.sh
+  cd ../../
+  scons
+  export PATH=$PATH:`pwd`/build/posix-release/
+  cd -
+fi
+
 for SOURCE_SNR in $FEATURE_DIRS; do
   
   if [ ! -e $FEATURES_ROOT/mfcc/$SOURCE_SNR/.make_mfcc_features_success ]; then
