@@ -15,10 +15,10 @@ if [ ! -e $SOUNDS_ROOT/clean/.make_clean_wavs_success ]; then
   VOWELS="a e i o u"
   CONSONANTS="b d f g h k l m n p r s t v w x y z"
   for v in $VOWELS; do
-    mkdir $SOUNDS_ROOT/clean/$v$v
+    mkdir -p $SOUNDS_ROOT/clean/$v$v
     for c in $CONSONANTS; do
-      mkdir $SOUNDS_ROOT/clean/$c$v
-      mkdir $SOUNDS_ROOT/clean/$v$c
+      mkdir -p $SOUNDS_ROOT/clean/$c$v
+      mkdir -p $SOUNDS_ROOT/clean/$v$c
     done
   done
   CURRENT_DIR=`pwd`

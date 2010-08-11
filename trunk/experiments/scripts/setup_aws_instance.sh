@@ -9,7 +9,7 @@
 #                    ami-2fc2e95b
 
 sudo apt-get -y update
-sudo apt-get -y install subversion scons pkg-config libsndfile1-dev build-essential libboost-dev libc6-dev-i386 python
+sudo apt-get -y install subversion scons pkg-config libsndfile1-dev build-essential libboost-dev libc6-dev-i386 python sox
 
 sudo mkdir /mnt/aimc
 sudo chown ubuntu /mnt/aimc
