@@ -67,6 +67,10 @@ if [ ! -d $FEATURES_ROOT ]; then
   sudo chown `whoami` $FEATURES_ROOT
 fi
 
+if [ ! -e /mnt/experiments/htk/.htk_installed_success ]; then
+  ./HTK/install_htk.sh
+done
+
 for SOURCE_SNR in $FEATURE_DIRS; do
   
   if [ ! -e $FEATURES_ROOT/mfcc/$SOURCE_SNR/.make_mfcc_features_success ]; then
