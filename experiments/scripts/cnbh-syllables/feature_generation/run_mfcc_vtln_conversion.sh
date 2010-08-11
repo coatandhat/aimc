@@ -1,8 +1,8 @@
 #!/bin/bash
 # 
-
+HCOPY_CONFIG=hcopy.config
 HCOPY=`which HCopy`
-if [ $HCOPY -eq "" ]; then
+if [ "$HCOPY" == "" ]; then
   echo "Please build HTK and make the binaries available in the path"
 fi
 
