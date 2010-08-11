@@ -54,7 +54,7 @@ echo -n $total_cores
 echo " tasks..."
 for ((c=1;c<=$MACHINE_CORES;c+=1)); do
   s=${splits[$element]}
-  HCopy -T 1 -C $WORK/$HCOPY_CONFIG -S $s &
+  HCopy -T 1 -C $FEATURES_DIR/${HCOPY_CONFIG} -S $s &
   let element=element+1
 done
 
