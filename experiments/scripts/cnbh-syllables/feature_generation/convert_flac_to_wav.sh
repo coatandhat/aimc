@@ -24,7 +24,7 @@ if [ ! -e $SOUNDS_ROOT/clean/.make_clean_wavs_success ]; then
   CURRENT_DIR=`pwd`
   cd $SOUNDS_ROOT/cnbh-syllables/
   for file in `find . -iname "*.flac"`; do
-    sox $file ../clean/${file%flac}.wav
+    sox $file ../clean/${file%flac}wav
   done
   touch $SOUNDS_ROOT/clean/.make_clean_wavs_success
   cd $CURRENT_DIR
