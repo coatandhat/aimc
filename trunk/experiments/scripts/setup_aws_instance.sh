@@ -15,5 +15,5 @@ sudo mkdir /mnt/aimc
 sudo chown ubuntu /mnt/aimc
 cd /mnt/aimc
 svn checkout http://aimc.googlecode.com/svn/trunk/ aimc-read-only
-cd aimc-read-only/experiments
+cd aimc-read-only/experiments/scripts
 ./master.sh
