@@ -8,7 +8,7 @@
 set -e
 set -u
 
-$SOUNDS_ROOT=$1
+SOUNDS_ROOT=$1
 
 if [ ! -e $SOUNDS_ROOT/clean/.make_clean_wavs_success ] then
   mkdir -p $SOUNDS_ROOT/clean
