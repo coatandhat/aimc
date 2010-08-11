@@ -114,11 +114,18 @@ done
 TRAINING_ITERATIONS="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"
 TESTING_ITERATIONS="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"
 HMM_STATES="3 4 5 6 7 8"
-HMM_OUTPUT_COMPONENTS=""
+HMM_OUTPUT_COMPONENTS="1 2 3 4 5 6"
 
 FEATURE_CLASS=mfcc
+FEATURE_SUFFIX=mfc
 FEATURE_SIZE=39
 FEATURE_TYPE=MFCC_0_D_A
+
+./run_training_and_testing/train_test_sets/generate_train_test_lists.sh \
+    $TALKERS \
+    $WORK \
+    $FEATURES_DIR \
+    $FEATURE_SUFFIX
 
 for SOURCE_SNR in $FEATURE_DIRS; do
   ./run_training_and_testing/test_features.sh \
@@ -130,5 +137,7 @@ for SOURCE_SNR in $FEATURE_DIRS; do
       $TRAINING_ITERATIONS \
       $TESTING_ITERATIONS \
       $FEATURE_SIZE \
-      $FEATURE_TYPE
+      $FEATURE_TYPE \
+      $TRAINING_SCRIPT \
+      $TESTING_SCRIPT
 done

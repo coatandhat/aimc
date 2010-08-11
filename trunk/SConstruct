@@ -49,11 +49,12 @@ common_sources = ['Support/Common.cc',
                   'Modules/Profile/ModuleSlice.cc',
                   'Modules/Profile/ModuleScaler.cc',
                   'Modules/Output/FileOutputHTK.cc',
-                  'Modules/Output/FileOutputAIMC.cc']
+                  'Modules/Output/FileOutputAIMC.cc',
+                  'Modules/Features/ModuleGaussians.cc']
 
 # List of currently incative source files which we may want to add back in
 sources_disabled = ['Modules/SNR/ModuleNoise.cc',
-                    'Modules/Features/ModuleGaussians.cc']
+                    ]
 
 # File which contains main()
 sources = common_sources + ['Main/AIMCopy_SSI_Features_v3.cc']
