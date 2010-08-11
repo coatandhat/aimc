@@ -69,7 +69,7 @@ fi
 
 if [ ! -e /mnt/experiments/htk/.htk_installed_success ]; then
   ./HTK/install_htk.sh
-done
+fi
 
 for SOURCE_SNR in $FEATURE_DIRS; do
   
