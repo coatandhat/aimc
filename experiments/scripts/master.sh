@@ -42,6 +42,7 @@ if [ ! -e $SOUNDS_ROOT/.untar_db_success ]; then
 fi
 
 # Convert the database to .WAV format and place it in $SOUNDS_ROOT/clean
+echo "Converting CNBH-syllables database from FLAC to WAV..."
 ./cnbh-syllables/feature_generation/convert_flac_to_wav.sh $SOUNDS_ROOT
 
 # Generate versions of the CNBH syllables spoke pattern with a range of
