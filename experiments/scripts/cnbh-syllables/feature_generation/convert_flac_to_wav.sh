@@ -10,7 +10,7 @@ set -u
 
 SOUNDS_ROOT=$1
 
-if [ ! -e $SOUNDS_ROOT/clean/.make_clean_wavs_success ] then
+if [ ! -e $SOUNDS_ROOT/clean/.make_clean_wavs_success ] then; do
   mkdir -p $SOUNDS_ROOT/clean
   VOWELS="a e i o u"
   CONSONANTS="b d f g h k l m n p r s t v w x y z"
