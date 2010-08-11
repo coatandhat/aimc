@@ -104,23 +104,12 @@ cat <<"EOF" > $FEATURES_DIR/${TALKERS}.tmp
 215.2p121.0s
 EOF
 
-echo "Generating script..."
-exec 3> $FEATURES_DIR/$FULL_LIST
-for syllable in $(cat $FEATURES_DIR/${SYLLIST}.tmp); do
-  for speaker in $(cat $FEATURES_DIR/${TALKERS}.tmp); do
-    SOURCE_FILENAME=$SOUND_SOURCE/$syllable/${syllable}${speaker}.wav
-    DEST_FILENAME=$FEATURES_DIR/$syllable/${syllable}${speaker}.htk
-    echo "$SOURCE_FILENAME  ${DEST_FILENAME}" >&3
-  done
-done
-exec 3>&-
 
 # Make the necessary directories for the computed features
 echo "Making directory structure..."
 for syllable in $(cat $FEATURES_DIR/${SYLLIST}.tmp); do
   mkdir -p $FEATURES_DIR/$syllable
 done
-
 
 echo "Creating HCopy config file..."
 cat <<"EOF" > $FEATURES_DIR/${HCOPY_CONFIG}
@@ -145,20 +134,25 @@ WARPLCUTOFF = 10
 WARPUCUTOFF = 23000
 EOF
 
-#echo "Splitting data files..."
-#cat $WORK/${TRAIN_LIST} $WORK/${TEST_LIST} > $WORK/${COMBINED_LIST}
-
 for TALKER in $(cat $FEATURES_DIR/${TALKERS}.tmp); do
+  echo "Generating script..."
+  exec 3> $FEATURES_DIR/${FULL_LIST}_$TALKER
+  for syllable in $(cat $FEATURES_DIR/${SYLLIST}.tmp); do
+    SOURCE_FILENAME=$SOUND_SOURCE/$syllable/${syllable}${TALKER}.wav
+    DEST_FILENAME=$FEATURES_DIR/$syllable/${syllable}${TALKER}.htk
+    echo "$SOURCE_FILENAME  ${DEST_FILENAME}" >&3
+  done
+  exec 3>&-
   cp $FEATURES_DIR/${HCOPY_CONFIG} $FEATURES_DIR/${HCOPY_CONFIG}_$TALKER
-  scale=`echo $speaker | sed 's/.*p//' | sed 's/s.*//'`
+  scale=`echo $TALKER | sed 's/.*p//' | sed 's/s.*//'`
   warpfactor=0`echo "scale=4; 100.0/$scale" | bc`
   echo "WARPFREQ = $warpfactor" >> $FEATURES_DIR/${HCOPY_CONFIG}_$TALKER
-  HCopy -T 1 -C $FEATURES_DIR/${HCOPY_CONFIG}_$TALKER -S $FEATURES_DIR/${TRAIN_LIST}_$TALKER &
+  HCopy -T 1 -C $FEATURES_DIR/${HCOPY_CONFIG}_$TALKER -S $FEATURES_DIR/${FULL_LIST}_$TALKER
 done
 
-echo "Waiting for tasks to complete..."
-wait
-echo "Done!"
+#echo "Waiting for tasks to complete..."
+#wait
+#echo "Done!"
 
 rm $FEATURES_DIR/$SYLLIST.tmp
 rm $FEATURES_DIR/${TALKERS}.tmp
