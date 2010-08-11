@@ -152,7 +152,7 @@ for TALKER in $(cat $FEATURES_DIR/${TALKERS}.tmp); do
   cp $FEATURES_DIR/${HCOPY_CONFIG} $FEATURES_DIR/${HCOPY_CONFIG}_$TALKER
   scale=`echo $speaker | sed 's/.*p//' | sed 's/s.*//'`
   warpfactor=0`echo "scale=4; 100.0/$scale" | bc`
-  echo "WARPFREQ = $warpfactor" >> $WORK/${HCOPY_CONFIG}_$TALKER
+  echo "WARPFREQ = $warpfactor" >> $FEATURES_DIR/${HCOPY_CONFIG}_$TALKER
   ${HTK_PREFIX}HCopy -T 1 -C $FEATURES_DIR/${HCOPY_CONFIG}_$TALKER -S $FEATURES_DIR/${TRAIN_LIST}_$TALKER &
 done
 

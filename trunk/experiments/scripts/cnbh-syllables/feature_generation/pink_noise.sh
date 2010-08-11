@@ -20,6 +20,7 @@ PREV_DIR=`pwd`
 cd $CLEAN_SYLLABLES_DATABASE_PATH
 
 for SNR in ${SIGNAL_TO_NOISE_RATIOS}; do
+  echo "Generating noisy data for SNR ${SNR}dB"
   if [ ! -e ../snr_${SNR}dB/.pink_noise_success ]
   then
     mkdir -p ../snr_${SNR}dB/
