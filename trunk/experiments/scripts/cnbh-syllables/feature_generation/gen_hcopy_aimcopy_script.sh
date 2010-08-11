@@ -13,6 +13,7 @@
 
 FEATURES_DIR=$1
 SOUND_SOURCE=$2
+SUFFIX=$3
 
 FULL_LIST=feature_generation_script
 
@@ -111,7 +112,7 @@ exec 3> $FEATURES_DIR/$FULL_LIST
 for syllable in $(cat $FEATURES_DIR/${SYLLIST}.tmp); do
   for speaker in $(cat $FEATURES_DIR/${TALKERS}.tmp); do
     SOURCE_FILENAME=$SOUND_SOURCE/$syllable/${syllable}${speaker}.wav
-    DEST_FILENAME=$FEATURES_DIR/$syllable/${syllable}${speaker}.htk
+    DEST_FILENAME=$FEATURES_DIR/$syllable/${syllable}${speaker}.$SUFFIX
     echo "$SOURCE_FILENAME  ${DEST_FILENAME}" >&3
   done
 done
