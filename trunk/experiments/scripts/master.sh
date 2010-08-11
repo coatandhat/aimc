@@ -63,7 +63,7 @@ fi
 
 for SOURCE_SNR in $FEATURE_DIRS; do
   
-  if [ ! -e $FEATURES_ROOT/mfcc/$SOURCE_SNR/.make_mfcc_features_success]; then
+  if [ ! -e $FEATURES_ROOT/mfcc/$SOURCE_SNR/.make_mfcc_features_success ]; then
     mkdir -p $FEATURES_ROOT/mfcc/$SOURCE_SNR/
     # Generate the list of files to convert
     ./cnbh-syllables/feature_generation/gen_hcopy_aimcopy_script.sh $FEATURES_ROOT/mfcc/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/
@@ -72,7 +72,7 @@ for SOURCE_SNR in $FEATURE_DIRS; do
     touch $FEATURES_ROOT/mfcc/$SOURCE_SNR/.make_mfcc_features_success
   fi
 
-  if [ ! -e $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/.make_mfcc_vtln_features_success]; then
+  if [ ! -e $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/.make_mfcc_vtln_features_success ]; then
     mkdir -p $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/
     # Generate the file list and run the conversion (all one step, since this
     # version uses a different configuraiton for each talker)
@@ -80,7 +80,7 @@ for SOURCE_SNR in $FEATURE_DIRS; do
     touch $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/.make_mfcc_vtln_features_success
   fi
 
-  if [ ! -e $FEATURES_ROOT/aim/$SOURCE_SNR/.make_aim_features_success]; then
+  if [ ! -e $FEATURES_ROOT/aim/$SOURCE_SNR/.make_aim_features_success ]; then
     mkdir -p $FEATURES_ROOT/aim/$SOURCE_SNR/ 
     ./cnbh-syllables/feature_generation/gen_hcopy_aimcopy_script.sh $FEATURES_ROOT/aim/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/
     # Run the conversion
