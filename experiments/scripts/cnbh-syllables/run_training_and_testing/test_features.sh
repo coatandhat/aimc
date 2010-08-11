@@ -35,11 +35,7 @@ TEST_MLF=test.mlf
 HMMCONFIG=hmmconfig
 
 
-
-
-
-
-if [ "$MFCC_FEATURES" ]
+if [ "$FEATURE_TYPE" == "MFCC_0_D_A"]
 then
   cat <<"EOF" > $WORK/$HMMCONFIG
 # Coding parameters
