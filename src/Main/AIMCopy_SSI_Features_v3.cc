@@ -71,6 +71,7 @@ int main(int argc, char* argv[]) {
   string script_file;
   bool write_data = false;
   bool print_version = false;
+  bool load_params = false;
 
   string version_string(
     " AIM-C AIMCopy\n"
@@ -107,6 +108,7 @@ int main(int argc, char* argv[]) {
         return(-1);
       }
       config_file = argv[i];
+      load_params = true;
       continue;
     }
     if (strcmp(argv[i],"-S") == 0) {
@@ -138,10 +140,12 @@ int main(int argc, char* argv[]) {
 
   aimc::Parameters params;
 
-  if (!params.Load(config_file.c_str())) {
-    aimc::LOG_ERROR(_T("Couldn't load parameters from file %s"),
-                    config_file.c_str());
-    return -1;
+  if (load_params) {
+    if (!params.Load(config_file.c_str())) {
+      aimc::LOG_ERROR(_T("Couldn't load parameters from file %s"),
+                      config_file.c_str());
+      return -1;
+    }
   }
 
   vector<pair<string, string> > file_list = aimc::FileList::Load(script_file);
@@ -259,15 +263,15 @@ int main(int argc, char* argv[]) {
     // aimc::LOG_INFO(_T("In:  %s"), file_list[i].first.c_str());
     aimc::LOG_INFO(_T("Out: %s"), file_list[i].second.c_str());
 
-    string filename = file_list[i].second + ".slice_1_no_cutoff";
+    string filename = file_list[i].second + "slice_1_no_cutoff";
     output_ssi_slice1_no_cutoff.OpenFile(filename.c_str(), 10.0f);
-    filename = file_list[i].second + ".ssi_profile_no_cutoff";
+    filename = file_list[i].second + "ssi_profile_no_cutoff";
     output_ssi_all_no_cutoff.OpenFile(filename.c_str(), 10.0f);
-    filename = file_list[i].second + ".slice_1_cutoff";
+    filename = file_list[i].second + "slice_1_cutoff";
     output_ssi_slice1_cutoff.OpenFile(filename.c_str(), 10.0f);
-    filename = file_list[i].second + ".ssi_profile_cutoff";
+    filename = file_list[i].second + "ssi_profile_cutoff";
     output_ssi_all_cutoff.OpenFile(filename.c_str(), 10.0f);
-    filename = file_list[i].second + ".smooth_nap_profile";
+    filename = file_list[i].second + "smooth_nap_profile";
     nap_out.OpenFile(filename.c_str(), 10.0f);
 
     if (input.LoadFile(file_list[i].first.c_str())) {

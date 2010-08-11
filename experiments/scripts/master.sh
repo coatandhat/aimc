@@ -86,7 +86,7 @@ for SOURCE_SNR in $FEATURE_DIRS; do
   if [ ! -e $FEATURES_ROOT/mfcc/$SOURCE_SNR/.make_mfcc_features_success ]; then
     mkdir -p $FEATURES_ROOT/mfcc/$SOURCE_SNR/
     # Generate the list of files to convert
-    ./cnbh-syllables/feature_generation/gen_hcopy_aimcopy_script.sh $FEATURES_ROOT/mfcc/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/
+    ./cnbh-syllables/feature_generation/gen_hcopy_aimcopy_script.sh $FEATURES_ROOT/mfcc/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/ htk
     # Run the conversion
     ./cnbh-syllables/feature_generation/run_hcopy.sh $FEATURES_ROOT/mfcc/$SOURCE_SNR/ $NUMBER_OF_CORES
     touch $FEATURES_ROOT/mfcc/$SOURCE_SNR/.make_mfcc_features_success
@@ -102,7 +102,7 @@ for SOURCE_SNR in $FEATURE_DIRS; do
 
   if [ ! -e $FEATURES_ROOT/aim/$SOURCE_SNR/.make_aim_features_success ]; then
     mkdir -p $FEATURES_ROOT/aim/$SOURCE_SNR/ 
-    ./cnbh-syllables/feature_generation/gen_hcopy_aimcopy_script.sh $FEATURES_ROOT/aim/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/
+    ./cnbh-syllables/feature_generation/gen_hcopy_aimcopy_script.sh $FEATURES_ROOT/aim/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/ ""
     # Run the conversion
     ./cnbh-syllables/feature_generation/run_aimcopy.sh $FEATURES_ROOT/aim/$SOURCE_SNR/ $NUMBER_OF_CORES
     touch $FEATURES_ROOT/aim/$SOURCE_SNR/.make_aim_features_success
@@ -121,6 +121,11 @@ FEATURE_CLASS=mfcc
 FEATURE_SUFFIX=mfc
 FEATURE_SIZE=39
 FEATURE_TYPE=MFCC_0_D_A
+
+TALKERS=inner_talkers
+WORK=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$SOURCE_SNR/$TALKERS/
+mkdir -p $WORK
+FEATURES_DIR=$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/
 
 ./run_training_and_testing/train_test_sets/generate_train_test_lists.sh \
     $TALKERS \
