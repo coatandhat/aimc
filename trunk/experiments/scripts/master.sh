@@ -48,7 +48,8 @@ echo "Converting CNBH-syllables database from FLAC to WAV..."
 # Generate versions of the CNBH syllables spoke pattern with a range of
 # signal-to-noise ratios (SNRs). The versions are put in the directory
 # ${SOUNDS_ROOT}/${SNR}_dB/ for each SNR in $SNRS.
-SNRS="30 27 24 21 18 15 12 9 6 3 0"
+#SNRS="30 27 24 21 18 15 12 9 6 3 0"
+SNRS="30" # For testing
 ./cnbh-syllables/feature_generation/pink_noise.sh $SOUNDS_ROOT/clean/ "$SNRS"
 
 # Make the list of all feature drectories
