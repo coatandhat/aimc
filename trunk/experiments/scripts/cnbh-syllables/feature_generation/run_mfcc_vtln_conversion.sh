@@ -153,7 +153,7 @@ for TALKER in $(cat $FEATURES_DIR/${TALKERS}.tmp); do
   scale=`echo $speaker | sed 's/.*p//' | sed 's/s.*//'`
   warpfactor=0`echo "scale=4; 100.0/$scale" | bc`
   echo "WARPFREQ = $warpfactor" >> $FEATURES_DIR/${HCOPY_CONFIG}_$TALKER
-  ${HTK_PREFIX}HCopy -T 1 -C $FEATURES_DIR/${HCOPY_CONFIG}_$TALKER -S $FEATURES_DIR/${TRAIN_LIST}_$TALKER &
+  HCopy -T 1 -C $FEATURES_DIR/${HCOPY_CONFIG}_$TALKER -S $FEATURES_DIR/${TRAIN_LIST}_$TALKER &
 done
 
 echo "Waiting for tasks to complete..."

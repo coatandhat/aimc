@@ -49,7 +49,7 @@ echo "Converting CNBH-syllables database from FLAC to WAV..."
 # signal-to-noise ratios (SNRs). The versions are put in the directory
 # ${SOUNDS_ROOT}/${SNR}_dB/ for each SNR in $SNRS.
 SNRS="30 27 24 21 18 15 12 9 6 3 0"
-./cnbh-syllables/feature_generation/pink_noise.sh $SOUNDS_ROOT/clean/ $SNRS
+./cnbh-syllables/feature_generation/pink_noise.sh $SOUNDS_ROOT/clean/ "$SNRS"
 
 # Make the list of all feature drectories
 FEATURE_DIRS="clean"
@@ -94,7 +94,7 @@ for SOURCE_SNR in $FEATURE_DIRS; do
   if [ ! -e $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/.make_mfcc_vtln_features_success ]; then
     mkdir -p $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/
     # Generate the file list and run the conversion (all one step, since this
-    # version uses a different configuraiton for each talker)
+    # version uses a different configuration for each talker)
     ./cnbh-syllables/feature_generation/run_mfcc_vtln_conversion.sh $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/
     touch $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/.make_mfcc_vtln_features_success
   fi
@@ -116,4 +116,19 @@ TESTING_ITERATIONS="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"
 HMM_STATES="3 4 5 6 7 8"
 HMM_OUTPUT_COMPONENTS=""
 
+FEATURE_CLASS=mfcc
+FEATURE_SIZE=39
+FEATURE_TYPE=MFCC_0_D_A
 
+for SOURCE_SNR in $FEATURE_DIRS; do
+  ./run_training_and_testing/test_features.sh \
+      $HMMS_ROOT \
+      $FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/ \
+      $FEATURE_SUFFIX \
+      $HMM_STATES \
+      $HMM_OUTPUT_COMPONENTS \
+      $TRAINING_ITERATIONS \
+      $TESTING_ITERATIONS \
+      $FEATURE_SIZE \
+      $FEATURE_TYPE
+done
