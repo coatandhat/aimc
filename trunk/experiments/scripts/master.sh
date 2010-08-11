@@ -36,13 +36,13 @@ if [ ! -e $SOUNDS_ROOT/.untar_db_success ]; then
 fi
 
 # Convert the database to .WAV format and place it in $SOUNDS_ROOT/clean
-./cnbh-syllables/convert_flac_to_wave.sh $SOUNDS_ROOT
+./cnbh-syllables/feature_generation/convert_flac_to_wave.sh $SOUNDS_ROOT
 
 # Generate versions of the CNBH syllables spoke pattern with a range of
 # signal-to-noise ratios (SNRs). The versions are put in the directory
 # ${SOUNDS_ROOT}/${SNR}_dB/ for each SNR in $SNRS.
 SNRS="30 27 24 21 18 15 12 9 6 3 0"
-./cnbh-syllables/pink_noise.sh $SOUNDS_ROOT/clean/ $SNRS
+./cnbh-syllables/feature_generation/pink_noise.sh $SOUNDS_ROOT/clean/ $SNRS
 
 # Make the list of all feature drectories
 FEATURE_DIRS="clean"
