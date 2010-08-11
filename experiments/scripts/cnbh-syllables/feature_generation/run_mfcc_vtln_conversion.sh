@@ -2,7 +2,7 @@
 # 
 
 HCOPY=`which HCopy`
-if [ $HCOPY == "" ]; then
+if [ $HCOPY -eq "" ]; then
   echo "Please build HTK and make the binaries available in the path"
 fi
 
