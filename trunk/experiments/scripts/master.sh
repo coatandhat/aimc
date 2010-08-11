@@ -25,7 +25,8 @@ set -e
 set -u
 
 if [ ! -d $SOUNDS_ROOT ]; then
-  mkdir -p $SOUNDS_ROOT
+  sudo mkdir -p $SOUNDS_ROOT
+  sudo chown `whoami` $SOUNDS_ROOT
 fi
 
 # Untar the CNBH syllables database, and convert the files from FLAC to WAV
@@ -53,6 +54,13 @@ done
 # 1. Standard MFCC features
 # 2. AIM features
 # 3. MFCC features with optimal VTLN 
+
+
+if [ ! -d $FEATURES_ROOT ]; then
+  sudo mkdir -p $FEATURES_ROOT
+  sudo chown `whoami` $FEATURES_ROOT
+fi
+
 for SOURCE_SNR in $FEATURE_DIRS; do
   
   if [ ! -e $FEATURES_ROOT/mfcc/$SOURCE_SNR/.make_mfcc_features_success]
