@@ -21,18 +21,10 @@ TESTING_ITERATIONS_LIST=$7
 FEATURE_SIZE=$8
 FEATURE_TYPE=$9
 
-
 TRAIN_SPEAKERS=train_speakers
 TEST_SPEAKERS=test_speakers
 
-# These are not
-SYLLIST_COMPLETE=syllist
-GRAM=gram
-DICT=dict
-WDNET=wdnet
-TRAIN_MLF=train.mlf
-TEST_MLF=test.mlf
-HMMCONFIG=hmmconfig
+HMMCONFIG=hmm_configuration
 
 
 if [ "$FEATURE_TYPE" == "MFCC_0_D_A"]
@@ -52,8 +44,8 @@ TARGETKIND = USER_E_D_A
 EOF
 fi
 
-for total_hmm_states in 3 4 5 6 7 8; do
-  for mixture_components in 1 2 3 4 5 6 7; do
+for total_hmm_states in $HMM_STATES_LIST; do
+  for mixture_components in $MIXTURE_COMPONENTS_LIST; do
     . run_test_instance.sh &
   done
 done
