@@ -37,6 +37,7 @@ ModuleNoise::ModuleNoise(Parameters *params) :
   module_type_ = "snr";
   module_version_ = "$Id$";
 
+  pink_ = parameters_->DefaultBool("noise.pink", true);
   // Noise level relative to unit-variance Gaussian noise (ie. 0dB will give a
   // noise with an RMS level of 1.0)
   float snr_db = parameters_->DefaultFloat("noise.level_db", 0.0f);
@@ -54,11 +55,14 @@ bool ModuleNoise::InitializeInternal(const SignalBank &input) {
   channel_count_ = input.channel_count();
 
   output_.Initialize(input);
+  ResetInternal();
   return true;
 }
 
 void ModuleNoise::ResetInternal() {
-
+  s0_ = 0.0f;
+  s1_ = 0.0f;
+  s2_ = 0.0f;
 }
 
 void ModuleNoise::Process(const SignalBank &input) {
@@ -81,7 +85,20 @@ void ModuleNoise::Process(const SignalBank &input) {
   for (int c = 0; c < input.channel_count(); ++c) {
     for (int i = 0; i < input.buffer_length(); ++i) {
       float s = input[c][i];
-      s += (multiplier_ * gaussian_variate_());
+      float n =  gaussian_variate_();
+      if (pink_) {
+        // Pink noise filter coefficients from 
+        // ccrma.stanford.edu/~jos/sasp/Example_Synthesis_1_F_Noise.html
+        // Smith, Julius O. Spectral Audio Signal Processing, October 2008
+        // Draft, http://ccrma.stanford.edu/~jos/sasp/, online book, 
+        // accessed 2010-02-27.
+        float f = 0.049922035 * n + s0_;
+        s0_ = -0.095993537 * n - (-2.494956002 * f) + s1_;
+        s1_ = 0.050612699 * n - (2.017265875 * f) + s2_;
+        s2_ = -0.004408786 * n - (-0.522189400 * f);
+        n = f;
+      }
+      s += multiplier_ * n;
       output_.set_sample(c, i, s);
     }
   }

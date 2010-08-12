@@ -53,10 +53,18 @@ class ModuleNoise : public Module {
   int buffer_length_;
   int channel_count_;
 
+  // True to generate pink noise, otherwise white noise
+  bool pink_;
+
+  // Filter state variables
+  float s0_;
+  float s1_;
+  float s2_;
+
   float multiplier_;
 
-  // Random number generator which yeilds Gaussian-distributed values by
-  // The generator is a Mersenne twister
+  // Mersenne twister random number generator fed into a transform which 
+  // yeilds Gaussian-distributed values
   boost::variate_generator<boost::mt19937,
                            boost::normal_distribution<float> >
                            gaussian_variate_;
