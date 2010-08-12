@@ -75,7 +75,15 @@ class ModuleGaussians : public Module {
 
   /*! \brief convergence criterion
    */
-  float m_fParamPriorsConverged;
+  float priors_converged_;
+
+  /*! \brief Output component positions as well as amplitudes
+   */
+  bool output_positions_;
+
+  /*! \brief Total number of values in the output
+   */
+  int output_component_count_;
 
   /*! \brief The amplitudes of the components (priors)
    */

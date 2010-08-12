@@ -38,17 +38,17 @@ ModuleGaussians::ModuleGaussians(Parameters *params) : Module(params) {
   module_type_ = "features";
   module_version_ = "$Id$";
 
-  m_iParamNComp = parameters_->DefaultInt("features.gaussians.ncomp", 4);
-  m_fParamVar = parameters_->DefaultFloat("features.gaussians.var", 115.0);
-  m_fParamPosteriorExp =
-    parameters_->DefaultFloat("features.gaussians.posterior_exp", 6.0);
-  m_iParamMaxIt = parameters_->DefaultInt("features.gaussians.maxit", 250);
+  m_iParamNComp = parameters_->DefaultInt("gaussians.ncomp", 4);
+  m_fParamVar = parameters_->DefaultFloat("gaussians.var", 115.0);
+  m_fParamPosteriorExp = parameters_->DefaultFloat("gaussians.posterior_exp",
+                                                   6.0);
+  m_iParamMaxIt = parameters_->DefaultInt("gaussians.maxit", 250);
 
   // The parameters system doesn't support tiny numbers well, to define this
   // variable as a string, then convert it to a float afterwards
-  parameters_->DefaultString("features.gaussians.priors_converged", "1e-7");
-  m_fParamPriorsConverged =
-    parameters_->GetFloat("features.gaussians.priors_converged");
+  parameters_->DefaultString("gaussians.priors_converged", "1e-7");
+  priors_converged_ = parameters_->GetFloat("gaussians.priors_converged");
+  output_positions_ = parameters_->DefaultBool("gaussians.positions", false);
 }
 
 ModuleGaussians::~ModuleGaussians() {
@@ -60,14 +60,21 @@ bool ModuleGaussians::InitializeInternal(const SignalBank &input) {
 
   // Assuming the number of channels is greater than twice the number of
   // Gaussian components, this is ok
+  output_component_count_ = 1; // Energy component
   if (input.channel_count() >= 2 * m_iParamNComp) {
-    output_.Initialize(m_iParamNComp, 1, input.sample_rate());
+    output_component_count_ += (m_iParamNComp - 1);
   } else {
     LOG_ERROR(_T("Too few channels in filterbank to produce sensible "
                  "Gaussian features. Either increase the number of filterbank"
                  " channels, or decrease the number of Gaussian components"));
     return false;
   }
+
+  if (output_positions_) {
+    output_component_count_ += m_iParamNComp;
+  }
+
+  output_.Initialize(output_component_count_, 1, input.sample_rate());
 
   m_iNumChannels = input.channel_count();
   m_pSpectralProfile.resize(m_iNumChannels, 0.0f);
@@ -90,16 +97,12 @@ void ModuleGaussians::Process(const SignalBank &input) {
     return;
   }
   // Calculate spectral profile
-  for (int iChannel = 0;
-       iChannel < input.channel_count();
-       ++iChannel) {
-    m_pSpectralProfile[iChannel] = 0.0f;
-    for (int iSample = 0;
-         iSample < input.buffer_length();
-         ++iSample) {
-      m_pSpectralProfile[iChannel] += input[iChannel][iSample];
+  for (int ch = 0; ch < input.channel_count(); ++ch) {
+    m_pSpectralProfile[ch] = 0.0f;
+    for (int i = 0; i < input.buffer_length(); ++i) {
+      m_pSpectralProfile[ch] += input[ch][i];
     }
-    m_pSpectralProfile[iChannel] /= static_cast<float>(input.buffer_length());
+    m_pSpectralProfile[ch] /= static_cast<float>(input.buffer_length());
   }
 
   float spectral_profile_sum = 0.0f;
@@ -107,36 +110,35 @@ void ModuleGaussians::Process(const SignalBank &input) {
     spectral_profile_sum += m_pSpectralProfile[i];
   }
 
+  // Set the last component of the feature vector to be the log energy
   float logsum = log(spectral_profile_sum);
   if (!isinf(logsum)) {
-    output_.set_sample(m_iParamNComp - 1, 0, logsum);
+    output_.set_sample(output_component_count_ - 1, 0, logsum);
   } else {
-    output_.set_sample(m_iParamNComp - 1, 0, -1000.0);
+    output_.set_sample(output_component_count_ - 1, 0, -1000.0);
   }
 
-  for (int iChannel = 0;
-       iChannel < input.channel_count();
-       ++iChannel) {
-    m_pSpectralProfile[iChannel] = pow(m_pSpectralProfile[iChannel], 0.8f);
+  for (int ch = 0; ch < input.channel_count(); ++ch) {
+    m_pSpectralProfile[ch] = pow(m_pSpectralProfile[ch], 0.8);
   }
 
   RubberGMMCore(2, true);
 
-  float fMean1 = m_pMu[0];
-  float fMean2 = m_pMu[1];
+  float mean1 = m_pMu[0];
+  float mean2 = m_pMu[1];
   // LOG_INFO(_T("Orig. mean 0 = %f"), m_pMu[0]);
   // LOG_INFO(_T("Orig. mean 1 = %f"), m_pMu[1]);
   // LOG_INFO(_T("Orig. prob 0 = %f"), m_pA[0]);
   // LOG_INFO(_T("Orig. prob 1 = %f"), m_pA[1]);
 
-  float fA1 = 0.05 * m_pA[0];
-  float fA2 = 1.0 - 0.25 * m_pA[1];
+  float a1 = 0.05 * m_pA[0];
+  float a2 = 1.0 - 0.25 * m_pA[1];
 
   // LOG_INFO(_T("fA1 = %f"), fA1);
   // LOG_INFO(_T("fA2 = %f"), fA2);
 
-  float fGradient = (fMean2 - fMean1) / (fA2 - fA1);
-  float fIntercept = fMean2 - fGradient * fA2;
+  float gradient = (mean2 - mean1) / (a2 - a1);
+  float intercept = mean2 - gradient * a2;
 
   // LOG_INFO(_T("fGradient = %f"), fGradient);
   // LOG_INFO(_T("fIntercept = %f"), fIntercept);
@@ -144,7 +146,7 @@ void ModuleGaussians::Process(const SignalBank &input) {
   for (int i = 0; i < m_iParamNComp; ++i) {
     m_pMu[i] = (static_cast<float>(i)
                 / (static_cast<float>(m_iParamNComp) - 1.0f))
-                * fGradient + fIntercept;
+                * gradient + intercept;
                 // LOG_INFO(_T("mean %d = %f"), i, m_pMu[i]);
   }
 
@@ -154,11 +156,25 @@ void ModuleGaussians::Process(const SignalBank &input) {
 
   RubberGMMCore(m_iParamNComp, false);
 
+  // Amplitudes first
   for (int i = 0; i < m_iParamNComp - 1; ++i) {
     if (!isnan(m_pA[i])) {
       output_.set_sample(i, 0, m_pA[i]);
     } else {
       output_.set_sample(i, 0, 0.0f);
+    }
+  }
+
+  // Then means if required
+  if (output_positions_) {
+    int idx = 0;
+    for (int i = m_iParamNComp - 1; i < 2 * m_iParamNComp - 1; ++i) {
+      if (!isnan(m_pMu[i])) {
+        output_.set_sample(i, 0, m_pMu[idx]);
+      } else {
+        output_.set_sample(i, 0, 0.0f);
+      }
+      ++idx;
     }
   }
 
@@ -169,12 +185,12 @@ bool ModuleGaussians::RubberGMMCore(int iNComponents, bool bDoInit) {
   int iSizeX = m_iNumChannels;
 
   // Normalise the spectral profile
-  float fSpectralProfileTotal = 0.0f;
+  float SpectralProfileTotal = 0.0f;
   for (int iCount = 0; iCount < iSizeX; iCount++) {
-    fSpectralProfileTotal += m_pSpectralProfile[iCount];
+    SpectralProfileTotal += m_pSpectralProfile[iCount];
   }
   for (int iCount = 0; iCount < iSizeX; iCount++) {
-    m_pSpectralProfile[iCount] /= fSpectralProfileTotal;
+    m_pSpectralProfile[iCount] /= SpectralProfileTotal;
   }
 
   if (bDoInit) {
@@ -200,12 +216,12 @@ bool ModuleGaussians::RubberGMMCore(int iNComponents, bool bDoInit) {
       pP_mod_X[i] = 0.0f;
     }
 
-    for (int i = 0; i < iNComponents; i++) {
+    for (int c = 0; c < iNComponents; c++) {
       for (int iCount = 0; iCount < iSizeX; iCount++) {
         pP_mod_X[iCount] += 1.0f / sqrt(2.0f * M_PI * m_fParamVar)
                             * exp((-0.5f)
-                            * pow(static_cast<float>(iCount+1) - m_pMu[i], 2)
-                            / m_fParamVar) * m_pA[i];
+                            * pow(static_cast<float>(iCount+1) - m_pMu[c], 2)
+                            / m_fParamVar) * m_pA[c];
       }
     }
 
@@ -251,7 +267,7 @@ bool ModuleGaussians::RubberGMMCore(int iNComponents, bool bDoInit) {
     }
     fPrdist /= iNComponents;
 
-    if (fPrdist < m_fParamPriorsConverged) {
+    if (fPrdist < priors_converged_) {
       // LOG_INFO("Converged!");
       break;
     }
