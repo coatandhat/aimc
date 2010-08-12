@@ -23,7 +23,7 @@ TRAIN_SCRIPT=training_script
 TEST_SCRIPT=testing_script
 SYLLIST=syllable_list
 
-BASEDIR=`basename $0`
+BASEDIR=`dirname $0`
 
 if [ $TALKERS == "inner_talkers" ]; then
     $BASEDIR/train_on_central.sh $WORK/training_talkers $WORK/testing_talkers
