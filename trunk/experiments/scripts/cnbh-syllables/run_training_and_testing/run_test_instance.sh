@@ -11,7 +11,9 @@
 # SYLLIST_COMPLETE
 
 # Filenames generated here
-HMMPROTO=hmm_prototype
+
+# This must be named 'proto' to keep HCompV happy.
+HMMPROTO=proto
 HHED_SCRIPT=hhed_change_components_script
 RECOUT=recognition_output
 RESULTS_FILE=results
