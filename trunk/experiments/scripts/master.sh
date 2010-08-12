@@ -134,6 +134,9 @@ FEATURES_DIR=$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/
     $FEATURES_DIR \
     $FEATURE_SUFFIX
 
+TRAINING_SCRIPT=$WORK/training_script
+TESTING_SCRIPT=$WORK/testing_script
+
 for SOURCE_SNR in $FEATURE_DIRS; do
   ./cnbh-syllables/run_training_and_testing/test_features.sh \
       $HMMS_ROOT \
