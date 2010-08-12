@@ -25,6 +25,9 @@ TEST_SCRIPT=testing_script
 SYLLIST_COMPLETE=syllable_list_with_silence
 TRAIN_MLF=training_master_label_file
 
+DICT=dictionary
+WDNET=word_network
+
 SILENCE=sil
 
 THIS_DIR=`dirname $0`
