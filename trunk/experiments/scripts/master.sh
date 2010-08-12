@@ -109,6 +109,9 @@ for SOURCE_SNR in $FEATURE_DIRS; do
   fi
 done 
 
+sudo mkdir -p $HMMS_ROOT
+sudo chown ubuntu $HMMS_ROOT
+
 # Now run a bunch of experiments.
 # For each of the feature types, we want to run HMMs with a bunch of
 # parameters.
@@ -124,8 +127,7 @@ FEATURE_TYPE=MFCC_0_D_A
 
 TALKERS=inner_talkers
 WORK=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$SOURCE_SNR/$TALKERS/
-sudo mkdir -p $WORK
-sudo chown ubuntu $WORK
+mkdir -p $WORK
 FEATURES_DIR=$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/
 
 ./cnbh-syllables/run_training_and_testing/train_test_sets/generate_train_test_lists.sh \

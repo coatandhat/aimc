@@ -18,23 +18,24 @@ HMM_STATES_LIST=$4
 MIXTURE_COMPONENTS_LIST=$5
 TRAINING_ITERATIONS_LIST=$6
 TESTING_ITERATIONS_LIST=$7
-FEATURE_SIZE=$8
-FEATURE_TYPE=$9
+input_vector_size=$8
+feature_code=$9
 
 TRAIN_SPEAKERS=train_speakers
 TEST_SPEAKERS=test_speakers
 
 HMMCONFIG=hmm_configuration
 
+THIS_DIR=`dirname $0`
 
-if [ "$FEATURE_TYPE" == "MFCC_0_D_A"]
+if [ "$FEATURE_TYPE" == "MFCC_0_D_A" ]
 then
-  cat <<"EOF" > $WORK/$HMMCONFIG
+  cat <<"EOF" > $WORKING_DIRECTORY/$HMMCONFIG
 # Coding parameters
 SOURCEFORMAT= HTK
 EOF
 else
-  cat <<"EOF" > $WORK/$HMMCONFIG
+  cat <<"EOF" > $WORKING_DIRECTORY/$HMMCONFIG
 # Coding parameters
 # The TARGETKIND and SOURCEKIND lines are to add deltas and delta-deltas to
 # the AIM features
@@ -46,7 +47,7 @@ fi
 
 for total_hmm_states in $HMM_STATES_LIST; do
   for mixture_components in $MIXTURE_COMPONENTS_LIST; do
-    . run_test_instance.sh &
+    . $THIS_DIR/run_test_instance.sh &
   done
 done
 echo "Waiting..."
