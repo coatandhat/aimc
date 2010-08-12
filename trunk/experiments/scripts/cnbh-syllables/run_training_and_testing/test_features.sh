@@ -22,6 +22,8 @@ input_vector_size=$8
 feature_code=$9
 TRAIN_SPEAKERS=${10}
 TEST_SPEAKERS=${11}
+TRAIN_MLF=${12}
+
 
 HMMCONFIG=hmm_configuration
 

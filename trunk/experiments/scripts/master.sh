@@ -125,16 +125,68 @@ sudo chown ubuntu $HMMS_ROOT
 TRAINING_ITERATIONS="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"
 TESTING_ITERATIONS="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"
 HMM_STATES="3 4 5 6 7 8"
-HMM_OUTPUT_COMPONENTS="1 2 3 4 5 6"
+HMM_OUTPUT_COMPONENTS="1 2 3 4 5 6 7"
 
+
+########################
+# Standard MFCCs
 FEATURE_CLASS=mfcc
 FEATURE_SUFFIX=htk
 FEATURE_SIZE=39
 FEATURE_TYPE=MFCC_0_D_A
-
-#for SOURCE_SNR in $FEATURE_DIRS; do
-SOURCE_SNR="clean"
 TALKERS=inner_talkers
+TRAINING_SCRIPT=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_script
+TRAINING_MASTER_LABEL_FILE=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_master_label_file
+run_train_test
+########################
+
+########################
+# Standard MFCCs
+# Train on extrema
+FEATURE_CLASS=mfcc
+FEATURE_SUFFIX=htk
+FEATURE_SIZE=39
+FEATURE_TYPE=MFCC_0_D_A
+TALKERS=outer_talkers
+TRAINING_SCRIPT=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_script
+TRAINING_MASTER_LABEL_FILE=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_master_label_file
+run_train_test
+########################
+
+########################
+# MFCCs with VTLN
+FEATURE_CLASS=mfcc_vtln
+FEATURE_SUFFIX=htk
+FEATURE_SIZE=39
+FEATURE_TYPE=MFCC_0_D_A
+TALKERS=inner_talkers
+TRAINING_SCRIPT=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_script
+TRAINING_MASTER_LABEL_FILE=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_master_label_file
+run_train_test
+########################
+
+########################
+# MFCCs with VTLN
+# Train on extrema
+FEATURE_CLASS=mfcc_vtln
+FEATURE_SUFFIX=htk
+FEATURE_SIZE=39
+FEATURE_TYPE=MFCC_0_D_A
+TALKERS=outer_talkers
+TRAINING_SCRIPT=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_script
+TRAINING_MASTER_LABEL_FILE=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_master_label_file
+run_train_test
+########################
+
+########################
+# AIM Features
+# TODO (loop over all feature suffixes)
+########################
+
+
+run_train_test () {
+for SOURCE_SNR in $FEATURE_DIRS; do
+#SOURCE_SNR="clean"
 WORK=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$SOURCE_SNR/$TALKERS/
 mkdir -p $WORK
 FEATURES_DIR=$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/
@@ -145,7 +197,6 @@ FEATURES_DIR=$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/
     $FEATURES_DIR \
     $FEATURE_SUFFIX
 
-TRAINING_SCRIPT=$WORK/training_script
 TESTING_SCRIPT=$WORK/testing_script
 
 ./cnbh-syllables/run_training_and_testing/gen_htk_base_files.sh $WORK
@@ -161,5 +212,9 @@ TESTING_SCRIPT=$WORK/testing_script
     "$FEATURE_SIZE" \
     "$FEATURE_TYPE" \
     "$TRAINING_SCRIPT" \
-    "$TESTING_SCRIPT"
-#done
+    "$TESTING_SCRIPT" \
+    "$TRAINING_MASTER_LABEL_FILE"
+done
+}
+
+
