@@ -23,6 +23,7 @@ MISCLASSIFIED=misclassified_syllables
 TRAIN_SCRIPT=training_script
 TEST_SCRIPT=testing_script
 SYLLIST_COMPLETE=syllable_list_with_silence
+TRAIN_MLF=training_master_label_file
 
 SILENCE=sil
 

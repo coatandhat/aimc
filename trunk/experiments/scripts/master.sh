@@ -140,6 +140,8 @@ FEATURES_DIR=$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/
 TRAINING_SCRIPT=$WORK/training_script
 TESTING_SCRIPT=$WORK/testing_script
 
+./cnbh-syllables/run_training_and_testing/gen_htk_base_files.sh $WORK
+
 for SOURCE_SNR in $FEATURE_DIRS; do
   ./cnbh-syllables/run_training_and_testing/test_features.sh \
       "$WORK" \
