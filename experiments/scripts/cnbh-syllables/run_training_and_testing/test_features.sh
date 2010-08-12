@@ -20,9 +20,8 @@ TRAINING_ITERATIONS_LIST=$6
 TESTING_ITERATIONS_LIST=$7
 input_vector_size=$8
 feature_code=$9
-
-TRAIN_SPEAKERS=train_speakers
-TEST_SPEAKERS=test_speakers
+TRAIN_SPEAKERS=${10}
+TEST_SPEAKERS=${11}
 
 HMMCONFIG=hmm_configuration
 
