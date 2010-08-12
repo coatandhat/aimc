@@ -48,16 +48,16 @@ echo "Generating HMM definitions..."
 # Now take the prototype file from hmm0, and create the other HMM definitions
 # from it
 grep -A 9999 "<BEGINHMM>" $WORKING_DIRECTORY/$hmm_type/hmm0/$HMMPROTO > $WORKING_DIRECTORY/$hmm_type/hmm0/hmms
-for syllable in $(cat $WORK/$SYLLIST_COMPLETE); do
-  echo "~h $syllable" >> $WORKING_DIRECTORY/$hmm_type/$feature/hmm0/hmmdefs
-  cat $WORKING_DIRECTORY/$hmm_type/$feature/hmm0/hmms >> $WORKING_DIRECTORY/$hmm_type/$feature/hmm0/hmmdefs
+for syllable in $(cat $WORKING_DIRECTORY/$SYLLIST_COMPLETE); do
+  echo "~h $syllable" >> $WORKING_DIRECTORY/$hmm_type/hmm0/hmmdefs
+  cat $WORKING_DIRECTORY/$hmm_type/hmm0/hmms >> $WORKING_DIRECTORY/$hmm_type/hmm0/hmmdefs
 done
  
-echo -n "~o<STREAMINFO> 1 ${input_vector_size}<VECSIZE> ${input_vector_size}<NULLD><${feature_code}><DIAGC>" > $WORKING_DIRECTORY/$hmm_type/$feature/hmm0/macros
+echo -n "~o<STREAMINFO> 1 ${input_vector_size}<VECSIZE> ${input_vector_size}<NULLD><${feature_code}><DIAGC>" > $WORKING_DIRECTORY/$hmm_type/hmm0/macros
 
-cat $WORKING_DIRECTORY/$hmm_type/$feature/hmm0/vFloors >> $WORKING_DIRECTORY/$hmm_type/$feature/hmm0/macros
+cat $WORKING_DIRECTORY/$hmm_type/hmm0/vFloors >> $WORKING_DIRECTORY/$hmm_type/hmm0/macros
 
-HHEd -H $WORKING_DIRECTORY/$hmm_type/$feature/hmm0/macros -H $WORKING_DIRECTORY/$hmm_type/$feature/hmm0/hmmdefs $WORKING_DIRECTORY/$hmm_type/$HHED_SCRIPT $WORKING_DIRECTORY/$SYLLIST_COMPLETE
+HHEd -H $WORKING_DIRECTORY/$hmm_type//hmm0/macros -H $WORKING_DIRECTORY/$hmm_type/hmm0/hmmdefs $WORKING_DIRECTORY/$hmm_type/$HHED_SCRIPT $WORKING_DIRECTORY/$SYLLIST_COMPLETE
 
 for iter in $TRAINING_ITERATIONS_LIST; do
   echo "Training iteration ${iter}..."
