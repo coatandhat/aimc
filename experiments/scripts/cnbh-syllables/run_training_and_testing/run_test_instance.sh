@@ -24,15 +24,17 @@ SYLLIST_COMPLETE=syllable_list_with_silence
 
 SILENCE=sil
 
+THIS_DIR=`dirname $0`
+
 hmm_type=${total_hmm_states}_states_${mixture_components}_mixture_components
 echo "HMM type: $hmm_type"
 mkdir -p $WORKING_DIRECTORY/$hmm_type
 
 echo "Creating HMM structure..."
-./gen_hmmproto.py --input_size ${input_vector_size} --total_hmm_states ${total_hmm_states} --feature_type ${feature_code} > $WORKING_DIRECTORY/$hmm_type/$HMMPROTO
+$THIS_DIR/gen_hmmproto.py --input_size ${input_vector_size} --total_hmm_states ${total_hmm_states} --feature_type ${feature_code} > $WORKING_DIRECTORY/$hmm_type/$HMMPROTO
 
 echo "Adding output mixture components..."
-./gen_hhed_script.py --num_means ${mixture_components} --total_hmm_states ${total_hmm_states} > $WORKING_DIRECTORY/$hmm_type/$HHED_SCRIPT
+$THIS_DIR/gen_hhed_script.py --num_means ${mixture_components} --total_hmm_states ${total_hmm_states} > $WORKING_DIRECTORY/$hmm_type/$HHED_SCRIPT
 
 
 echo "Training HMM..."
@@ -53,13 +55,13 @@ echo -n "~o<STREAMINFO> 1 ${input_vector_size}<VECSIZE> ${input_vector_size}<NUL
 
 cat $WORKING_DIRECTORY/$hmm_type/$feature/hmm0/vFloors >> $WORKING_DIRECTORY/$hmm_type/$feature/hmm0/macros
 
-HHEd  -H $WORKING_DIRECTORY/$hmm_type/$feature/hmm0/macros -H $WORKING_DIRECTORY/$hmm_type/$feature/hmm0/hmmdefs $WORKING_DIRECTORY/$hmm_type/$HHED_SCRIPT $WORKING_DIRECTORY/$SYLLIST_COMPLETE
+HHEd -H $WORKING_DIRECTORY/$hmm_type/$feature/hmm0/macros -H $WORKING_DIRECTORY/$hmm_type/$feature/hmm0/hmmdefs $WORKING_DIRECTORY/$hmm_type/$HHED_SCRIPT $WORKING_DIRECTORY/$SYLLIST_COMPLETE
 
 for iter in $TRAINING_ITERATIONS_LIST; do
   echo "Training iteration ${iter}..."
   let "nextiter=$iter+1"
   mkdir $WORKING_DIRECTORY/$hmm_type/hmm$nextiter
-  ${HTK_PREFIX}HERest -C $WORKING_DIRECTORY/$HMMCONFIG -I $WORKING_DIRECTORY/$TRAIN_MLF \
+  HERest -C $WORKING_DIRECTORY/$HMMCONFIG -I $WORKING_DIRECTORY/$TRAIN_MLF \
     -t 250.0 150.0 1000.0 -S $WORKING_DIRECTORY/$TRAIN_SCRIPT \
     -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/macros -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/hmmdefs \
     -M $WORKING_DIRECTORY/$hmm_type/hmm$nextiter $WORKING_DIRECTORY/$SYLLIST_COMPLETE
@@ -67,12 +69,12 @@ done
 
 for iter in $TESTING_ITERATIONS_LIST; do
   echo "Testing iteration ${iter}..."
-  ${HTK_PREFIX}HVite -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/macros -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/hmmdefs \
+  HVite -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/macros -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/hmmdefs \
     -C $WORKING_DIRECTORY/$HMMCONFIG -S $WORKING_DIRECTORY/$TEST_SCRIPT -i $WORKING_DIRECTORY/$hmm_type/$RECOUT \
     -w $WORKING_DIRECTORY/$WDNET -p 0.0 -s 5.0 $WORKING_DIRECTORY/$DICT $WORKING_DIRECTORY/$SYLLIST_COMPLETE
   echo "Results from testing on iteration ${iter}..."
-  ${HTK_PREFIX}HResults -e "???" ${SILENCE} -I $WORKING_DIRECTORY/$TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT
-  ${HTK_PREFIX}HResults -p -t -e "???" ${SILENCE} \
+  HResults -e "???" ${SILENCE} -I $WORKING_DIRECTORY/$TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT
+  HResults -p -t -e "???" ${SILENCE} \
     -I $WORKING_DIRECTORY/$TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT > $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter
   grep Aligned $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter| sed -E "s/.*\/..\/([a-z]{2})([0-9]{2,3}\.[0-9])p([0-9]{2,3}\.[0-9])s.*/\2 \3/" | sort | uniq -c > $WORKING_DIRECTORY/$hmm_type/${MISCLASSIFIED}_iteration_$iter
 done

@@ -28,7 +28,7 @@ HMMCONFIG=hmm_configuration
 
 THIS_DIR=`dirname $0`
 
-if [ "$FEATURE_TYPE" == "MFCC_0_D_A" ]
+if [ "$feature_code" == "MFCC_0_D_A" ]
 then
   cat <<"EOF" > $WORKING_DIRECTORY/$HMMCONFIG
 # Coding parameters
