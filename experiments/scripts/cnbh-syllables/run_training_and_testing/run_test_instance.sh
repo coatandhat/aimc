@@ -23,7 +23,6 @@ MISCLASSIFIED=misclassified_syllables
 TRAIN_SCRIPT=training_script
 TEST_SCRIPT=testing_script
 SYLLIST_COMPLETE=syllable_list_with_silence
-TRAIN_MLF=training_master_label_file
 TEST_MLF=testing_master_label_file
 
 DICT=dictionary
@@ -34,7 +33,13 @@ SILENCE=sil
 THIS_DIR=`dirname $0`
 
 hmm_type=${total_hmm_states}_states_${mixture_components}_mixture_components
-echo "HMM type: $hmm_type"
+echo "HMM type: ${hmm_type}..."
+
+if [ -e $WORKING_DIRECTORY/.hmm_success ]; then
+  echo " already done"
+  return 0
+fi
+
 mkdir -p $WORKING_DIRECTORY/$hmm_type
 
 echo "Creating HMM structure..."
