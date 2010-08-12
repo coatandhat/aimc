@@ -141,15 +141,15 @@ TESTING_SCRIPT=$WORK/testing_script
 
 for SOURCE_SNR in $FEATURE_DIRS; do
   ./cnbh-syllables/run_training_and_testing/test_features.sh \
-      $HMMS_ROOT \
-      $FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/ \
-      $FEATURE_SUFFIX \
-      $HMM_STATES \
-      $HMM_OUTPUT_COMPONENTS \
-      $TRAINING_ITERATIONS \
-      $TESTING_ITERATIONS \
-      $FEATURE_SIZE \
-      $FEATURE_TYPE \
-      $TRAINING_SCRIPT \
-      $TESTING_SCRIPT
+      "$WORK" \
+      "$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/" \
+      "$FEATURE_SUFFIX" \
+      "$HMM_STATES" \
+      "$HMM_OUTPUT_COMPONENTS" \
+      "$TRAINING_ITERATIONS" \
+      "$TESTING_ITERATIONS" \
+      "$FEATURE_SIZE" \
+      "$FEATURE_TYPE" \
+      "$TRAINING_SCRIPT" \
+      "$TESTING_SCRIPT"
 done
