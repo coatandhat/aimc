@@ -36,6 +36,7 @@ then
 fi
 
 for v in $VOWELS; do
+  echo $v$v >> $FEATURES_DIR/$SYLLIST.tmp.tmp
   for c in $CONSONANTS; do
     echo $v$c >> $FEATURES_DIR/$SYLLIST.tmp.tmp
     echo $c$v >> $FEATURES_DIR/$SYLLIST.tmp.tmp
