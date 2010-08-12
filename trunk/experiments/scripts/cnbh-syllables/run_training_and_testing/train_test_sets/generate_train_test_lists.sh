@@ -23,12 +23,14 @@ TRAIN_SCRIPT=training_script
 TEST_SCRIPT=testing_script
 SYLLIST=syllable_list
 
+BASEDIR=`basename $0`
+
 if [ $TALKERS == "inner_talkers" ]; then
-    ./train_on_central.sh $WORK/training_talkers $WORK/testing_talkers
+    $BASEDIR/train_on_central.sh $WORK/training_talkers $WORK/testing_talkers
 fi
 
 if [ $TALKERS == "outer_talkers" ]; then
-    ./train_on_extrema.sh $WORK/training_talkers $WORK/testing_talkers
+    $BASEDIR/train_on_extrema.sh $WORK/training_talkers $WORK/testing_talkers
 fi
 
 # The vowels and consonants that make up the CNBH database
