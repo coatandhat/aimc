@@ -48,8 +48,8 @@ echo "Converting CNBH-syllables database from FLAC to WAV..."
 # Generate versions of the CNBH syllables spoke pattern with a range of
 # signal-to-noise ratios (SNRs). The versions are put in the directory
 # ${SOUNDS_ROOT}/${SNR}_dB/ for each SNR in $SNRS.
-SNRS="30 27 24 21 18 15 12 9 6 3 0"
-#SNRS="30" # For testing
+#SNRS="30 27 24 21 18 15 12 9 6 3 0"
+SNRS="30" # For testing
 ./cnbh-syllables/feature_generation/pink_noise.sh $SOUNDS_ROOT/clean/ "$SNRS"
 
 # Make the list of all feature drectories
@@ -104,8 +104,8 @@ for SOURCE_SNR in $FEATURE_DIRS; do
     mkdir -p $FEATURES_ROOT/aim/$SOURCE_SNR/ 
     ./cnbh-syllables/feature_generation/gen_hcopy_aimcopy_script.sh $FEATURES_ROOT/aim/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/ ""
     # Run the conversion
-    ./cnbh-syllables/feature_generation/run_aimcopy.sh $FEATURES_ROOT/aim/$SOURCE_SNR/ $NUMBER_OF_CORES
-    touch $FEATURES_ROOT/aim/$SOURCE_SNR/.make_aim_features_success
+    #./cnbh-syllables/feature_generation/run_aimcopy.sh $FEATURES_ROOT/aim/$SOURCE_SNR/ $NUMBER_OF_CORES
+    #touch $FEATURES_ROOT/aim/$SOURCE_SNR/.make_aim_features_success
   fi
 done 
 
@@ -124,17 +124,18 @@ FEATURE_TYPE=MFCC_0_D_A
 
 TALKERS=inner_talkers
 WORK=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$SOURCE_SNR/$TALKERS/
-mkdir -p $WORK
+sudo mkdir -p $WORK
+sudo chown ubuntu $WORK
 FEATURES_DIR=$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/
 
-./run_training_and_testing/train_test_sets/generate_train_test_lists.sh \
+./cnbh-syllables/run_training_and_testing/train_test_sets/generate_train_test_lists.sh \
     $TALKERS \
     $WORK \
     $FEATURES_DIR \
     $FEATURE_SUFFIX
 
 for SOURCE_SNR in $FEATURE_DIRS; do
-  ./run_training_and_testing/test_features.sh \
+  ./cnbh-syllables/run_training_and_testing/test_features.sh \
       $HMMS_ROOT \
       $FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/ \
       $FEATURE_SUFFIX \
