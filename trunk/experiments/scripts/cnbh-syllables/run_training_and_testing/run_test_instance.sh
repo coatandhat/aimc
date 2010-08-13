@@ -73,7 +73,7 @@ for iter in $TRAINING_ITERATIONS_LIST; do
   echo "Training iteration ${iter}..."
   let "nextiter=$iter+1"
   mkdir $WORKING_DIRECTORY/$hmm_type/hmm$nextiter
-  HERest -C $WORKING_DIRECTORY/$HMMCONFIG -I $WORKING_DIRECTORY/$TRAIN_MLF \
+  HERest -C $WORKING_DIRECTORY/$HMMCONFIG -I $TRAIN_MLF \
     -t 250.0 150.0 1000.0 -S $WORKING_DIRECTORY/$TRAIN_SCRIPT \
     -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/macros -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/hmmdefs \
     -M $WORKING_DIRECTORY/$hmm_type/hmm$nextiter $WORKING_DIRECTORY/$SYLLIST_COMPLETE
