@@ -128,6 +128,40 @@ HMM_STATES="3 4 5 6 7 8"
 HMM_OUTPUT_COMPONENTS="1 2 3 4 5 6 7"
 
 
+run_train_test () {
+for SOURCE_SNR in $FEATURE_DIRS; do
+#SOURCE_SNR="clean"
+WORK=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$SOURCE_SNR/$TALKERS/
+mkdir -p $WORK
+FEATURES_DIR=$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/
+
+./cnbh-syllables/run_training_and_testing/train_test_sets/generate_train_test_lists.sh \
+    $TALKERS \
+    $WORK \
+    $FEATURES_DIR \
+    $FEATURE_SUFFIX
+
+TESTING_SCRIPT=$WORK/testing_script
+
+./cnbh-syllables/run_training_and_testing/gen_htk_base_files.sh $WORK
+
+./cnbh-syllables/run_training_and_testing/test_features.sh \
+    "$WORK" \
+    "$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/" \
+    "$FEATURE_SUFFIX" \
+    "$HMM_STATES" \
+    "$HMM_OUTPUT_COMPONENTS" \
+    "$TRAINING_ITERATIONS" \
+    "$TESTING_ITERATIONS" \
+    "$FEATURE_SIZE" \
+    "$FEATURE_TYPE" \
+    "$TRAINING_SCRIPT" \
+    "$TESTING_SCRIPT" \
+    "$TRAINING_MASTER_LABEL_FILE"
+done
+}
+
+
 ########################
 # Standard MFCCs
 FEATURE_CLASS=mfcc
@@ -184,37 +218,6 @@ run_train_test
 ########################
 
 
-run_train_test () {
-for SOURCE_SNR in $FEATURE_DIRS; do
-#SOURCE_SNR="clean"
-WORK=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$SOURCE_SNR/$TALKERS/
-mkdir -p $WORK
-FEATURES_DIR=$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/
 
-./cnbh-syllables/run_training_and_testing/train_test_sets/generate_train_test_lists.sh \
-    $TALKERS \
-    $WORK \
-    $FEATURES_DIR \
-    $FEATURE_SUFFIX
-
-TESTING_SCRIPT=$WORK/testing_script
-
-./cnbh-syllables/run_training_and_testing/gen_htk_base_files.sh $WORK
-
-./cnbh-syllables/run_training_and_testing/test_features.sh \
-    "$WORK" \
-    "$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/" \
-    "$FEATURE_SUFFIX" \
-    "$HMM_STATES" \
-    "$HMM_OUTPUT_COMPONENTS" \
-    "$TRAINING_ITERATIONS" \
-    "$TESTING_ITERATIONS" \
-    "$FEATURE_SIZE" \
-    "$FEATURE_TYPE" \
-    "$TRAINING_SCRIPT" \
-    "$TESTING_SCRIPT" \
-    "$TRAINING_MASTER_LABEL_FILE"
-done
-}
 
 
