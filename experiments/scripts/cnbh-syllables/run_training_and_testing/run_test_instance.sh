@@ -20,10 +20,10 @@ RESULTS_FILE=results
 MISCLASSIFIED=misclassified_syllables
 
 # Filenames used here
-TRAIN_SCRIPT=training_script
-TEST_SCRIPT=testing_script
+#TRAIN_SCRIPT=training_script
+#TEST_SCRIPT=testing_script
 SYLLIST_COMPLETE=syllable_list_with_silence
-TEST_MLF=testing_master_label_file
+#TEST_MLF=testing_master_label_file
 
 DICT=dictionary
 WDNET=word_network
@@ -52,7 +52,7 @@ $THIS_DIR/gen_hhed_script.py --num_means ${mixture_components} --total_hmm_state
 echo "Training HMM..."
 echo "Setting up prototype HMM..."
 mkdir -p $WORKING_DIRECTORY/$hmm_type/hmm0
-HCompV -C $WORKING_DIRECTORY/$HMMCONFIG -f 0.01 -m -S $WORKING_DIRECTORY/$TRAIN_SCRIPT -M $WORKING_DIRECTORY/$hmm_type/hmm0 $WORKING_DIRECTORY/$hmm_type/$HMMPROTO
+HCompV -C $WORKING_DIRECTORY/$HMMCONFIG -f 0.01 -m -S $TRAIN_SCRIPT -M $WORKING_DIRECTORY/$hmm_type/hmm0 $WORKING_DIRECTORY/$hmm_type/$HMMPROTO
 
 echo "Generating HMM definitions..."
 # Now take the prototype file from hmm0, and create the other HMM definitions
@@ -74,7 +74,7 @@ for iter in $TRAINING_ITERATIONS_LIST; do
   let "nextiter=$iter+1"
   mkdir $WORKING_DIRECTORY/$hmm_type/hmm$nextiter
   HERest -C $WORKING_DIRECTORY/$HMMCONFIG -I $TRAIN_MLF \
-    -t 250.0 150.0 1000.0 -S $WORKING_DIRECTORY/$TRAIN_SCRIPT \
+    -t 250.0 150.0 1000.0 -S $TRAIN_SCRIPT \
     -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/macros -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/hmmdefs \
     -M $WORKING_DIRECTORY/$hmm_type/hmm$nextiter $WORKING_DIRECTORY/$SYLLIST_COMPLETE
 done
@@ -82,7 +82,7 @@ done
 for iter in $TESTING_ITERATIONS_LIST; do
   echo "Testing iteration ${iter}..."
   HVite -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/macros -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/hmmdefs \
-    -C $WORKING_DIRECTORY/$HMMCONFIG -S $WORKING_DIRECTORY/$TEST_SCRIPT -i $WORKING_DIRECTORY/$hmm_type/$RECOUT \
+    -C $WORKING_DIRECTORY/$HMMCONFIG -S $TEST_SCRIPT -i $WORKING_DIRECTORY/$hmm_type/$RECOUT \
     -w $WORKING_DIRECTORY/$WDNET -p 0.0 -s 5.0 $WORKING_DIRECTORY/$DICT $WORKING_DIRECTORY/$SYLLIST_COMPLETE
   echo "Results from testing on iteration ${iter}..."
   HResults -e "???" ${SILENCE} -I $WORKING_DIRECTORY/$TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT

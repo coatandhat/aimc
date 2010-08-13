@@ -13,7 +13,6 @@
 # HTK_USERNAME and HTK_PASSWORD - username and password for the site at 
 # http://htk.eng.cam.ac.uk/
 
-
 # Set these to be the location of your input database, and desired output
 # locations.
 SYLLABLES_DATABASE_TAR=/mnt/sounds/cnbh-syllables.tar
@@ -142,6 +141,7 @@ FEATURES_DIR=$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/
     $FEATURE_SUFFIX
 
 TESTING_SCRIPT=$WORK/testing_script
+TESTING_MASTER_LABEL_FILE=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$SOURCE_SNR/$TALKERS/testing_master_label_file
 
 ./cnbh-syllables/run_training_and_testing/gen_htk_base_files.sh $WORK
 
@@ -157,7 +157,8 @@ TESTING_SCRIPT=$WORK/testing_script
     "$FEATURE_TYPE" \
     "$TRAINING_SCRIPT" \
     "$TESTING_SCRIPT" \
-    "$TRAINING_MASTER_LABEL_FILE"
+    "$TRAINING_MASTER_LABEL_FILE" \
+    "$TESTING_MASTER_LABEL_FILE"
 done
 }
 
