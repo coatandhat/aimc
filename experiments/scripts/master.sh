@@ -22,7 +22,7 @@ HMMS_ROOT=/mnt/experiments/hmms/
 
 # Number of cores on the experimental machine. Various scripts will try to use
 # this if it's set.
-NUMBER_OF_CORES=1
+NUMBER_OF_CORES=8
 
 # Fail if any command fails
 set -e
@@ -54,8 +54,8 @@ echo "Converting CNBH-syllables database from FLAC to WAV..."
 # Generate versions of the CNBH syllables spoke pattern with a range of
 # signal-to-noise ratios (SNRs). The versions are put in the directory
 # ${SOUNDS_ROOT}/${SNR}_dB/ for each SNR in $SNRS.
-#SNRS="30 27 24 21 18 15 12 9 6 3 0"
-SNRS="30" # For testing
+SNRS="30 27 24 21 18 15 12 9 6 3 0"
+#SNRS="30" # For testing
 ./cnbh-syllables/feature_generation/pink_noise.sh $SOUNDS_ROOT/clean/ "$SNRS"
 
 # Make the list of all feature drectories
@@ -128,8 +128,8 @@ HMM_OUTPUT_COMPONENTS="1 2 3 4 5 6 7"
 
 
 run_train_test () {
+# TODO(tom): Make sure that the training SNR is generated first
 for SOURCE_SNR in $FEATURE_DIRS; do
-#SOURCE_SNR="clean"
 WORK=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$SOURCE_SNR/$TALKERS/
 mkdir -p $WORK
 FEATURES_DIR=$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/
@@ -140,8 +140,11 @@ FEATURES_DIR=$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/
     $FEATURES_DIR \
     $FEATURE_SUFFIX
 
+TRAINING_SCRIPT=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$TRAINING_SNR/$TALKERS/training_script
+TRAINING_MASTER_LABEL_FILE=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$TRAINING_SNR/$TALKERS/training_master_label_file
+
 TESTING_SCRIPT=$WORK/testing_script
-TESTING_MASTER_LABEL_FILE=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$SOURCE_SNR/$TALKERS/testing_master_label_file
+TESTING_MASTER_LABEL_FILE=$WORK/testing_master_label_file
 
 ./cnbh-syllables/run_training_and_testing/gen_htk_base_files.sh $WORK
 
@@ -170,8 +173,7 @@ FEATURE_SUFFIX=htk
 FEATURE_SIZE=39
 FEATURE_TYPE=MFCC_0_D_A
 TALKERS=inner_talkers
-TRAINING_SCRIPT=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_script
-TRAINING_MASTER_LABEL_FILE=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_master_label_file
+TRAINING_SNR=clean
 run_train_test
 ########################
 
@@ -183,8 +185,7 @@ FEATURE_SUFFIX=htk
 FEATURE_SIZE=39
 FEATURE_TYPE=MFCC_0_D_A
 TALKERS=outer_talkers
-TRAINING_SCRIPT=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_script
-TRAINING_MASTER_LABEL_FILE=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_master_label_file
+TRAINING_SNR=clean
 run_train_test
 ########################
 
@@ -195,8 +196,7 @@ FEATURE_SUFFIX=htk
 FEATURE_SIZE=39
 FEATURE_TYPE=MFCC_0_D_A
 TALKERS=inner_talkers
-TRAINING_SCRIPT=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_script
-TRAINING_MASTER_LABEL_FILE=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_master_label_file
+TRAINING_SNR=clean
 run_train_test
 ########################
 
@@ -208,8 +208,7 @@ FEATURE_SUFFIX=htk
 FEATURE_SIZE=39
 FEATURE_TYPE=MFCC_0_D_A
 TALKERS=outer_talkers
-TRAINING_SCRIPT=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_script
-TRAINING_MASTER_LABEL_FILE=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_master_label_file
+TRAINING_SNR=clean
 run_train_test
 ########################
 
