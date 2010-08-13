@@ -6,7 +6,7 @@ sudo apt-get -y update
 sudo apt-get -y install bc subversion scons pkg-config libsndfile1-dev build-essential libboost-dev python sox
 
 # For 64-bit systems, uncomment this line:
-# sudo apt-get -y install libc6-dev-i386
+sudo apt-get -y install libc6-dev-i386
 
 sudo mkdir -p /mnt/aimc
 sudo chown ubuntu /mnt/aimc
@@ -15,4 +15,4 @@ sudo chown ubuntu /mnt/log
 cd /mnt/aimc
 svn checkout http://aimc.googlecode.com/svn/trunk/ aimc-read-only
 cd aimc-read-only/experiments/scripts/
-./master.sh > /mnt/log/log.log
+./master.sh &> /mnt/log/log.log
