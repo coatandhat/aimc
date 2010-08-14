@@ -85,8 +85,8 @@ for iter in $TESTING_ITERATIONS_LIST; do
     -C $WORKING_DIRECTORY/$HMMCONFIG -S $TEST_SCRIPT -i $WORKING_DIRECTORY/$hmm_type/$RECOUT \
     -w $WORKING_DIRECTORY/$WDNET -p 0.0 -s 5.0 $WORKING_DIRECTORY/$DICT $WORKING_DIRECTORY/$SYLLIST_COMPLETE
   echo "Results from testing on iteration ${iter}..."
-  HResults -e "???" ${SILENCE} -I $WORKING_DIRECTORY/$TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT
+  HResults -e "???" ${SILENCE} -I $TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT
   HResults -p -t -e "???" ${SILENCE} \
-    -I $WORKING_DIRECTORY/$TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT > $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter
+    -I $TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT > $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter
   grep Aligned $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter| sed -E "s/.*\/..\/([a-z]{2})([0-9]{2,3}\.[0-9])p([0-9]{2,3}\.[0-9])s.*/\2 \3/" | sort | uniq -c > $WORKING_DIRECTORY/$hmm_type/${MISCLASSIFIED}_iteration_$iter
 done
