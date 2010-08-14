@@ -12,6 +12,7 @@
 # database in FLAC format
 # HTK_USERNAME and HTK_PASSWORD - username and password for the site at 
 # http://htk.eng.cam.ac.uk/
+# NUMBER_OF_CORES - total number of machine cores
 
 # Set these to be the location of your input database, and desired output
 # locations.
@@ -22,7 +23,7 @@ HMMS_ROOT=/mnt/experiments/hmms/
 
 # Number of cores on the experimental machine. Various scripts will try to use
 # this if it's set.
-NUMBER_OF_CORES=8
+# NUMBER_OF_CORES=8
 
 # Fail if any command fails
 set -e
@@ -94,24 +95,24 @@ for SOURCE_SNR in $FEATURE_DIRS; do
     # Generate the list of files to convert
     ./cnbh-syllables/feature_generation/gen_hcopy_aimcopy_script.sh $FEATURES_ROOT/mfcc/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/ htk
     # Run the conversion
-    ./cnbh-syllables/feature_generation/run_hcopy.sh $FEATURES_ROOT/mfcc/$SOURCE_SNR/ $NUMBER_OF_CORES
-    touch $FEATURES_ROOT/mfcc/$SOURCE_SNR/.make_mfcc_features_success
+    #./cnbh-syllables/feature_generation/run_hcopy.sh $FEATURES_ROOT/mfcc/$SOURCE_SNR/ $NUMBER_OF_CORES
+    #touch $FEATURES_ROOT/mfcc/$SOURCE_SNR/.make_mfcc_features_success
   fi
 
   if [ ! -e $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/.make_mfcc_vtln_features_success ]; then
     mkdir -p $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/
     # Generate the file list and run the conversion (all one step, since this
     # version uses a different configuration for each talker)
-    ./cnbh-syllables/feature_generation/run_mfcc_vtln_conversion.sh $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/
-    touch $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/.make_mfcc_vtln_features_success
+    #./cnbh-syllables/feature_generation/run_mfcc_vtln_conversion.sh $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/
+    #touch $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/.make_mfcc_vtln_features_success
   fi
 
   if [ ! -e $FEATURES_ROOT/aim/$SOURCE_SNR/.make_aim_features_success ]; then
     mkdir -p $FEATURES_ROOT/aim/$SOURCE_SNR/ 
     ./cnbh-syllables/feature_generation/gen_hcopy_aimcopy_script.sh $FEATURES_ROOT/aim/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/ ""
     # Run the conversion
-    #./cnbh-syllables/feature_generation/run_aimcopy.sh $FEATURES_ROOT/aim/$SOURCE_SNR/ $NUMBER_OF_CORES
-    #touch $FEATURES_ROOT/aim/$SOURCE_SNR/.make_aim_features_success
+    ./cnbh-syllables/feature_generation/run_aimcopy.sh $FEATURES_ROOT/aim/$SOURCE_SNR/ $NUMBER_OF_CORES
+    touch $FEATURES_ROOT/aim/$SOURCE_SNR/.make_aim_features_success
   fi
 done 
 
@@ -126,6 +127,7 @@ TESTING_ITERATIONS="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"
 HMM_STATES="3 4 5 6 7 8"
 HMM_OUTPUT_COMPONENTS="1 2 3 4 5 6 7"
 
+return 0
 
 run_train_test () {
 # TODO(tom): Make sure that the training SNR is generated first
