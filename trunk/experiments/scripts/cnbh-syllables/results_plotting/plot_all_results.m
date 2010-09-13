@@ -3,16 +3,21 @@
 % Nick Fyson and Martin Vestergaard.
 % Copyright 2009 University of Cambridge
 % Author: Tom Walters <tcw24@cam>
-function plot_all_results(exp_path)
+function plot_all_results(exp_path, iteration, plot_end_numbers)
+
+plot_numbers = true;
+if nargin < 3
+  plot_end_numbers = false;
+end
 
 % Load the results from the experimental directory
-load([exp_path 'misclassified.txt_iter15']); 
+misclassified = load([exp_path 'misclassified_syllables_iteration_' num2str(iteration)]); 
 
 % The total number of syllables in the CNBH syllable database 
 num_points = 185;
 target_VTL = 15;
 
-misclassified(:, 1) = 1 - misclassified(:, 1) / num_points; %#ok<NODEF>
+misclassified(:, 1) = 1 - misclassified(:, 1) / num_points;
 
 % The individual data points are plotted as spheres
 sphere_size_x = 1.2;
@@ -61,20 +66,30 @@ for i=1:length(spokes)
   y_pos_2 = spokes{i}(j, 2);
   z_pos_2 = results{i}(j);
   
-  text(x_pos + 0.3*(x_pos - x_pos_2), y_pos + 0.3*(y_pos - y_pos_2), z_pos + 0.3*(z_pos - z_pos_2) , [num2str(results{i}(j), 3) '%']);
-  for j = 1:length(spokes{i})
-    [X Y Z] = sphere(10);
-    X = sphere_size_x.*X + spokes{i}(j,1);
-    Y = sphere_size_y.*Y + spokes{i}(j,2);
-    Z = sphere_size_z.*Z + results{i}(j);
-    % C = zeros(size(X));
-    plot3([spokes{i}(j, 1) spokes{i}(j, 1)], ...
-          [spokes{i}(j, 2),spokes{i}(j, 2)], [0 results{i}(j)], '-k.', ...
-          'LineWidth', 1, 'Color', [0.8 0.8 0.8]);
-    surf(X, Y, Z, ones(size(Z)) .* (results{i}(j)), 'LineStyle', 'none');
+  j=1;
+  
+  if (~plot_numbers && plot_end_numbers)
+    text(x_pos + 0.3*(x_pos - x_pos_2), y_pos + 0.3*(y_pos - y_pos_2), z_pos + 0.3*(z_pos - z_pos_2) , [num2str(results{i}(j), 3) '%']);
   end
-  plot3(spokes{i}(:,1), spokes{i}(:,2), results{i}(:), '-', 'LineWidth', 2, ...
-       'Color', [0.2 0.2 0.2]);
+  for j = 1:length(spokes{i})
+	if (plot_numbers)
+	  text(spokes{i}(j,1), spokes{i}(j,2), results{i}(j), [num2str(results{i}(j), 3) '%']);
+	else
+      [X Y Z] = sphere(10);
+      X = sphere_size_x.*X + spokes{i}(j,1);
+      Y = sphere_size_y.*Y + spokes{i}(j,2);
+      Z = sphere_size_z.*Z + results{i}(j);
+      % C = zeros(size(X));
+      plot3([spokes{i}(j, 1) spokes{i}(j, 1)], ...
+            [spokes{i}(j, 2),spokes{i}(j, 2)], [0 results{i}(j)], '-k.', ...
+            'LineWidth', 1, 'Color', [0.8 0.8 0.8]);
+      surf(X, Y, Z, ones(size(Z)) .* (results{i}(j)), 'LineStyle', 'none');
+    end
+  end
+  if (~plot_numbers)
+    plot3(spokes{i}(:,1), spokes{i}(:,2), results{i}(:), '-', 'LineWidth', 2, ...
+         'Color', [0.2 0.2 0.2]);
+  end
 end
 % Plot a zero-sized sphere at zero to get the autoscaling of the colour bar
 % correct
@@ -99,8 +114,9 @@ set(axes1, 'YTick', [10 15 22]);
 set(axes1, 'YDir', 'reverse');
 set(axes1, 'ZTick', [0 20 40 60 80 100]);
 hold('all');
-print('-depsc', 'results_plot.eps');
-!open results_plot.eps
+%print('-depsc', [exp_path 'results_plot_iteration_' num2str(iteration) '.eps']);
+%   saveas(gcf, [exp_path 'results_plot_iteration_' num2str(iteration) '.fig']);
+%!open results_plot.eps
 
 
 

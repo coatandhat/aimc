@@ -88,5 +88,6 @@ for iter in $TESTING_ITERATIONS_LIST; do
   HResults -e "???" ${SILENCE} -I $TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT
   HResults -p -t -e "???" ${SILENCE} \
     -I $TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT > $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter
+  # Count the number of instances of each talker appearing in the list of errors.
   grep Aligned $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter| sed -E "s/.*\/..\/([a-z]{2})([0-9]{2,3}\.[0-9])p([0-9]{2,3}\.[0-9])s.*/\2 \3/" | sort | uniq -c > $WORKING_DIRECTORY/$hmm_type/${MISCLASSIFIED}_iteration_$iter
 done

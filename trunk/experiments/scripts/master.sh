@@ -33,7 +33,7 @@ set -u
 
 if [ ! -e $SYLLABLES_DATABASE_TAR ]; then
   sudo mkdir -p `dirname $SYLLABLES_DATABASE_TAR`
-  sudo chown ubuntu `dirname $SYLLABLES_DATABASE_TAR`
+  sudo chown `whoami` `dirname $SYLLABLES_DATABASE_TAR`
   wget -O $SYLLABLES_DATABASE_TAR $SYLLABLES_DATABASE_URL
 fi
 
@@ -117,7 +117,7 @@ for SOURCE_SNR in $FEATURE_DIRS; do
 done 
 
 sudo mkdir -p $HMMS_ROOT
-sudo chown ubuntu $HMMS_ROOT
+sudo chown `whoami` $HMMS_ROOT
 
 # Now run a bunch of experiments.
 # For each of the feature types, we want to run HMMs with a bunch of

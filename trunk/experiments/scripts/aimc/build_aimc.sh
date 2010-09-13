@@ -6,7 +6,7 @@ set -u
 AIMC_DIR=/mnt/experiments/aimc
 
 sudo mkdir -p $AIMC_DIR
-sudo chown ubuntu $AIMC_DIR
+sudo chown `whoami` $AIMC_DIR
 cd $AIMC_DIR
 svn checkout http://aimc.googlecode.com/svn/trunk/ aimc-read-only
 cd aimc-read-only

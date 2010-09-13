@@ -11,7 +11,7 @@ sudo mount /dev/sdg1 /media/results/
 su ubuntu
 cd /mnt/
 sudo mkdir work
-sudo chown ubuntu work
+sudo chown `whoami` work
 cd work
 svn checkout http://aimc.googlecode.com/svn/trunk/ aimc-read-only
 cd aimc-read-only
