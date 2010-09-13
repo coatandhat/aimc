@@ -33,6 +33,11 @@ if [ $TALKERS == "outer_talkers" ]; then
     $BASEDIR/train_on_extrema.sh $WORK/training_talkers $WORK/testing_talkers
 fi
 
+# In general, we want to do our testing on all the talkers (training talkers and
+# testing talkers) so the train and test talkers are combined here to make a single
+# testing set.
+cat $WORK/training_talkers $WORK/testing_talkers > $WORK/all_talkers
+
 # The vowels and consonants that make up the CNBH database
 VOWELS="a e i o u"
 CONSONANTS="b d f g h k l m n p r s t v w x y z"
@@ -83,7 +88,7 @@ for syllable in $(cat $WORK/${SYLLIST}); do
     echo "$SILENCE" >&4
     echo "." >&4
   done
-  for speaker in $(cat $WORK/testing_talkers); do
+  for speaker in $(cat $WORK/all_talkers); do
     DEST_FILENAME=$FEATURES_DIR/$syllable/${syllable}${speaker} 
     echo "'\"${DEST_FILENAME}.lab\"'" >&6
     echo "$SILENCE" >&6
@@ -111,7 +116,7 @@ for syllable in $(cat $WORK/${SYLLIST}); do
     DEST_FILENAME=$FEATURES_DIR/$syllable/${syllable}${speaker}
     echo "'${DEST_FILENAME}.${FEATURE_NAME}'" >&7
   done
-  for speaker in $(cat $WORK/testing_talkers); do
+  for speaker in $(cat $WORK/all_talkers); do
     DEST_FILENAME=$FEATURES_DIR/$syllable/${syllable}${speaker}
       echo "'${DEST_FILENAME}.${FEATURE_NAME}'" >&8
   done
@@ -120,4 +125,7 @@ exec 7>&-
 exec 8>&-
 
 rm $WORK/${SYLLIST}
-rm $WORK/training_talkers $WORK/testing_talkers
+# Note: don't delete 'all_talkers', 'training_talkers' or 'testing_talkers' because
+# they're used later by the plotting scripts.
+
+
