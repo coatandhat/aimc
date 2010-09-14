@@ -35,7 +35,7 @@ THIS_DIR=`dirname $0`
 hmm_type=${total_hmm_states}_states_${mixture_components}_mixture_components
 echo "HMM type: ${hmm_type}..."
 
-if [ -e $WORKING_DIRECTORY/.hmm_success ]; then
+if [ -e $WORKING_DIRECTORY/$hmm_type/.hmm_success ]; then
   echo " already done"
   return 0
 fi
@@ -62,7 +62,7 @@ for syllable in $(cat $WORKING_DIRECTORY/$SYLLIST_COMPLETE); do
   echo "~h $syllable" >> $WORKING_DIRECTORY/$hmm_type/hmm0/hmmdefs
   cat $WORKING_DIRECTORY/$hmm_type/hmm0/hmms >> $WORKING_DIRECTORY/$hmm_type/hmm0/hmmdefs
 done
- 
+
 echo -n "~o<STREAMINFO> 1 ${input_vector_size}<VECSIZE> ${input_vector_size}<NULLD><${feature_code}><DIAGC>" > $WORKING_DIRECTORY/$hmm_type/hmm0/macros
 
 cat $WORKING_DIRECTORY/$hmm_type/hmm0/vFloors >> $WORKING_DIRECTORY/$hmm_type/hmm0/macros
@@ -90,4 +90,9 @@ for iter in $TESTING_ITERATIONS_LIST; do
     -I $TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT > $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter
   # Count the number of instances of each talker appearing in the list of errors.
   grep Aligned $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter| sed -E "s/.*\/..\/([a-z]{2})([0-9]{2,3}\.[0-9])p([0-9]{2,3}\.[0-9])s.*/\2 \3/" | sort | uniq -c > $WORKING_DIRECTORY/$hmm_type/${MISCLASSIFIED}_iteration_$iter
+  python ./cnbh-syllables/results_plotting/gen_results.py --input_file=$WORKING_DIRECTORY/$hmm_type/${MISCLASSIFIED}_iteration_$iter --train_talkers=$WORKING_DIRECTORY/$hmm_type/training_talkers --test_talkers=$WORKING_DIRECTORY/$hmm_type/testing_talkers --output_filename=$WORKING_DIRECTORY/$hmm_type/results_iteration_${iter}.txt --spoke_pattern=cnbh-syllables/run_training_and_testing/train_test_sets/gen_spoke_points/spoke_pattern.txt
+  python ./cnbh-syllbles/results_plotting/spider_plot.py --input_file=$WORKING_DIRECTORY/$hmm_type/results_iteration_${iter}.txt --output_file=$WORKING_DIRECTORY/$hmm_type/results_iteration_${iter}.png
 done
+touch $WORKING_DIRECTORY/$hmm_type/.hmm_success
+
+

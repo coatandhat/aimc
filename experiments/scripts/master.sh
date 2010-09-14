@@ -5,21 +5,26 @@
 # AIM features generated using AIM-C using a series of syllable recogntiton
 # tasks.
 # This script expects to be run from within the AIM-C source tree.
-# It builds the HTK binaries and AIM-C AIMCopy binary if they're not 
-# present. 
+# It builds the HTK binaries and AIM-C AIMCopy binary if they're not
+# present.
 # The following environment varaibles should be set before this script is run:
 # SYLLABLES_DATABASE_URL - URL of a tar file containing the CNBH syllables
 # database in FLAC format
-# HTK_USERNAME and HTK_PASSWORD - username and password for the site at 
+# HTK_USERNAME and HTK_PASSWORD - username and password for the site at
 # http://htk.eng.cam.ac.uk/
 # NUMBER_OF_CORES - total number of machine cores
 
 # Set these to be the location of your input database, and desired output
-# locations.
-SYLLABLES_DATABASE_TAR=/mnt/sounds/cnbh-syllables.tar
-SOUNDS_ROOT=/mnt/experiments/sounds/
-FEATURES_ROOT=/mnt/experiments/features/
-HMMS_ROOT=/mnt/experiments/hmms/
+# locations. (Note: the user running this script needs write permissions on
+# the $WORKING_VOLUME.)
+WORKING_VOLUME=/mnt/scratch1
+
+SYLLABLES_DATABASE_TAR=$WORKING_VOLUME/001-downloaded_sounds_data/cnbh-syllables.tar
+SOUNDS_ROOT=$WORKING_VOLUME/002-sounds/
+FEATURES_ROOT=$WORKING_VOLUME/003-features/
+HMMS_ROOT=$WORKING_VOLUME/004-hmms/
+HTK_ROOT=$WORKING_VOLUME/software/htk/
+AIMC_ROOT=$WORKING_VOLUME/software/aimc/
 
 # Number of cores on the experimental machine. Various scripts will try to use
 # this if it's set.
@@ -31,18 +36,18 @@ set -e
 # Fail if any variable is unset
 set -u
 
+######
+# Step 001 - Get the sounds database
 if [ ! -e $SYLLABLES_DATABASE_TAR ]; then
-  sudo mkdir -p `dirname $SYLLABLES_DATABASE_TAR`
-  sudo chown `whoami` `dirname $SYLLABLES_DATABASE_TAR`
+  mkdir -p `dirname $SYLLABLES_DATABASE_TAR`
   wget -O $SYLLABLES_DATABASE_TAR $SYLLABLES_DATABASE_URL
 fi
 
 if [ ! -d $SOUNDS_ROOT ]; then
-  sudo mkdir -p $SOUNDS_ROOT
-  sudo chown `whoami` $SOUNDS_ROOT
+  mkdir -p $SOUNDS_ROOT
 fi
 
-# Untar the CNBH syllables database, and convert the files from FLAC to WAV
+# Untar the CNBH syllables database, and convert the files from FLAC to WAV.
 if [ ! -e $SOUNDS_ROOT/.untar_db_success ]; then
   tar -x -C $SOUNDS_ROOT -f $SYLLABLES_DATABASE_TAR
   touch $SOUNDS_ROOT/.untar_db_success
@@ -51,7 +56,11 @@ fi
 # Convert the database to .WAV format and place it in $SOUNDS_ROOT/clean
 echo "Converting CNBH-syllables database from FLAC to WAV..."
 ./cnbh-syllables/feature_generation/convert_flac_to_wav.sh $SOUNDS_ROOT
+#
+######
 
+#####
+# Step 002 -
 # Generate versions of the CNBH syllables spoke pattern with a range of
 # signal-to-noise ratios (SNRs). The versions are put in the directory
 # ${SOUNDS_ROOT}/${SNR}_dB/ for each SNR in $SNRS.
@@ -68,66 +77,59 @@ done
 # Generate feature sets (for the full range of SNRs in $FEATURE_DIRS)
 # 1. Standard MFCC features
 # 2. AIM features
-# 3. MFCC features with optimal VTLN 
-
+# 3. MFCC features with optimal VTLN
 
 if [ ! -d $FEATURES_ROOT ]; then
-  sudo mkdir -p $FEATURES_ROOT
-  sudo chown `whoami` $FEATURES_ROOT
+ mkdir -p $FEATURES_ROOT
 fi
 
-if [ ! -e /mnt/experiments/htk/.htk_installed_success ]; then
-  ./HTK/install_htk.sh
+if [ ! -e $HTK_ROOT/.htk_installed_success ]; then
+  ./HTK/install_htk.sh $HTK_ROOT
 fi
 
-if [ ! -e /mnt/experiments/aimc/.aimc_build_success ]; then
-# ./aimc/build_aimc.sh
-  cd ../../
-  scons
-  export PATH=$PATH:`pwd`/build/posix-release/
-  cd -
+if [ ! -e $AIMC_ROOT/.aimc_build_success ]; then
+ ./aimc/build_aimc.sh $AIMC_ROOT
 fi
 
 for SOURCE_SNR in $FEATURE_DIRS; do
-  
   if [ ! -e $FEATURES_ROOT/mfcc/$SOURCE_SNR/.make_mfcc_features_success ]; then
     mkdir -p $FEATURES_ROOT/mfcc/$SOURCE_SNR/
     # Generate the list of files to convert
     ./cnbh-syllables/feature_generation/gen_hcopy_aimcopy_script.sh $FEATURES_ROOT/mfcc/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/ htk
     # Run the conversion
-    #./cnbh-syllables/feature_generation/run_hcopy.sh $FEATURES_ROOT/mfcc/$SOURCE_SNR/ $NUMBER_OF_CORES
-    #touch $FEATURES_ROOT/mfcc/$SOURCE_SNR/.make_mfcc_features_success
+    ./cnbh-syllables/feature_generation/run_hcopy.sh $FEATURES_ROOT/mfcc/$SOURCE_SNR/ $NUMBER_OF_CORES
+    touch $FEATURES_ROOT/mfcc/$SOURCE_SNR/.make_mfcc_features_success
   fi
 
   if [ ! -e $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/.make_mfcc_vtln_features_success ]; then
     mkdir -p $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/
     # Generate the file list and run the conversion (all one step, since this
     # version uses a different configuration for each talker)
-    #./cnbh-syllables/feature_generation/run_mfcc_vtln_conversion.sh $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/
-    #touch $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/.make_mfcc_vtln_features_success
+    ./cnbh-syllables/feature_generation/run_mfcc_vtln_conversion.sh $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/
+    touch $FEATURES_ROOT/mfcc_vtln/$SOURCE_SNR/.make_mfcc_vtln_features_success
   fi
 
   if [ ! -e $FEATURES_ROOT/aim/$SOURCE_SNR/.make_aim_features_success ]; then
-    mkdir -p $FEATURES_ROOT/aim/$SOURCE_SNR/ 
+    mkdir -p $FEATURES_ROOT/aim/$SOURCE_SNR/
     ./cnbh-syllables/feature_generation/gen_hcopy_aimcopy_script.sh $FEATURES_ROOT/aim/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/ ""
     # Run the conversion
     ./cnbh-syllables/feature_generation/run_aimcopy.sh $FEATURES_ROOT/aim/$SOURCE_SNR/ $NUMBER_OF_CORES
     touch $FEATURES_ROOT/aim/$SOURCE_SNR/.make_aim_features_success
   fi
-done 
+done
 
-sudo mkdir -p $HMMS_ROOT
-sudo chown `whoami` $HMMS_ROOT
+mkdir -p $HMMS_ROOT
 
 # Now run a bunch of experiments.
 # For each of the feature types, we want to run HMMs with a bunch of
 # parameters.
-TRAINING_ITERATIONS="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"
-TESTING_ITERATIONS="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"
-HMM_STATES="3 4 5 6 7 8"
-HMM_OUTPUT_COMPONENTS="1 2 3 4 5 6 7"
-
-return 0
+TRAINING_ITERATIONS="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15" # 16 17 18 19 20"
+#TESTING_ITERATIONS="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"
+TESTING_ITERATIONS="15"
+#HMM_STATES="3 4 5 6 7 8"
+HMM_STATES="4"
+#HMM_OUTPUT_COMPONENTS="1 2 3 4 5 6 7"
+HMM_OUTPUT_COMPONENTS="4"
 
 run_train_test () {
 # TODO(tom): Make sure that the training SNR is generated first
@@ -167,7 +169,6 @@ TESTING_MASTER_LABEL_FILE=$WORK/testing_master_label_file
 done
 }
 
-
 ########################
 # Standard MFCCs
 FEATURE_CLASS=mfcc
@@ -210,15 +211,37 @@ FEATURE_SUFFIX=htk
 FEATURE_SIZE=39
 FEATURE_TYPE=MFCC_0_D_A
 TALKERS=outer_talkers
+TRAINING_SNR=clean
+run_train_test
+########################
+
+AIM_FEATURE_SUFFIXES="slice_1_no_cutoff ssi_profile_no_cutoff slice_1_cutoff ssi_profile_cutoff smooth_nap_profile"
+for f in $AIM_FEATURE_SUFFIXES
+do
+########################
+# AIM Features
+# Inner talkers
+FEATURE_CLASS=aim
+FEATURE_SUFFIX=$f
+FEATURE_SIZE=12
+FEATURE_TYPE=USER_E_D_A
+TALKERS=inner_talkers
 TRAINING_SNR=clean
 run_train_test
 ########################
 
 ########################
 # AIM Features
-# TODO (loop over all feature suffixes)
+# Inner talkers
+FEATURE_CLASS=aim
+FEATURE_SUFFIX=$f
+FEATURE_SIZE=12
+FEATURE_TYPE=USER_E_D_A
+TALKERS=outer_talkers
+TRAINING_SNR=clean
+run_train_test
 ########################
-
+done
 
 
 

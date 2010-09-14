@@ -132,7 +132,8 @@ ENORMALISE = F
 WARPLCUTOFF = 10 
 # Upper frequency is the Nyquist freq. (24000Hz) 
 # so choose the break freq. close to that
-WARPUCUTOFF = 23000
+#WARPUCUTOFF = 23000
+WARPUCUTOFF = 10500
 EOF
 
 for TALKER in $(cat $FEATURES_DIR/${TALKERS}.tmp); do
