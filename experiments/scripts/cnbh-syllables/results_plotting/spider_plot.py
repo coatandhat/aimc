@@ -120,3 +120,5 @@ def main(argv=None):
   #p.show()
   p.savefig(output_filename)
 
+if __name__ == "__main__":
+  sys.exit(main())
