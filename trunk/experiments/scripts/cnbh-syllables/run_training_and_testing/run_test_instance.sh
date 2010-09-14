@@ -96,9 +96,9 @@ for iter in $TESTING_ITERATIONS_LIST; do
       -I $TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT > $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter
   fi
   # Count the number of instances of each talker appearing in the list of errors.
-  grep Aligned $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter| sed -E "s/.*\/..\/([a-z]{2})([0-9]{2,3}\.[0-9])p([0-9]{2,3}\.[0-9])s.*/\2 \3/" | sort | uniq -c > $WORKING_DIRECTORY/$hmm_type/${MISCLASSIFIED}_iteration_$iter
+  grep Aligned $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter| sed -E "s/.*\/..\/([a-z]{2})([0-9]{2,3}\.[0-9])p([0-9]{2,3}\.[0-9])s.*/\2p\3s/" | sort | uniq -c > $WORKING_DIRECTORY/$hmm_type/${MISCLASSIFIED}_iteration_$iter
   python ./cnbh-syllables/results_plotting/gen_results.py --input_file=$WORKING_DIRECTORY/$hmm_type/${MISCLASSIFIED}_iteration_$iter --train_talkers=$WORKING_DIRECTORY/training_talkers --test_talkers=$WORKING_DIRECTORY/testing_talkers --output_filename=$WORKING_DIRECTORY/$hmm_type/results_iteration_${iter}.txt --spoke_pattern=$SPOKE_PATTERN_FILE
-  python ./cnbh-syllbles/results_plotting/spider_plot.py --input_file=$WORKING_DIRECTORY/$hmm_type/results_iteration_${iter}.txt --output_file=$WORKING_DIRECTORY/$hmm_type/results_iteration_${iter}.png
+  python ./cnbh-syllables/results_plotting/spider_plot.py --input_file=$WORKING_DIRECTORY/$hmm_type/results_iteration_${iter}.txt --output_file=$WORKING_DIRECTORY/$hmm_type/results_iteration_${iter}.png
 done
 touch $WORKING_DIRECTORY/$hmm_type/.hmm_success
 
