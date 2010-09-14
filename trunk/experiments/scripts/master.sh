@@ -137,6 +137,7 @@ for SOURCE_SNR in $FEATURE_DIRS; do
 WORK=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$SOURCE_SNR/$TALKERS/
 mkdir -p $WORK
 FEATURES_DIR=$FEATURES_ROOT/$FEATURE_CLASS/$SOURCE_SNR/
+SPOKE_PATTERN_FILE=`pwd`/cnbh-syllables/run_training_and_testing/train_test_sets/gen_spoke_points/spoke_pattern.txt
 
 ./cnbh-syllables/run_training_and_testing/train_test_sets/generate_train_test_lists.sh \
     $TALKERS \
@@ -165,7 +166,8 @@ TESTING_MASTER_LABEL_FILE=$WORK/testing_master_label_file
     "$TRAINING_SCRIPT" \
     "$TESTING_SCRIPT" \
     "$TRAINING_MASTER_LABEL_FILE" \
-    "$TESTING_MASTER_LABEL_FILE"
+    "$TESTING_MASTER_LABEL_FILE" \
+    "$SPOKE_PATTERN_FILE"
 done
 }
 
