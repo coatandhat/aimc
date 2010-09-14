@@ -24,6 +24,7 @@ TRAIN_SCRIPT=${10}
 TEST_SCRIPT=${11}
 TRAIN_MLF=${12}
 TEST_MLF=${13}
+SPOKE_PATTERN_FILE=${14}
 
 HMMCONFIG=hmm_configuration
 
@@ -49,7 +50,7 @@ fi
 for total_hmm_states in $HMM_STATES_LIST; do
   for mixture_components in $MIXTURE_COMPONENTS_LIST; do
     #. $THIS_DIR/run_test_instance.sh &
-    $THIS_DIR/run_test_instance.sh
+    . $THIS_DIR/run_test_instance.sh
   done
 done
 echo "Waiting..."
