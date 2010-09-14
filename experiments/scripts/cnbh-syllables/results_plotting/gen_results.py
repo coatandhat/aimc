@@ -66,7 +66,7 @@ def main(argv=None):
         test_talkers = value
       if option in ("-c", "--value_count"):
         total_value_count = int(value)
-      if option in ("-p", "--spoke_pattern_file"):
+      if option in ("-p", "--spoke_pattern"):
         spoke_pattern_file = value
       if option in ("-o", "--output_filename"):
         output_filename = value
