@@ -54,7 +54,10 @@ def main(argv=None):
     print >> sys.stderr, sys.argv[0].split("/")[-1] + ": " + str(err.msg)
     print >> sys.stderr, "\t for help use --help"
     return 2
-
+  
+  central_vtl=15
+  central_vtl_scaling=112.32
+  
   # Read in a file with lines in the form
   # Pitch Scale Percentage
   xs=[]
