@@ -10,6 +10,9 @@
 # WORKING_DIRECTORY - working directory
 # SYLLIST_COMPLETE
 
+set -e
+set -u
+
 # Filenames generated here
 
 # This must be named 'proto' to keep HCompV happy.
@@ -72,22 +75,26 @@ HHEd -H $WORKING_DIRECTORY/$hmm_type//hmm0/macros -H $WORKING_DIRECTORY/$hmm_typ
 for iter in $TRAINING_ITERATIONS_LIST; do
   echo "Training iteration ${iter}..."
   let "nextiter=$iter+1"
-  mkdir $WORKING_DIRECTORY/$hmm_type/hmm$nextiter
-  HERest -C $WORKING_DIRECTORY/$HMMCONFIG -I $TRAIN_MLF \
-    -t 250.0 150.0 1000.0 -S $TRAIN_SCRIPT \
-    -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/macros -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/hmmdefs \
-    -M $WORKING_DIRECTORY/$hmm_type/hmm$nextiter $WORKING_DIRECTORY/$SYLLIST_COMPLETE
+  if [ ! -d $WORKING_DIRECTORY/$hmm_type/hmm$nextiter ]; then
+    mkdir $WORKING_DIRECTORY/$hmm_type/hmm$nextiter
+    HERest -C $WORKING_DIRECTORY/$HMMCONFIG -I $TRAIN_MLF \
+      -t 250.0 150.0 1000.0 -S $TRAIN_SCRIPT \
+      -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/macros -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/hmmdefs \
+      -M $WORKING_DIRECTORY/$hmm_type/hmm$nextiter $WORKING_DIRECTORY/$SYLLIST_COMPLETE
+  fi
 done
 
 for iter in $TESTING_ITERATIONS_LIST; do
   echo "Testing iteration ${iter}..."
-  HVite -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/macros -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/hmmdefs \
-    -C $WORKING_DIRECTORY/$HMMCONFIG -S $TEST_SCRIPT -i $WORKING_DIRECTORY/$hmm_type/$RECOUT \
-    -w $WORKING_DIRECTORY/$WDNET -p 0.0 -s 5.0 $WORKING_DIRECTORY/$DICT $WORKING_DIRECTORY/$SYLLIST_COMPLETE
-  echo "Results from testing on iteration ${iter}..."
-  HResults -e "???" ${SILENCE} -I $TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT
-  HResults -p -t -e "???" ${SILENCE} \
-    -I $TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT > $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter
+  if [ ! -f $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter ]; then
+    HVite -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/macros -H $WORKING_DIRECTORY/$hmm_type/hmm$iter/hmmdefs \
+      -C $WORKING_DIRECTORY/$HMMCONFIG -S $TEST_SCRIPT -i $WORKING_DIRECTORY/$hmm_type/$RECOUT \
+      -w $WORKING_DIRECTORY/$WDNET -p 0.0 -s 5.0 $WORKING_DIRECTORY/$DICT $WORKING_DIRECTORY/$SYLLIST_COMPLETE
+    echo "Results from testing on iteration ${iter}..."
+    HResults -e "???" ${SILENCE} -I $TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT
+    HResults -p -t -e "???" ${SILENCE} \
+      -I $TEST_MLF $WORKING_DIRECTORY/$SYLLIST_COMPLETE $WORKING_DIRECTORY/$hmm_type/$RECOUT > $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter
+  fi
   # Count the number of instances of each talker appearing in the list of errors.
   grep Aligned $WORKING_DIRECTORY/$hmm_type/${RESULTS_FILE}_iteration_$iter| sed -E "s/.*\/..\/([a-z]{2})([0-9]{2,3}\.[0-9])p([0-9]{2,3}\.[0-9])s.*/\2 \3/" | sort | uniq -c > $WORKING_DIRECTORY/$hmm_type/${MISCLASSIFIED}_iteration_$iter
   python ./cnbh-syllables/results_plotting/gen_results.py --input_file=$WORKING_DIRECTORY/$hmm_type/${MISCLASSIFIED}_iteration_$iter --train_talkers=$WORKING_DIRECTORY/training_talkers --test_talkers=$WORKING_DIRECTORY/testing_talkers --output_filename=$WORKING_DIRECTORY/$hmm_type/results_iteration_${iter}.txt --spoke_pattern=cnbh-syllables/run_training_and_testing/train_test_sets/gen_spoke_points/spoke_pattern.txt
