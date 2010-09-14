@@ -63,7 +63,7 @@ echo "Generating HMM definitions..."
 grep -A 9999 "<BEGINHMM>" $WORKING_DIRECTORY/$hmm_type/hmm0/$HMMPROTO > $WORKING_DIRECTORY/$hmm_type/hmm0/hmms
 if [ -e $WORKING_DIRECTORY/$hmm_type/hmm0/hmmdefs ]; then
   rm $WORKING_DIRECTORY/$hmm_type/hmm0/hmmdefs
-done
+fi
 for syllable in $(cat $WORKING_DIRECTORY/$SYLLIST_COMPLETE); do
   echo "~h $syllable" >> $WORKING_DIRECTORY/$hmm_type/hmm0/hmmdefs
   cat $WORKING_DIRECTORY/$hmm_type/hmm0/hmms >> $WORKING_DIRECTORY/$hmm_type/hmm0/hmmdefs
