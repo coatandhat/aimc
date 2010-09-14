@@ -68,7 +68,7 @@ def main(argv=None):
         total_value_count = int(value)
       if option in ("-p", "--spoke_pattern_file"):
         spoke_pattern_file = value
-      if option in ("-o", "--output_filename")
+      if option in ("-o", "--output_filename"):
         output_filename = value
   
   except Usage, err:
