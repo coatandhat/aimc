@@ -7,10 +7,11 @@ Created by Thomas Walters on 2010-09-12.
 
 import sys
 import getopt
+import matplotlib as mpl
+matplotlib.use('PDF')
 import numpy as np
 import pylab as p
 import mpl_toolkits.mplot3d.axes3d as p3
-import matplotlib as mpl
 from matplotlib import cm
 import matplotlib.ticker as ticker 
 
