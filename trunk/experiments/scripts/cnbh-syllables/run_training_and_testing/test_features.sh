@@ -5,7 +5,7 @@
 #
 # Copyright 2009-2010 University of Cambridge
 # Author: Thomas Walters <tom@acousticscale.org>
-# 
+#
 # Run multiple HMMs
 
 set -e
