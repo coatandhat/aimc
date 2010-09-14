@@ -8,7 +8,7 @@ Created by Thomas Walters on 2010-09-12.
 import sys
 import getopt
 import matplotlib as mpl
-matplotlib.use('PDF')
+mpl.use('PDF')
 import numpy as np
 import pylab as p
 import mpl_toolkits.mplot3d.axes3d as p3
@@ -40,7 +40,7 @@ def main(argv=None):
   
     # defaults
     input_file = "results_iteration_15.txt"
-    output_filename = "results_iteration_15.png"
+    output_file = "results_iteration_15.png"
     
     # option processing
     for option, value in opts:
@@ -122,7 +122,7 @@ def main(argv=None):
 
 
   #p.show()
-  p.savefig(output_filename)
+  p.savefig(output_file)
 
 if __name__ == "__main__":
   sys.exit(main())
