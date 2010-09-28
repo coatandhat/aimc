@@ -7,7 +7,8 @@ module1.child1 = GammatoneFilterbank
 
 module2.name = GammatoneFilterbank
 module2.id = gt
-module2.child1 = SmoothNAP
+module2.child1 = StandardNAP
+module2.child2 = SmoothNAP
 
 module3.name = SmoothNAP
 module3.id = nap
@@ -29,3 +30,5 @@ module5.child1 = SmoothNAPOutput
 
 moudule6.name = SmoothNAPOutput
 module6.id = htk_out
+
+module7.name = 
