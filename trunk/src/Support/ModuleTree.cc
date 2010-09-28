@@ -24,7 +24,42 @@
  *  \version \$Id: $
  */
 
+#include "Support/ModuleTree.h"
+
+#include "Support/ModuleFactory.h"
+
 namespace aimc {
-  ParseConfigFile(string )
+LoadConfigFile(const string &filename) {
+  parameters_.Load(filename.c_str());
+  return ConstructTree();
+}
+
+LoadConfigText(const string &config) {
+  parameters_.Parse(config.c_str());
+  return ConstructTree();
+}
+
+ConstructTree() {
+  // Make two passes over the configuration file.
+  // The first pass creates all the named modules with their parameters.
+  bool done = false;
+  bool error = false;
+  string module;
+  int module_number = 1;
+  while (!done) {
+    module = sprintf("module%d", module_number);
+    if (parameters_.IsSet(module + ".name") {
+      string module_name = 
+      string module_id = 
+      string module_params = 
+      modules_[]
+    } else {
+      done = true;
+    }
+    ++module_number;
+  }
+  // The second pass connects up all the modules into a tree.
   
+  return error;
+}
 }  // namespace aimc

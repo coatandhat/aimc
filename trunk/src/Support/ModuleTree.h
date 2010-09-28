@@ -24,7 +24,11 @@
  *  \version \$Id: $
  */
 
+#include <boost/scoped_ptr.hpp>
+#include <hash_map>
 #include <string>
+
+#include "Support/Parameters.h"
 
 namespace aimc {
 using std::string;
@@ -32,12 +36,18 @@ class ModuleTree {
  public:
   bool ParseConfigFile(const string &filename);
   bool ParseConfigText(const string &config_text);
-  void set_output_filename_prefix(const string &prefix);
+  string GetFullConfig()
+  void set_output_filename_prefix(const string &prefix) {
+    output_filename_prefix_ = prefix;
+  }
   string output_filename_prefix() {
     return output_filename_prefix_;
   }
  private:
+  Paramters parameters_;
   string output_filename_prefix_;
+  hash_map<string, scoped_ptr<Module> > modules_;
+  string root_name_;
   DISALLOW_COPY_AND_ASSIGN(ModuleTree);
 };
 }  // namespace aimc
