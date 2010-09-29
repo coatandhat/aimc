@@ -47,7 +47,7 @@ ConstructTree() {
   string module;
   int module_number = 1;
   while (!done) {
-    module = sprintf("module%d", module_number);
+    snprintf("module%d", module_number);
     if (parameters_.IsSet(module + ".name") {
       string module_name = 
       string module_id = 
@@ -59,7 +59,19 @@ ConstructTree() {
     ++module_number;
   }
   // The second pass connects up all the modules into a tree.
-  
+  module_number = 1;
+  while (!done) {
+    module = sprintf("module%d", module_number);
+    if (parameters_.IsSet(module + ".name") {
+      string module_name = 
+      string module_id = 
+      string module_params = 
+      modules_[]
+    } else {
+      done = true;
+    }
+    ++module_number;
+  }
   return error;
 }
 }  // namespace aimc
