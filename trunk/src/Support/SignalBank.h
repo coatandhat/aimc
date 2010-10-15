@@ -54,11 +54,24 @@ class SignalBank {
   bool Initialize(const SignalBank &input);
   bool Validate() const;
 
+  // Return a const reference to an individual signal. Allows for 
+  // signal[channel][sample] referencing of SignalBanks.
   inline const vector<float> &operator[](int channel) const {
     return signals_[channel];
   };
 
+  // Return a const reference to an individual signal.
   inline const vector<float> &get_signal(int channel) const {
+    return signals_[channel];
+  };
+  
+  // Return a reference to the signal vector. The reference is not
+  // const, so the vector is directly modifiable. In order to maintain
+  // consistency of the data within the filterbank, the size of this
+  // vector should not be changed. Changes to the vector size can be picked
+  // up with a call to Validate(), which will return false if the sizes of
+  // channle vectors are not consistent.
+  inline vector<float> &get_mutable_signal(int channel) {
     return signals_[channel];
   };
   
