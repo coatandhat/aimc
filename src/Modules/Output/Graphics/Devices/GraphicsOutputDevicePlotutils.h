@@ -47,87 +47,87 @@ class GraphicsOutputDevicePlotutils : public GraphicsOutputDevice {
   GraphicsOutputDevicePlotutils(Parameters *pParam);
   virtual ~GraphicsOutputDevicePlotutils();
 
-	/*! \brief Initializes this output device, prepares plotting tools.
-	 *  \param sDir Directory or filename where to put images, max length
+  /*! \brief Initializes this output device, prepares plotting tools.
+   *  \param sDir Directory or filename where to put images, max length
    *         is _MAX_PATH. Must end with slash!!!
-	 *  \return true on success, false on failure.
-	 *
-	 *  sDir can be either a filename, in which case the output will be
-	 *  to that file, or a directory, in which case it will be filled
-	 *  with 6-digit numbered files. A new file is then created at every
-	 *  call to gGrab().
-	 *
-	 *  As usual, make sure to call this function before any other. If this
-	 *  Initialize() failed, you shouldn't try the other functions either.
-	 */
-	bool Initialize(const char *sDir);
-	bool Initialize();
+   *  \return true on success, false on failure.
+   *
+   *  sDir can be either a filename, in which case the output will be
+   *  to that file, or a directory, in which case it will be filled
+   *  with 6-digit numbered files. A new file is then created at every
+   *  call to gGrab().
+   *
+   *  As usual, make sure to call this function before any other. If this
+   *  Initialize() failed, you shouldn't try the other functions either.
+   */
+  bool Initialize(const char *sDir);
+  bool Initialize();
 
   void gGrab();
   void gBeginLineStrip();
   void gBeginQuadStrip();
-	using GraphicsOutputDevice::gVertex3f; // Because we overload it
-	void gVertex3f(float x, float y, float z);
-	void gColor3f(float r, float g, float b);
+  using GraphicsOutputDevice::gVertex3f; // Because we overload it
+  void gVertex3f(float x, float y, float z);
+  void gColor3f(float r, float g, float b);
   void gEnd();
-	void gText3f(float x, float y, float z, const char *sStr, bool bRotated = false);
-	void gRelease();
-	char* GetBuffer();
+  void gText3f(float x, float y, float z, const char *sStr, bool bRotated = false);
+  void gRelease();
+  char* GetBuffer();
  protected:
-	/*! \brief Open the file with given index for output
-	 *  \param index File number to open
-	 *  \return true on success, false on error
-	 *
-	 *  This opens a file for output and sets up the plotting library.
-	 */
-	bool OpenFile(unsigned int index);
+  /*! \brief Open the file with given index for output
+   *  \param index File number to open
+   *  \return true on success, false on error
+   *
+   *  This opens a file for output and sets up the plotting library.
+   */
+  bool OpenFile(unsigned int index);
 
-	//! \brief Closes a plot output file, if any is open.
-	void CloseFile();
+  //! \brief Closes a plot output file, if any is open.
+  void CloseFile();
 
-	//! \brief Internal initialisation function called by overloaded variants of Initialize()
-	void Init();
+  //! \brief Internal initialisation function called by overloaded variants of Initialize()
+  void Init();
 
-	//! \brief The current output file's handle
-	FILE *m_pOutputFile;
-	//! \brief The plotutils plotter
-	int m_iPlotHandle;
-	//! \brief Output directory
-	char m_sDir[PATH_MAX];
-	//! \brief Current file number
-	unsigned int m_iFileNumber;
-	//! \brief true if this is the first vertex after gBegin()
-	bool m_bIsFirstVertex;
+  //! \brief The current output file's handle
+  FILE *m_pOutputFile;
+  //! \brief The plotutils plotter
+  int m_iPlotHandle;
+  //! \brief Output directory
+  char m_sDir[PATH_MAX];
+  //! \brief Current file number
+  unsigned int m_iFileNumber;
+  //! \brief true if this is the first vertex after gBegin()
+  bool m_bIsFirstVertex;
 
-	enum VertexType {
-		VertexTypeNone,
+  enum VertexType {
+    VertexTypeNone,
     VertexTypeLine,
     VertexTypeQuad
-	};
-	//! \brief The current vertex type
-	VertexType m_iVertexType;
-	//! \brief Begin vertex of current quad
-	float m_aPrevX[3], m_aPrevY[3];
-	//! \brief Current number of quad vertices stored
-	unsigned int m_iPrevVertexCount;
+  };
+  //! \brief The current vertex type
+  VertexType m_iVertexType;
+  //! \brief Begin vertex of current quad
+  float m_aPrevX[3], m_aPrevY[3];
+  //! \brief Current number of quad vertices stored
+  unsigned int m_iPrevVertexCount;
 
-	//! \brief Whether to invert the colors or not
-	bool m_bInvertColors;
+  //! \brief Whether to invert the colors or not
+  bool m_bInvertColors;
 
-	//! \brief The size of the memory bitmap buffer as provided by open_memstream
-	size_t m_sMemoryBufferSize;
+  //! \brief The size of the memory bitmap buffer as provided by open_memstream
+  size_t m_sMemoryBufferSize;
 
-	//! \brief Are we using a memory buffer for writing to (as opposed to a file)?
-	bool m_bUseMemoryBuffer;
+  //! \brief Are we using a memory buffer for writing to (as opposed to a file)?
+  bool m_bUseMemoryBuffer;
 
-	//! \brief Pointer to the memory buffer in question
-	char *m_pMemoryBuffer;
+  //! \brief Pointer to the memory buffer in question
+  char *m_pMemoryBuffer;
 
-	//! \brief Width of the bitmap
-	unsigned int m_uWidth;
+  //! \brief Width of the bitmap
+  unsigned int m_uWidth;
 
-	//! \brief Height of the bitmap
-	unsigned int m_uHeight;
+  //! \brief Height of the bitmap
+  unsigned int m_uHeight;
 };
 
 #endif /* __GRAPHICS_OUTPUT_DEVICE_PLOTUTILS_H__ */

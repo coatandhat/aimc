@@ -41,10 +41,10 @@ extern "C" {
 class LibavformatWriter {
  public:
   LibavformatWriter();
-	~LibavformatWriter() { };
-	bool Init(const char *sMovieFile, int width, int height, float framerate);
-	void WriteFrame(unsigned char *pFrameBuffer);
-	void End();
+  ~LibavformatWriter() { };
+  bool Init(const char *sMovieFile, int width, int height, float framerate);
+  void WriteFrame(unsigned char *pFrameBuffer);
+  void End();
  private:
   AVFrame *picture, *tmp_picture;
   uint8_t *video_outbuf;
@@ -70,20 +70,20 @@ class LibavformatWriter {
 class GraphicsOutputDeviceMovieDirect : public GraphicsOutputDeviceMovie {
  public:
   GraphicsOutputDeviceMovieDirect(AimParameters *pParam);
-	virtual ~GraphicsOutputDeviceMovieDirect() { };
-	/*! \brief Initializes this output device, prepares plotting tools.
-	 *  \param sSoundFile Sound file for the movie
-	 *  \param sMovieFile Movie filename to produce
-	 *  \return true on success, false on failure.
-	 *
-	 *  As usual, make sure to call this function before any other. If this
-	 *  Initialize() failed, you shouldn't try the other functions either.
-	 */
-	bool Initialize(const char *sSoundFile, const char *sMovieFile);
-	void Stop();
+  virtual ~GraphicsOutputDeviceMovieDirect() { };
+  /*! \brief Initializes this output device, prepares plotting tools.
+   *  \param sSoundFile Sound file for the movie
+   *  \param sMovieFile Movie filename to produce
+   *  \return true on success, false on failure.
+   *
+   *  As usual, make sure to call this function before any other. If this
+   *  Initialize() failed, you shouldn't try the other functions either.
+   */
+  bool Initialize(const char *sSoundFile, const char *sMovieFile);
+  void Stop();
   void gRelease();
  private:
-	LibavformatWriter* m_pOutputMovie;
+  LibavformatWriter* m_pOutputMovie;
 };
 
 #endif /* __GRAPHICS_OUTPUT_DEVICE_MOVIE_DIRECT_H__ */

@@ -132,7 +132,7 @@ bool ModulePZFC::SetPZBankCoeffsOrig() {
   float pole_frequency = cf_max_ / sample_rate_ * (2.0f * M_PI);
   channel_count_ = 0;
   while ((pole_frequency / (2.0f * M_PI)) * sample_rate_ > cf_min_) {
-	float bw = bandwidth_over_cf_ * pole_frequency + 2 * M_PI * min_bandwidth_hz_ / sample_rate_;
+  float bw = bandwidth_over_cf_ * pole_frequency + 2 * M_PI * min_bandwidth_hz_ / sample_rate_;
     pole_frequency -= step_factor_ * bw;
     channel_count_++;
   }
@@ -169,7 +169,7 @@ bool ModulePZFC::SetPZBankCoeffsOrig() {
     // channel
     output_.set_centre_frequency(i, frequency);
 
-	float zero_frequency = Minimum(M_PI, zero_factor_ * pole_frequency);
+  float zero_frequency = Minimum(M_PI, zero_factor_ * pole_frequency);
 
     // Impulse-invariance mapping
     float z_plane_theta = zero_frequency * sqrt(1.0f - pow(zero_damping_, 2));
@@ -187,7 +187,7 @@ bool ModulePZFC::SetPZBankCoeffsOrig() {
 
     // Subtract step factor (1/n2) times current bandwidth from the pole
     // frequency
-	float bw = bandwidth_over_cf_ * pole_frequency + 2 * M_PI * min_bandwidth_hz_ / sample_rate_;
+  float bw = bandwidth_over_cf_ * pole_frequency + 2 * M_PI * min_bandwidth_hz_ / sample_rate_;
     pole_frequency -= step_factor_ * bw;
   }
   return true;
@@ -247,7 +247,7 @@ bool ModulePZFC::SetPZBankCoeffsERB() {
     // channel
     output_.set_centre_frequency(i, frequency);
 
-	float zero_frequency = Minimum(M_PI, zero_factor_ * pole_frequency);
+  float zero_frequency = Minimum(M_PI, zero_factor_ * pole_frequency);
 
     // Impulse-invariance mapping
     float z_plane_theta = zero_frequency * sqrt(1.0f - pow(zero_damping_, 2));
@@ -426,7 +426,7 @@ bool ModulePZFC::SetPZBankCoeffs() {
       return false;
   } else {
     if (!SetPZBankCoeffsOrig())
-	  return false;
+    return false;
   }
 
   /*! \todo Make fMindamp and fMaxdamp user-settable?

@@ -39,37 +39,37 @@
 class GraphicsOutputDeviceMovie : public GraphicsOutputDeviceCairo {
  public:
   GraphicsOutputDeviceMovie(AimParameters *pParam);
-	virtual ~GraphicsOutputDeviceMovie() { };
+  virtual ~GraphicsOutputDeviceMovie() { };
 
-	/*! \brief Initializes this output device, prepares plotting tools.
-	 *  \param sSoundFile Sound file for the movie
-	 *  \param sMovieFile Movie filename to produce
-	 *  \return true on success, false on failure.
-	 *
-	 *  As usual, make sure to call this function before any other. If this
-	 *  Initialize() failed, you shouldn't try the other functions either.
-	 */
-	bool Initialize(const char *sSoundFile, const char *sMovieFile);
+  /*! \brief Initializes this output device, prepares plotting tools.
+   *  \param sSoundFile Sound file for the movie
+   *  \param sMovieFile Movie filename to produce
+   *  \return true on success, false on failure.
+   *
+   *  As usual, make sure to call this function before any other. If this
+   *  Initialize() failed, you shouldn't try the other functions either.
+   */
+  bool Initialize(const char *sSoundFile, const char *sMovieFile);
 
-	void Start();
-	//! \brief This function now also generates the output movie.
-	void Stop();
+  void Start();
+  //! \brief This function now also generates the output movie.
+  void Stop();
 
  protected:
-	/*! \brief Plots a summary of relevant parameters on the output
-	 *
-	 *  This is intended for use in a movie as the first frame, which has no
-	 *  interesting data anyway, since at least one buffer of data is needed
-	 *  to be able to show someting.
-	 *
-	 *  The caller must do the gGrab() and gRelease().
-	 */
-	void PlotParameterScreen();
+  /*! \brief Plots a summary of relevant parameters on the output
+   *
+   *  This is intended for use in a movie as the first frame, which has no
+   *  interesting data anyway, since at least one buffer of data is needed
+   *  to be able to show someting.
+   *
+   *  The caller must do the gGrab() and gRelease().
+   */
+  void PlotParameterScreen();
 
-	//! \brief Name of the sound file to be merged with the video
-	char m_sSoundFile[PATH_MAX];
-	//! \brief Name of the movie file to produce
-	char m_sMovieFile[PATH_MAX];
+  //! \brief Name of the sound file to be merged with the video
+  char m_sSoundFile[PATH_MAX];
+  //! \brief Name of the movie file to produce
+  char m_sMovieFile[PATH_MAX];
 };
 
 #endif /* __GRAPHICS_OUTPUT_DEVICE_MOVIE_H__ */

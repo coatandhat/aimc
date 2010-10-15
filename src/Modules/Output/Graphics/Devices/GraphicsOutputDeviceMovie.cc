@@ -38,10 +38,10 @@
 #include "Support/Common.h"
 
 #ifdef _WINDOWS
-#	include <direct.h> // for _mkdir&_rmdir
+#  include <direct.h> // for _mkdir&_rmdir
 #else
-#	include <sys/types.h>
-#	include <dirent.h> // for opendir&friends
+#  include <sys/types.h>
+#  include <dirent.h> // for opendir&friends
 #endif
 #include <stdio.h>
 #include <string.h>
@@ -50,207 +50,207 @@
 #include "Output/GraphicsOutputDeviceMovie.h"
 
 GraphicsOutputDeviceMovie::GraphicsOutputDeviceMovie(Parameters *pParam)
-	: GraphicsOutputDeviceCairo(pParam) {  // or GraphicsOutputDevicePlotutils
-	m_sMovieFile[0] = '\0';
-	m_sSoundFile[0] = '\0';
+  : GraphicsOutputDeviceCairo(pParam) {  // or GraphicsOutputDevicePlotutils
+  m_sMovieFile[0] = '\0';
+  m_sSoundFile[0] = '\0';
 }
 
 bool GraphicsOutputDeviceMovie::Initialize(const char *sSoundFile,
                                            const char *sMovieFile) {
-	FILE *f;
-	AIM_ASSERT(sSoundFile);
-	AIM_ASSERT(sMovieFile);
+  FILE *f;
+  AIM_ASSERT(sSoundFile);
+  AIM_ASSERT(sMovieFile);
 
-	// Check sound file exists
-	if ((f = fopen(sSoundFile, "r")) == NULL) {
-		AIM_ERROR(_T("Couldn't open sound file '%s' for movie creation."),
+  // Check sound file exists
+  if ((f = fopen(sSoundFile, "r")) == NULL) {
+    AIM_ERROR(_T("Couldn't open sound file '%s' for movie creation."),
              sSoundFile);
-		return false;
-	}
-	fclose(f);
-	strcpy(m_sSoundFile, sSoundFile);
+    return false;
+  }
+  fclose(f);
+  strcpy(m_sSoundFile, sSoundFile);
 
-	// Check movie output file can be made
-	if ( (f=fopen(sMovieFile, "w"))==NULL ) {
-		aimERROR(_T("Couldn't open movie file '%s' to write to."),
+  // Check movie output file can be made
+  if ( (f=fopen(sMovieFile, "w"))==NULL ) {
+    aimERROR(_T("Couldn't open movie file '%s' to write to."),
              sMovieFile);
-		return false;
-	}
-	fclose(f);
-	strcpy(m_sMovieFile, sMovieFile);
+    return false;
+  }
+  fclose(f);
+  strcpy(m_sMovieFile, sMovieFile);
 
-	// Get a temporary image output directory
-	//! \warning Not really safe ... but windows has no mkdtemp()
-	//! \todo Make build system check for mkdtemp() to use it when available. See TODO.txt.
-	char *sTmpDir = NULL;
+  // Get a temporary image output directory
+  //! \warning Not really safe ... but windows has no mkdtemp()
+  //! \todo Make build system check for mkdtemp() to use it when available. See TODO.txt.
+  char *sTmpDir = NULL;
 #ifdef _WINDOWS
-	if ((sTmpDir = _tempnam(NULL, AIM_NAME))
+  if ((sTmpDir = _tempnam(NULL, AIM_NAME))
       && _mkdir(sTmpDir) >= 0) {
-		strcpy(m_sDir, sTmpDir);
-		strcat(m_sDir, "\\"); // Make sure to end with trailing slash
-	} else
+    strcpy(m_sDir, sTmpDir);
+    strcat(m_sDir, "\\"); // Make sure to end with trailing slash
+  } else
 #else
-	strcpy(m_sDir, "/tmp/"AIM_NAME"-movie.XXXXXX");
-	if (mkdtemp(m_sDir)) {
-		strcat(m_sDir, "/"); // Make sure to end with trailing slash
-	} else
+  strcpy(m_sDir, "/tmp/"AIM_NAME"-movie.XXXXXX");
+  if (mkdtemp(m_sDir)) {
+    strcat(m_sDir, "/"); // Make sure to end with trailing slash
+  } else
 #endif
-	{
-		AIM_ERROR(_T("Couldn't create a temporary directory for movie output."));
-		if (sTmpDir) free(sTmpDir);
-		return false;
-	}
-	if (sTmpDir) {
+  {
+    AIM_ERROR(_T("Couldn't create a temporary directory for movie output."));
+    if (sTmpDir) free(sTmpDir);
+    return false;
+  }
+  if (sTmpDir) {
     free(sTmpDir);
   }
 
-	// We want png for movie conversion
-	//! \bug This may change the user preference in GUI, hmm what to do? See TODO.txt
-	m_pParam->SetString("output.img.format", "png");
-	//if ( !GraphicsOutputDevicePlotutils::Initialize(m_sDir) ) {
-	if ( !GraphicsOutputDeviceCairo::Initialize(m_sDir) ) {
-		return false;
+  // We want png for movie conversion
+  //! \bug This may change the user preference in GUI, hmm what to do? See TODO.txt
+  m_pParam->SetString("output.img.format", "png");
+  //if ( !GraphicsOutputDevicePlotutils::Initialize(m_sDir) ) {
+  if ( !GraphicsOutputDeviceCairo::Initialize(m_sDir) ) {
+    return false;
   }
 
-	return true;
+  return true;
 }
 
 void GraphicsOutputDeviceMovie::Start() {
-	//GraphicsOutputDevicePlotutils::Start();
-	GraphicsOutputDeviceCairo::Start();
-	// Just output a single frame to get audio/video in sync, put params in there
-	gGrab();
-	PlotParameterScreen();
-	gRelease();
+  //GraphicsOutputDevicePlotutils::Start();
+  GraphicsOutputDeviceCairo::Start();
+  // Just output a single frame to get audio/video in sync, put params in there
+  gGrab();
+  PlotParameterScreen();
+  gRelease();
 }
 
 void GraphicsOutputDeviceMovie::Stop() {
-	// Make sure Plotutils is really done writing.
-	//GraphicsOutputDevicePlotutils::Stop();
-	GraphicsOutputDeviceCairo::Stop();
-	CloseFile();
+  // Make sure Plotutils is really done writing.
+  //GraphicsOutputDevicePlotutils::Stop();
+  GraphicsOutputDeviceCairo::Stop();
+  CloseFile();
 
 #ifdef __WX__
-	// GUI only: popup dialog
+  // GUI only: popup dialog
 #else
-	printf("Generating movie ... \n");
+  printf("Generating movie ... \n");
 #endif
-	AIM_ASSERT(m_pParam);
-	// Convert images and sound file to a movie
-	//! \warning Movie files are overwritten without warning
-	//! \bug ffmpeg only works with colour images, not with bw. So make sure to not use bw only in drawing..
-	// Always convert to audio stream of 44.1kHz or problems may occur in playing or conversio.
-	float fFps = 1000.0 / m_pParam->GetFloat("output.frameperiod");
-	char sffmpegPath[1024];
-	if (!m_pParam->IsSet("output.ffmpeg_path")) {
+  AIM_ASSERT(m_pParam);
+  // Convert images and sound file to a movie
+  //! \warning Movie files are overwritten without warning
+  //! \bug ffmpeg only works with colour images, not with bw. So make sure to not use bw only in drawing..
+  // Always convert to audio stream of 44.1kHz or problems may occur in playing or conversio.
+  float fFps = 1000.0 / m_pParam->GetFloat("output.frameperiod");
+  char sffmpegPath[1024];
+  if (!m_pParam->IsSet("output.ffmpeg_path")) {
   strcpy(sffmpegPath,"ffmpeg");
   } else {
-  	strcpy(sffmpegPath, m_pParam->GetString("output.ffmpeg_path"));
+    strcpy(sffmpegPath, m_pParam->GetString("output.ffmpeg_path"));
   }
   char sCodecOptions[1024];
-	if (!m_pParam->IsSet("output.ffmpeg_codec_options")) {
+  if (!m_pParam->IsSet("output.ffmpeg_codec_options")) {
     strcpy(sCodecOptions,"");
   } else {
-	  strcpy(sCodecOptions, m_pParam->GetString("output.ffmpeg_codec_options"));
+    strcpy(sCodecOptions, m_pParam->GetString("output.ffmpeg_codec_options"));
   }
 
-	char sCmdLine[1024]; //!\todo check that snprintf does not want a larger buffer
-	snprintf(sCmdLine, sizeof(sCmdLine)/sizeof(sCmdLine[0]),
-		"%s -r %.2f -y -i \"%s\" -i \"%s%%06d.png\" "
-		"-title \"%s\" -comment \"Generated by "AIM_NAME" "AIM_VERSION_STRING"\" "
-		"-sameq -r %.2f -ar 44100 -acodec pcm_s16le %s \"%s\"",
-		sffmpegPath, fFps, m_sSoundFile, m_sDir,
-		m_pParam->GetString("output.movie.title"),
-		fFps, sCodecOptions, m_sMovieFile);
+  char sCmdLine[1024]; //!\todo check that snprintf does not want a larger buffer
+  snprintf(sCmdLine, sizeof(sCmdLine)/sizeof(sCmdLine[0]),
+    "%s -r %.2f -y -i \"%s\" -i \"%s%%06d.png\" "
+    "-title \"%s\" -comment \"Generated by "AIM_NAME" "AIM_VERSION_STRING"\" "
+    "-sameq -r %.2f -ar 44100 -acodec pcm_s16le %s \"%s\"",
+    sffmpegPath, fFps, m_sSoundFile, m_sDir,
+    m_pParam->GetString("output.movie.title"),
+    fFps, sCodecOptions, m_sMovieFile);
     printf(sCmdLine);
     printf("\n");
-	if (system(sCmdLine)) {
-		AIM_ERROR(_T("Couldn't create movie output."));
-	}
+  if (system(sCmdLine)) {
+    AIM_ERROR(_T("Couldn't create movie output."));
+  }
 
 #ifdef __WX__
-	// GUI only: close dialog again
+  // GUI only: close dialog again
 #endif
-	// Remove files in temporary directory and the dir itself
-	//! \todo make portable function, possibly decided on by build system
+  // Remove files in temporary directory and the dir itself
+  //! \todo make portable function, possibly decided on by build system
 #ifdef _WINDOWS
-	HANDLE hList;
-	WIN32_FIND_DATA FileData;
-	snprintf(sCmdLine, sizeof(sCmdLine)/sizeof(sCmdLine[0]), "%s/*.*", m_sDir);
-	if ((hList = FindFirstFile(sCmdLine, &FileData)) == INVALID_HANDLE_VALUE) {
-		AIM_ERROR(_T("Couldn't remove files from temporary directory."));
-		return;
-	}
-	bool bRMfinished = false;
-	while (!bRMfinished) {
-	  snprintf(sCmdLine,
+  HANDLE hList;
+  WIN32_FIND_DATA FileData;
+  snprintf(sCmdLine, sizeof(sCmdLine)/sizeof(sCmdLine[0]), "%s/*.*", m_sDir);
+  if ((hList = FindFirstFile(sCmdLine, &FileData)) == INVALID_HANDLE_VALUE) {
+    AIM_ERROR(_T("Couldn't remove files from temporary directory."));
+    return;
+  }
+  bool bRMfinished = false;
+  while (!bRMfinished) {
+    snprintf(sCmdLine,
              sizeof(sCmdLine)/sizeof(sCmdLine[0]),
-			       "%s%s",
+             "%s%s",
              m_sDir,
              FileData.cFileName);
-		remove(sCmdLine);
-		if (!FindNextFile(hList, &FileData) && GetLastError() == ERROR_NO_MORE_FILES) {
-			bRMfinished = true;
+    remove(sCmdLine);
+    if (!FindNextFile(hList, &FileData) && GetLastError() == ERROR_NO_MORE_FILES) {
+      bRMfinished = true;
     }
-	}
-	FindClose(hList);
-	_rmdir(m_sDir);
+  }
+  FindClose(hList);
+  _rmdir(m_sDir);
 #else
-	DIR *dir;
-	struct dirent *dirent;
-	if (!(dir = opendir(m_sDir))) {
-		AIM_ERROR(_T("Couldn't remove files in temporary directory."));
-		return;
-	}
-	while (dirent = readdir(dir)) {
-		snprintf(sCmdLine,
+  DIR *dir;
+  struct dirent *dirent;
+  if (!(dir = opendir(m_sDir))) {
+    AIM_ERROR(_T("Couldn't remove files in temporary directory."));
+    return;
+  }
+  while (dirent = readdir(dir)) {
+    snprintf(sCmdLine,
              sizeof(sCmdLine)/sizeof(sCmdLine[0]),
-			       "%s%s",
+             "%s%s",
              m_sDir,
              dirent->d_name);
-		unlink(sCmdLine);
-	}
-	closedir(dir);
-	rmdir(m_sDir);
+    unlink(sCmdLine);
+  }
+  closedir(dir);
+  rmdir(m_sDir);
 #endif
 }
 
 void GraphicsOutputDeviceMovie::PlotParameterScreen() {
-	AIM_ASSERT(m_pParam);
-	char sStr[50];
-	int lineno = 1;
+  AIM_ASSERT(m_pParam);
+  char sStr[50];
+  int lineno = 1;
 
-	float fMarL = m_pParam->GetFloat(_S("graph.margin.left"));
-	float fMarT = m_pParam->GetFloat(_S("graph.margin.top"));
-	float fTextHeight = 1.0f / 50.0f * 1.2; // change this when fontsizing is there!
+  float fMarL = m_pParam->GetFloat(_S("graph.margin.left"));
+  float fMarT = m_pParam->GetFloat(_S("graph.margin.top"));
+  float fTextHeight = 1.0f / 50.0f * 1.2; // change this when fontsizing is there!
 
-	gText2f(fMarL, 1-(fMarT+fTextHeight*lineno++),
+  gText2f(fMarL, 1-(fMarT+fTextHeight*lineno++),
           _S("AIM-C"));
-	gText2f(fMarL,
+  gText2f(fMarL,
           1-(fMarT+fTextHeight*lineno++),
           _S("(c) 2006-2010, Thomas Walters, Willem van Engen"));
-	gText2f(fMarL,
+  gText2f(fMarL,
           1-(fMarT+fTextHeight*lineno++),
           _S("http://aimc.acousticscale.org/"));
-	lineno++;
+  lineno++;
 
-	static const char *pPlotParams[] = {
-		_S("input.buffersize"),
-		_S("input.samplerate"),
-		_S("bmm.freqstart"),
-		_S("bmm.freqend"),
-		_S("bmm.numchannels"),
-		_S("preset.name"),
-		_S("preset.title"),
-		NULL
-	};
-	for (int i = 0; pPlotParams[i]; i++) {
-		snprintf(sStr,
+  static const char *pPlotParams[] = {
+    _S("input.buffersize"),
+    _S("input.samplerate"),
+    _S("bmm.freqstart"),
+    _S("bmm.freqend"),
+    _S("bmm.numchannels"),
+    _S("preset.name"),
+    _S("preset.title"),
+    NULL
+  };
+  for (int i = 0; pPlotParams[i]; i++) {
+    snprintf(sStr,
              sizeof(sStr)/sizeof(sStr[0]), _S("%s=%s"),
-			       pPlotParams[i],
+             pPlotParams[i],
              m_pParam->GetString(pPlotParams[i]));
-		gText2f(fMarL,
+    gText2f(fMarL,
             1-(fMarT+fTextHeight*lineno++),
             sStr);
-	}
+  }
 }

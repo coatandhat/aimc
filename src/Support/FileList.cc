@@ -33,19 +33,19 @@ vector<pair<string, string> > FileList::Load(string filename) {
   FILE* file_handle;
   vector<pair<string, string> > file_list;
   if ((file_handle = fopen(filename.c_str(), "r"))==NULL) {
-		LOG_ERROR(_T("Couldn't open file '%s' for reading."), filename.c_str());
-		return file_list;
-	}
+    LOG_ERROR(_T("Couldn't open file '%s' for reading."), filename.c_str());
+    return file_list;
+  }
 
   string out_1;
   string out_2;
   char n1[PATH_MAX];
   char n2[PATH_MAX];
-	while (fscanf(file_handle, "%s\t%s", n1, n2) != EOF) {
+  while (fscanf(file_handle, "%s\t%s", n1, n2) != EOF) {
     out_1 = n1;
     out_2 = n2;
     file_list.push_back(make_pair(out_1, out_2));
-	}
+  }
   fclose(file_handle);
   return file_list;
 }

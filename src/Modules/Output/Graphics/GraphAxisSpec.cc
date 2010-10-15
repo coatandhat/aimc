@@ -22,36 +22,36 @@
 #include "Modules/Output/Graphics/GraphAxisSpec.h"
 
 GraphAxisSpec::GraphAxisSpec(float fMin, float fMax, Scale::ScaleType iScale) {
-	m_pScale = NULL;
-	m_sLabel = NULL;
-	SetDisplayRange(fMin, fMax);
-	SetDisplayScale(iScale);
+  m_pScale = NULL;
+  m_sLabel = NULL;
+  SetDisplayRange(fMin, fMax);
+  SetDisplayScale(iScale);
 }
 
 GraphAxisSpec::GraphAxisSpec() {
-	m_pScale = NULL;
-	m_sLabel = NULL;
-	m_fMin = 0;
-	m_fMax = 0;
+  m_pScale = NULL;
+  m_sLabel = NULL;
+  m_fMin = 0;
+  m_fMax = 0;
 }
 
 GraphAxisSpec::~GraphAxisSpec() {
-	DELETE_IF_NONNULL(m_pScale);
+  DELETE_IF_NONNULL(m_pScale);
 }
 
 void GraphAxisSpec::SetDisplayRange(float fMin, float fMax) {
-	AIM_ASSERT(fMin <= fMax);
-	m_fMin = fMin;
-	m_fMax = fMax;
-	if (m_pScale)
-		m_pScale->FromLinearScaledExtrema(m_fMin, m_fMax);
+  AIM_ASSERT(fMin <= fMax);
+  m_fMin = fMin;
+  m_fMax = fMax;
+  if (m_pScale)
+    m_pScale->FromLinearScaledExtrema(m_fMin, m_fMax);
 }
 
 void GraphAxisSpec::SetDisplayScale(Scale::ScaleType iScale) {
-	DELETE_IF_NONNULL(m_pScale);
-	m_pScale = Scale::Create(iScale);
-	aimASSERT(m_pScale);
-	m_pScale->FromLinearScaledExtrema(m_fMin, m_fMax);
+  DELETE_IF_NONNULL(m_pScale);
+  m_pScale = Scale::Create(iScale);
+  aimASSERT(m_pScale);
+  m_pScale->FromLinearScaledExtrema(m_fMin, m_fMax);
 }
 
 bool GraphAxisSpec::Initialize(Parameters *parameters,
@@ -59,68 +59,68 @@ bool GraphAxisSpec::Initialize(Parameters *parameters,
                                float fMin,
                                float fMax,
                                Scale::ScaleType iScale) {
-	AIM_ASSERT(pParam);
-	AIM_ASSERT(sPrefix && sPrefix[0]!='\0');
-	char sParamName[Parameters::MaxParamNameLength];
+  AIM_ASSERT(pParam);
+  AIM_ASSERT(sPrefix && sPrefix[0]!='\0');
+  char sParamName[Parameters::MaxParamNameLength];
 
-	//! The following parameters are recognized for each axis:
-	//!   - \c "<prefix>.min", the minimum value; a float or \c 'auto'
-	snprintf(sParamName, sizeof(sParamName)/sizeof(sParamName[0]),
+  //! The following parameters are recognized for each axis:
+  //!   - \c "<prefix>.min", the minimum value; a float or \c 'auto'
+  snprintf(sParamName, sizeof(sParamName)/sizeof(sParamName[0]),
           "%s.min",
           sPrefix);
-	if (pParam->IsSet(sParamName)) {
-		if (strcmp(parameters->GetString(sParamName), "auto") == 0)
-			m_fMin = fMin;
-		else
-			m_fMin = parameters->GetFloat(sParamName);
-	}
+  if (pParam->IsSet(sParamName)) {
+    if (strcmp(parameters->GetString(sParamName), "auto") == 0)
+      m_fMin = fMin;
+    else
+      m_fMin = parameters->GetFloat(sParamName);
+  }
 
-	//!   - \c "<prefix>.max", the maximum value; a float or \c 'auto'
-	snprintf(sParamName, sizeof(sParamName)/sizeof(sParamName[0]),
+  //!   - \c "<prefix>.max", the maximum value; a float or \c 'auto'
+  snprintf(sParamName, sizeof(sParamName)/sizeof(sParamName[0]),
           "%s.max",
           sPrefix);
-	if (pParam->IsSet(sParamName)) {
-		if (strcmp(parameters->GetString(sParamName), "auto")==0)
-			m_fMax = fMax;
-		else
-			m_fMax = parameters->GetFloat(sParamName);
-	}
+  if (pParam->IsSet(sParamName)) {
+    if (strcmp(parameters->GetString(sParamName), "auto")==0)
+      m_fMax = fMax;
+    else
+      m_fMax = parameters->GetFloat(sParamName);
+  }
 
-	// Make sure ranges are updated properly
-	SetDisplayRange(m_fMin, m_fMax);
+  // Make sure ranges are updated properly
+  SetDisplayRange(m_fMin, m_fMax);
 
-	//!   - \c "<prefix>.scale", the scale; one of \c 'auto',
+  //!   - \c "<prefix>.scale", the scale; one of \c 'auto',
   //!     \c 'linear', \c 'erb' or \c 'log'
-	snprintf(sParamName, sizeof(sParamName)/sizeof(sParamName[0]),
+  snprintf(sParamName, sizeof(sParamName)/sizeof(sParamName[0]),
            "%s.scale",
            sPrefix);
-	if (pParam->IsSet(sParamName)) {
-		// Scale change, we updated min/max values already so no need to
-		Scale::ScaleType iThisScale;
-		const char *sVal = parameters->GetString(sParamName);
-		if (strcmp(sVal, "auto")==0)
-			iThisScale = iScale;
-		else if (strcmp(sVal, "linear")==0)
-			iThisScale = Scale::SCALE_LINEAR;
-		else if (strcmp(sVal, "erb")==0)
-			iThisScale = Scale::SCALE_ERB;
-		else if (strcmp(sVal, "log")==0)
-			iThisScale = Scale::SCALE_LOG;
-		else {
-			AIM_ERROR(_T("Unrecognized scale type in parameter '%s': '%s'"),
+  if (pParam->IsSet(sParamName)) {
+    // Scale change, we updated min/max values already so no need to
+    Scale::ScaleType iThisScale;
+    const char *sVal = parameters->GetString(sParamName);
+    if (strcmp(sVal, "auto")==0)
+      iThisScale = iScale;
+    else if (strcmp(sVal, "linear")==0)
+      iThisScale = Scale::SCALE_LINEAR;
+    else if (strcmp(sVal, "erb")==0)
+      iThisScale = Scale::SCALE_ERB;
+    else if (strcmp(sVal, "log")==0)
+      iThisScale = Scale::SCALE_LOG;
+    else {
+      AIM_ERROR(_T("Unrecognized scale type in parameter '%s': '%s'"),
                   sParamName,
                   sVal);
-			return false;
-		}
-		SetDisplayScale(iThisScale);
-	}
+      return false;
+    }
+    SetDisplayScale(iThisScale);
+  }
 
-	//!   - \c "<prefix>.label", the label; a string
-	snprintf(sParamName, sizeof(sParamName)/sizeof(sParamName[0]),
+  //!   - \c "<prefix>.label", the label; a string
+  snprintf(sParamName, sizeof(sParamName)/sizeof(sParamName[0]),
            "%s.label",
            sPrefix);
-	if (parameters->IsSet(sParamName))
-		m_sLabel = parameters->GetString(sParamName); // Assumes strings remains valid
+  if (parameters->IsSet(sParamName))
+    m_sLabel = parameters->GetString(sParamName); // Assumes strings remains valid
 
-	return true;
+  return true;
 }

@@ -90,8 +90,8 @@ bool FileOutputAIMC::InitializeInternal(const SignalBank &input) {
     return false;
   }
   channel_count_ = input.channel_count();
-  buffer_length_ = input.buffer_length();	
-  sample_rate_ = input.sample_rate();	
+  buffer_length_ = input.buffer_length();  
+  sample_rate_ = input.sample_rate();  
   WriteHeader();
   return true;
 }

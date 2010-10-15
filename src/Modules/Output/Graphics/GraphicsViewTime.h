@@ -25,18 +25,18 @@
  */
 class GraphicsViewTime : public GraphicsView {
 public:
-	/*! \brief Create a new view
-	 *  \param pParam Main parameter store
-	 */
-	GraphicsViewTime(AimParameters *pParam);
-	virtual ~GraphicsViewTime() { };
+  /*! \brief Create a new view
+   *  \param pParam Main parameter store
+   */
+  GraphicsViewTime(AimParameters *pParam);
+  virtual ~GraphicsViewTime() { };
 
-	virtual GraphicsViewTime *Clone(GraphicsOutputDevice *pDev);
+  virtual GraphicsViewTime *Clone(GraphicsOutputDevice *pDev);
 
 private:
-	void PlotData(Signal* pSig, float yOffset, float height, float xScale = 1.0);
-	void PlotAxes(Signal* pSig);
-	void PlotAxes(SignalBank* pBank);
+  void PlotData(Signal* pSig, float yOffset, float height, float xScale = 1.0);
+  void PlotAxes(Signal* pSig);
+  void PlotAxes(SignalBank* pBank);
 
 };
 
