@@ -19,7 +19,7 @@
 #include "Modules/Output/Graphics/Devices/GraphicsOutputDevice.h"
 
 GraphicsOutputDevice::GraphicsOutputDevice(Parameters *pParam) {
-	m_pParam = pParam;
+  m_pParam = pParam;
 }
 
 void GraphicsOutputDevice::gVertex3f(float x,
@@ -28,8 +28,8 @@ void GraphicsOutputDevice::gVertex3f(float x,
                                      float r,
                                      float g,
                                      float b) {
-	gColor3f(r, g, b);
-	gVertex3f(x, y, z);
+  gColor3f(r, g, b);
+  gVertex3f(x, y, z);
 }
 
 void GraphicsOutputDevice::gVertex2f(float x,
@@ -37,17 +37,17 @@ void GraphicsOutputDevice::gVertex2f(float x,
                                      float r,
                                      float g,
                                      float b) {
-	gColor3f(r, g, b);
-	gVertex3f(x, y, 0);
+  gColor3f(r, g, b);
+  gVertex3f(x, y, 0);
 }
 
 void GraphicsOutputDevice::gVertex2f(float x, float y) {
-	gVertex3f(x, y, 0);
+  gVertex3f(x, y, 0);
 }
 
 void GraphicsOutputDevice::gText2f(float x,
                                    float y,
                                    const char *sStr,
                                    bool bRotated) {
-	gText3f(x, y, 0, sStr, bRotated);
+  gText3f(x, y, 0, sStr, bRotated);
 }

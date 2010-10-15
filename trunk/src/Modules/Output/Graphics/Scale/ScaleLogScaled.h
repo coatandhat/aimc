@@ -28,16 +28,16 @@
  */
 class ScaleLogScaled : public Scale {
 public:
-	ScaleLogScaled(unsigned int min, unsigned int max, float density)
-		: Scale(min, max, density) { m_iType = SCALE_ERB; m_sName = "logscaled"; };
+  ScaleLogScaled(unsigned int min, unsigned int max, float density)
+    : Scale(min, max, density) { m_iType = SCALE_ERB; m_sName = "logscaled"; };
 
-	float FromLinear(float fFreq) {
-		return 21.4f*log10(0.00437f*fFreq);
-	};
+  float FromLinear(float fFreq) {
+    return 21.4f*log10(0.00437f*fFreq);
+  };
 
-	float ToLinear(float fFreq) {
-		return (pow(10, fFreq/21.4f))/0.00437f;
-	};
+  float ToLinear(float fFreq) {
+    return (pow(10, fFreq/21.4f))/0.00437f;
+  };
 };
 
 #endif /* __MODULE_SCALE_ERB_H__ */

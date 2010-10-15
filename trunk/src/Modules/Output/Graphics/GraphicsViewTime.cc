@@ -33,64 +33,64 @@
 #include "Modules/Output/Graphics/GraphicsViewTime.h"
 
 GraphicsViewTime::GraphicsViewTime(Parameters *pParam)
-	: GraphicsView(pParam) {
+  : GraphicsView(pParam) {
 }
 
 GraphicsViewTime *GraphicsViewTime::Clone(GraphicsOutputDevice *pDev) {
-	GraphicsViewTime *pView = new GraphicsViewTime(m_pParam);
-	// Copy everything
-	pView->m_pAxisX->SetDisplayRange(m_pAxisX->m_fMax, m_pAxisX->m_fMin);
-	pView->m_pAxisX->SetDisplayScale(m_pAxisX->m_pScale->getType());
-	pView->m_pAxisY->SetDisplayRange(m_pAxisY->m_fMax, m_pAxisY->m_fMin);
-	pView->m_pAxisY->SetDisplayScale(m_pAxisY->m_pScale->getType());
-	pView->m_pAxisFreq->SetDisplayRange(m_pAxisFreq->m_fMax, m_pAxisFreq->m_fMin);
-	pView->m_pAxisFreq->SetDisplayScale(m_pAxisFreq->m_pScale->getType());
-	return pView;
+  GraphicsViewTime *pView = new GraphicsViewTime(m_pParam);
+  // Copy everything
+  pView->m_pAxisX->SetDisplayRange(m_pAxisX->m_fMax, m_pAxisX->m_fMin);
+  pView->m_pAxisX->SetDisplayScale(m_pAxisX->m_pScale->getType());
+  pView->m_pAxisY->SetDisplayRange(m_pAxisY->m_fMax, m_pAxisY->m_fMin);
+  pView->m_pAxisY->SetDisplayScale(m_pAxisY->m_pScale->getType());
+  pView->m_pAxisFreq->SetDisplayRange(m_pAxisFreq->m_fMax, m_pAxisFreq->m_fMin);
+  pView->m_pAxisFreq->SetDisplayScale(m_pAxisFreq->m_pScale->getType());
+  return pView;
 }
 
 void GraphicsViewTime::PlotAxes(const SignalBank &bank) {
-	m_pDev->gColor3f(0.0f, 0.7f, 0.7f);
-	// Vertical axis
-	m_pDev->gBeginLineStrip();
-	m_pDev->gVertex2f(m_fMarginLeft, m_fMarginBottom);
-	m_pDev->gVertex2f(m_fMarginLeft, 1.0f - m_fMarginTop);
-	m_pDev->gEnd();
-	// Horizontal axis
-	m_pDev->gBeginLineStrip();
-	m_pDev->gVertex2f(m_fMarginLeft, m_fMarginBottom);
-	m_pDev->gVertex2f(1.0f-m_fMarginRight, m_fMarginBottom);
-	m_pDev->gEnd();
+  m_pDev->gColor3f(0.0f, 0.7f, 0.7f);
+  // Vertical axis
+  m_pDev->gBeginLineStrip();
+  m_pDev->gVertex2f(m_fMarginLeft, m_fMarginBottom);
+  m_pDev->gVertex2f(m_fMarginLeft, 1.0f - m_fMarginTop);
+  m_pDev->gEnd();
+  // Horizontal axis
+  m_pDev->gBeginLineStrip();
+  m_pDev->gVertex2f(m_fMarginLeft, m_fMarginBottom);
+  m_pDev->gVertex2f(1.0f-m_fMarginRight, m_fMarginBottom);
+  m_pDev->gEnd();
 
-	if (!m_bPlotLabels)
-		return;
+  if (!m_bPlotLabels)
+    return;
 
-	// Labels
-	char sTxt[80];
-	snprintf(sTxt, sizeof(sTxt) / sizeof(sTxt[0]),
+  // Labels
+  char sTxt[80];
+  snprintf(sTxt, sizeof(sTxt) / sizeof(sTxt[0]),
            _S("%s [%.0f..%.0f Hz, %s scale]"),
-		       m_pAxisFreq->m_sLabel ? m_pAxisFreq->m_sLabel : "",
-		       m_pAxisFreq->m_fMin, m_pAxisFreq->m_fMax,
-		       m_pAxisFreq->m_pScale->getName());
-	m_pDev->gText2f(0.0025f, 0.35f, sTxt, true);
-	if (m_bPlotScaled) {
-		snprintf(sTxt, sizeof(sTxt) / sizeof(sTxt[0]),
+           m_pAxisFreq->m_sLabel ? m_pAxisFreq->m_sLabel : "",
+           m_pAxisFreq->m_fMin, m_pAxisFreq->m_fMax,
+           m_pAxisFreq->m_pScale->getName());
+  m_pDev->gText2f(0.0025f, 0.35f, sTxt, true);
+  if (m_bPlotScaled) {
+    snprintf(sTxt, sizeof(sTxt) / sizeof(sTxt[0]),
              _S("%s [cycles, %s scale]"),
-			       m_pAxisX->m_sLabel ? m_pAxisX->m_sLabel : "",
-			       m_pAxisX->m_pScale->getName());
-	} else {
-		snprintf(sTxt, sizeof(sTxt) / sizeof(sTxt[0]),
+             m_pAxisX->m_sLabel ? m_pAxisX->m_sLabel : "",
+             m_pAxisX->m_pScale->getName());
+  } else {
+    snprintf(sTxt, sizeof(sTxt) / sizeof(sTxt[0]),
              _S("%s [%.2f..%.2f ms, %s scale]"),
-			       m_pAxisX->m_sLabel ? m_pAxisX->m_sLabel : "",
-			       m_pAxisX->m_fMin,
+             m_pAxisX->m_sLabel ? m_pAxisX->m_sLabel : "",
+             m_pAxisX->m_fMin,
              m_pAxisX->m_fMax,
-			       m_pAxisX->m_pScale->getName());
-	}
-	m_pDev->gText2f(m_fMarginLeft, 0.0025f, sTxt, false);
+             m_pAxisX->m_pScale->getName());
+  }
+  m_pDev->gText2f(m_fMarginLeft, 0.0025f, sTxt, false);
 
-	// Frame time
-	snprintf(sTxt, sizeof(sTxt)/sizeof(sTxt[0]), _S("t=%.0f ms"),
-		       pBank->getSampleTime(0));
-	m_pDev->gText2f(0.8f, 0.0025f, sTxt, false);
+  // Frame time
+  snprintf(sTxt, sizeof(sTxt)/sizeof(sTxt[0]), _S("t=%.0f ms"),
+           pBank->getSampleTime(0));
+  m_pDev->gText2f(0.8f, 0.0025f, sTxt, false);
 }
 
 void GraphicsViewTime::PlotData(const vector<float> &signal,
@@ -98,42 +98,42 @@ void GraphicsViewTime::PlotData(const vector<float> &signal,
                                 float yOffset,
                                 float height,
                                 float xScale) {
-	AIM_ASSERT(pSig);
-	AIM_ASSERT(xScale >= 0 && xScale <= 1);
-	AIM_ASSERT(height > 0  && height <= 1);
-	AIM_ASSERT(yOffset >= 0 && yOffset <= 1);
-	AIM_ASSERT(m_pAxisX && m_pAxisX->m_pScale);
-	AIM_ASSERT(m_pAxisY && m_pAxisY->m_pScale);
+  AIM_ASSERT(pSig);
+  AIM_ASSERT(xScale >= 0 && xScale <= 1);
+  AIM_ASSERT(height > 0  && height <= 1);
+  AIM_ASSERT(yOffset >= 0 && yOffset <= 1);
+  AIM_ASSERT(m_pAxisX && m_pAxisX->m_pScale);
+  AIM_ASSERT(m_pAxisY && m_pAxisY->m_pScale);
 
-	// Make sure we get time is ms as x value
-	xScale *= 1000.0 / sample_rate;
-	m_pDev->gColor3f(1.0f, 1.0f, 0.8f);
-	BeginDataStrip();
+  // Make sure we get time is ms as x value
+  xScale *= 1000.0 / sample_rate;
+  m_pDev->gColor3f(1.0f, 1.0f, 0.8f);
+  BeginDataStrip();
 
-	// Draw the signal.
-	float x = 0;
-	float y = 0;
-	for (int i = 0; i < signal.size(); i++) {
-		// Find out where to draw and do so
-		x = xScale * i;
-		y = signal[i];
-		x = m_pAxisX->m_pScale->FromLinearScaled(x) + 0.5f;
-		y = m_pAxisY->m_pScale->FromLinearScaled(y);
+  // Draw the signal.
+  float x = 0;
+  float y = 0;
+  for (int i = 0; i < signal.size(); i++) {
+    // Find out where to draw and do so
+    x = xScale * i;
+    y = signal[i];
+    x = m_pAxisX->m_pScale->FromLinearScaled(x) + 0.5f;
+    y = m_pAxisY->m_pScale->FromLinearScaled(y);
 
-		if (x < 0.0)
+    if (x < 0.0)
       continue;
 
-		// Now fit it into the drawing area
-		x = x * (1.0f - m_fMarginLeft - m_fMarginRight) + m_fMarginLeft;	// fit inside x-axis area
-		PlotDataPoint(x, yOffset, y, height, false);
-		/* There's no point in drawing anything when x>1.0, outside of view.
-		 * x is continuously increasing, so we can just stop completely. We need to
-		 * plot this point however, to finish the final line. */
-		if (x > 1.0)
-			break;
-	}
-	// Redraw the last point in case it's needed
-	PlotDataPoint(x, yOffset, y, height, true);
+    // Now fit it into the drawing area
+    x = x * (1.0f - m_fMarginLeft - m_fMarginRight) + m_fMarginLeft;  // fit inside x-axis area
+    PlotDataPoint(x, yOffset, y, height, false);
+    /* There's no point in drawing anything when x>1.0, outside of view.
+     * x is continuously increasing, so we can just stop completely. We need to
+     * plot this point however, to finish the final line. */
+    if (x > 1.0)
+      break;
+  }
+  // Redraw the last point in case it's needed
+  PlotDataPoint(x, yOffset, y, height, true);
 
-	m_pDev->gEnd();
+  m_pDev->gEnd();
 }

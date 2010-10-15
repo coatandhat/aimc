@@ -24,16 +24,16 @@
  */
 class ScaleLinear : public Scale {
 public:
-	ScaleLinear(unsigned int min, unsigned int max, float density)
-		: Scale(min, max, density) { m_iType = SCALE_LINEAR; m_sName = "linear"; };
+  ScaleLinear(unsigned int min, unsigned int max, float density)
+    : Scale(min, max, density) { m_iType = SCALE_LINEAR; m_sName = "linear"; };
 
-	float FromLinear(float fFreq) {
-		return fFreq;
-	};
+  float FromLinear(float fFreq) {
+    return fFreq;
+  };
 
-	float ToLinear(float fFreq) {
-		return fFreq;
-	};
+  float ToLinear(float fFreq) {
+    return fFreq;
+  };
 };
 
 #endif /* __MODULE_SCALE_LINEAR_H__ */

@@ -35,37 +35,37 @@
 #include "Output/GraphicsOutputDeviceMovieDirect.h"
 
 GraphicsOutputDeviceMovieDirect::GraphicsOutputDeviceMovieDirect(Parameters *params)
-	: GraphicsOutputDeviceMovie(params) {
-	m_sMovieFile[0] = '\0';
-	m_sSoundFile[0] = '\0';
+  : GraphicsOutputDeviceMovie(params) {
+  m_sMovieFile[0] = '\0';
+  m_sSoundFile[0] = '\0';
 }
 
 bool GraphicsOutputDeviceMovieDirect::Initialize(const char *sSoundFile,
                                                  const char *sMovieFile) {
-	// We want pnm for direct movie conversion as the data format is nice and simple
-	//! \bug This may change the user preference in GUI, hmm what to do? See TODO.txt
-	//m_pParam->SetString("output.img.format", "pnm");
+  // We want pnm for direct movie conversion as the data format is nice and simple
+  //! \bug This may change the user preference in GUI, hmm what to do? See TODO.txt
+  //m_pParam->SetString("output.img.format", "pnm");
 
-	// Initialise GraphicsOutputDevicePlotutils for memory buffer use
-	if(!GraphicsOutputDeviceCairo::Initialize())
+  // Initialise GraphicsOutputDevicePlotutils for memory buffer use
+  if(!GraphicsOutputDeviceCairo::Initialize())
     return false;
 
   int width = m_pParam->GetUInt("output.img.width");
-	int height = m_pParam->GetUInt("output.img.height");
-	//float framerate = 1000.0f/m_pParam->GetFloat("output.frameperiod");
-	float framerate=1000.0f/20.0f;
+  int height = m_pParam->GetUInt("output.img.height");
+  //float framerate = 1000.0f/m_pParam->GetFloat("output.frameperiod");
+  float framerate=1000.0f/20.0f;
 
   m_pOutputMovie = new LibavformatWriter;
-	m_pOutputMovie->Init(sMovieFile,  width, height, framerate);
+  m_pOutputMovie->Init(sMovieFile,  width, height, framerate);
 
-	return true;
+  return true;
 }
 
 void GraphicsOutputDeviceMovieDirect::Stop() {
-	// Make sure Plotutils is really done writing.
-	GraphicsOutputDeviceCairo::Stop();
-	m_pOutputMovie->End();
-	delete m_pOutputMovie;
+  // Make sure Plotutils is really done writing.
+  GraphicsOutputDeviceCairo::Stop();
+  m_pOutputMovie->End();
+  delete m_pOutputMovie;
 
 }
 
@@ -392,5 +392,5 @@ void LibavformatWriter::fill_image(AVFrame *pict,
                                   unsigned char *pFrameBuffer,
                                   int width,
                                   int height) {
-	memcpy((void*)&(pict->data[0][0]), (void*)pFrameBuffer, width*height*4);
+  memcpy((void*)&(pict->data[0][0]), (void*)pFrameBuffer, width*height*4);
 }

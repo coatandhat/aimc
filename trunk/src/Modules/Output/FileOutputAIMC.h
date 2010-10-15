@@ -67,7 +67,7 @@ class FileOutputAIMC : public Module {
 
   int channel_count_;
   int buffer_length_;
-  float sample_rate_;	
+  float sample_rate_;  
   float frame_period_ms_;
 };
 }  // namespace aimc

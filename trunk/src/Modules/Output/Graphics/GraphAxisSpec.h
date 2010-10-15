@@ -26,63 +26,63 @@
  */
 class GraphAxisSpec {
 public:
-	/*! \brief Create a new GraphAxisSpec
-	 *  \param fMin Minimum value on the axis to show
-	 *  \param fMax Maximum value on the axis to show
-	 *  \param iScale Scale to use
-	 *
-	 *  Please see SetScale() and SetRange() for more details.
-	 */
-	GraphAxisSpec(float fMin, float fMax, Scale::ScaleType iScale);
-	//! \brief Create a new GraphAxisSpec from defaults
-	GraphAxisSpec();
+  /*! \brief Create a new GraphAxisSpec
+   *  \param fMin Minimum value on the axis to show
+   *  \param fMax Maximum value on the axis to show
+   *  \param iScale Scale to use
+   *
+   *  Please see SetScale() and SetRange() for more details.
+   */
+  GraphAxisSpec(float fMin, float fMax, Scale::ScaleType iScale);
+  //! \brief Create a new GraphAxisSpec from defaults
+  GraphAxisSpec();
 
-	~GraphAxisSpec();
+  ~GraphAxisSpec();
 
-	/*! \brief Set the scale to use
-	 *  \param iScale Scale to use
-	 */
-	void SetDisplayScale(Scale::ScaleType iScale);
-	/*! \brief Set the minumum and maximum values to show on the axis
-	 *  \param fMin Minimum value on the axis to show
-	 *  \param fMax Maximum value on the axis to show
-	 *
-	 *  Either fMin _must_ be smaller than fMax, or fMin==fMax but then
-	 *  this function must be called later to fulfil the former condition
-	 *  before it is used to scale data.
-	 */
-	void SetDisplayRange(float fMin, float fMax);
-	/*! \brief Set the label of this axis
-	 *  \param sLabel New label, or NULL to remove label
-	 */
-	void SetLabel(const char *sLabel);
+  /*! \brief Set the scale to use
+   *  \param iScale Scale to use
+   */
+  void SetDisplayScale(Scale::ScaleType iScale);
+  /*! \brief Set the minumum and maximum values to show on the axis
+   *  \param fMin Minimum value on the axis to show
+   *  \param fMax Maximum value on the axis to show
+   *
+   *  Either fMin _must_ be smaller than fMax, or fMin==fMax but then
+   *  this function must be called later to fulfil the former condition
+   *  before it is used to scale data.
+   */
+  void SetDisplayRange(float fMin, float fMax);
+  /*! \brief Set the label of this axis
+   *  \param sLabel New label, or NULL to remove label
+   */
+  void SetLabel(const char *sLabel);
 
-	/*! \brief Read axis specification from parameter store
-	 *  \param pParam Parameter store to read from
-	 *  \param sPrefix Prefix to use, e.g. "view.x"
-	 *  \param fMin Default minumum value for 'auto'
-	 *  \param fMax Default maximum value for 'auto'
-	 *  \param iScale Default scale for 'auto'
-	 *  \return true if no error occured in reading
-	 */
-	bool Initialize(Parameters *pParam,
+  /*! \brief Read axis specification from parameter store
+   *  \param pParam Parameter store to read from
+   *  \param sPrefix Prefix to use, e.g. "view.x"
+   *  \param fMin Default minumum value for 'auto'
+   *  \param fMax Default maximum value for 'auto'
+   *  \param iScale Default scale for 'auto'
+   *  \return true if no error occured in reading
+   */
+  bool Initialize(Parameters *pParam,
                   const char *sPrefix,
                   float fMin,
                   float fMax,
                   Scale::ScaleType iScale);
 
 protected:
-	//! \brief Minimum value on the axis to display
-	float m_fMin;
-	//! \brief Maximum value on the axis to display
-	float m_fMax;
-	//! \brief Scale to use
-	Scale *m_pScale;
-	//! \brief Axis label, NULL for no label
-	const char *m_sLabel;
+  //! \brief Minimum value on the axis to display
+  float m_fMin;
+  //! \brief Maximum value on the axis to display
+  float m_fMax;
+  //! \brief Scale to use
+  Scale *m_pScale;
+  //! \brief Axis label, NULL for no label
+  const char *m_sLabel;
 
-	friend class GraphicsView;
-	friend class GraphicsViewTime;
+  friend class GraphicsView;
+  friend class GraphicsViewTime;
 };
 
 #endif /* __GRAPH_AXIS_SPEC_H__ */

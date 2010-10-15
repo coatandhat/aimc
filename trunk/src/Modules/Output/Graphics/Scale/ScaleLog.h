@@ -24,19 +24,19 @@
  */
 class ScaleLog : public Scale {
 public:
-	ScaleLog(unsigned int min, unsigned int max, float density)
-		: Scale(min, max, density) { m_iType = SCALE_LOG; m_sName="log"; };
+  ScaleLog(unsigned int min, unsigned int max, float density)
+    : Scale(min, max, density) { m_iType = SCALE_LOG; m_sName="log"; };
 
-	/*! The log scale has a problem, because log(0)=inf, so all values below
-	 *  1e-5 are truncated to 1e-5. */
-	float FromLinear(float fFreq) {
-		if (fFreq<1e-5f) fFreq=1e-5f;
-		return log(fFreq);
-	};
+  /*! The log scale has a problem, because log(0)=inf, so all values below
+   *  1e-5 are truncated to 1e-5. */
+  float FromLinear(float fFreq) {
+    if (fFreq<1e-5f) fFreq=1e-5f;
+    return log(fFreq);
+  };
 
-	float ToLinear(float fFreq) {
-		return exp(fFreq);
-	};
+  float ToLinear(float fFreq) {
+    return exp(fFreq);
+  };
 };
 
 #endif /* __MODULE_SCALE_LOG_H__ */
