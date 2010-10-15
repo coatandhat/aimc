@@ -51,6 +51,16 @@ common_sources = ['Support/Common.cc',
                   'Modules/Output/FileOutputHTK.cc',
                   'Modules/Output/FileOutputAIMC.cc',
                   'Modules/Features/ModuleGaussians.cc']
+                  
+graphics_sources = [ 'Modules/Output/Graphics/GraphAxisSpec.cc',
+                     'Modules/Output/Graphics/GraphicsView.cc',
+                     'Modules/Output/Graphics/GraphicsViewTime.cc',
+                     'Modules/Output/Graphics/Devices/GraphicsOutputDevice.cc',
+                     'Modules/Output/Graphics/Devices/GraphicsOutputDeviceCairo.cc',
+                     'Modules/Output/Graphics/Devices/GraphicsOutputDeviceMovie.cc',
+                     'Modules/Output/Graphics/Devices/GraphicsOutputDeviceMovieDirect.cc' ]
+graphics_libraries = [ 'cairo', 
+                       '' ]
 
 # List of currently incative source files which we may want to add back in
 sources_disabled = ['Modules/SNR/ModuleNoise.cc',

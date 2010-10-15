@@ -69,6 +69,13 @@ ModuleSSI::ModuleSSI(Parameters *params) : Module(params) {
   // The centre frequency of the channel which will just fill the complete
   // width of the SSI buffer
   pivot_cf_ = parameters_->DefaultFloat("ssi.pivot_cf", 1000.0f);
+  
+  // Whether or not to do smooth offset when the pitch cutoff is active.
+  do_smooth_offset_ = parameters_->DefaultBool("ssi.do_smooth_offset", false);
+  
+  // The number of cycles, centered on the pitch line, over which the SSI is taken
+  // to zero when doing the pitch cutoff.
+  smooth_offset_cycles_ = parameters_->DefaultFloat("ssi.smooth_offset_cycles", 3.0f);
 }
 
 ModuleSSI::~ModuleSSI() {
@@ -146,16 +153,45 @@ void ModuleSSI::Process(const SignalBank &input) {
   if (do_pitch_cutoff_) {
     pitch_index = ExtractPitchIndex(input);
   }
+  
+  float gamma_min = -1.0f;
+  float gamma_max = log2(ssi_width_cycles_);
 
   for (int ch = 0; ch < channel_count_; ++ch) {
     float centre_frequency = input.centre_frequency(ch);
+    
+    float channel_weight = 1.0f;
+    int cutoff_index = buffer_length_ - 1;
+    if (do_pitch_cutoff_) {
+      if (pitch_index < cutoff_index) {
+        if (weight_by_cutoff_) {
+          channel_weight = static_cast<float>(buffer_length_)
+                    / static_cast<float>(pitch_index);
+        }
+        cutoff_index = pitch_index;
+      }
+    }
+    
+    // tanh(3) is about 0.995. Seems reasonable. 
+    float smooth_pitch_constant = smooth_offset_cycles_ * 3.0f;
+    float pitch_h = 0.0f;
+    if (do_smooth_offset_) {
+      if (log_cycles_axis_) {
+        float gamma = gamma_min + (gamma_max - gamma_min)
+                                   * static_cast<float>(pitch_index)
+                                   / static_cast<float>(ssi_width_samples_);
+        pitch_h = pow(2.0f, gamma);
+      } else {
+        pitch_h = static_cast<float>(pitch_index) * ssi_width_cycles_
+            / static_cast<float>(ssi_width_samples_);
+      }
+    }
+    
     // Copy the buffer from input to output, addressing by h-value
     for (int i = 0; i < ssi_width_samples_; ++i) {
       float h;
       float cycle_samples = sample_rate_ / centre_frequency;
       if (log_cycles_axis_) {
-        float gamma_min = -1.0f;
-        float gamma_max = log2(ssi_width_cycles_);
         float gamma = gamma_min + (gamma_max - gamma_min)
                                    * static_cast<float>(i)
                                    / static_cast<float>(ssi_width_samples_);
@@ -173,17 +209,11 @@ void ModuleSSI::Process(const SignalBank &input) {
       float frac_part = modf(h * cycle_samples, &whole_part);
       int sample = floor(whole_part);
 
-      float weight = 1.0f;
-
-      int cutoff_index = buffer_length_ - 1;
-      if (do_pitch_cutoff_) {
-        if (pitch_index < cutoff_index) {
-          if (weight_by_cutoff_) {
-            weight *= static_cast<float>(buffer_length_)
-                      / static_cast<float>(pitch_index);
-          }
-          cutoff_index = pitch_index;
-        }
+      float weight = channel_weight;
+      
+      if (do_smooth_offset_ && do_pitch_cutoff_) {
+        // Smoothing around the pitch cutoff line.
+        weight *= (1.0f + tanh(smooth_pitch_constant * (pitch_h - h))) / 2.0f;
       }
 
       if (weight_by_scaling_) {
@@ -193,7 +223,7 @@ void ModuleSSI::Process(const SignalBank &input) {
       }
 
       float val;
-      if (sample < cutoff_index) {
+      if (sample < cutoff_index || do_smooth_offset_) {
         float curr_sample = input.sample(ch, sample);
         float next_sample = input.sample(ch, sample + 1);
         val = weight * (curr_sample

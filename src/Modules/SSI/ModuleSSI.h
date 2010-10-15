@@ -62,6 +62,8 @@ class ModuleSSI : public Module {
   bool weight_by_scaling_;
   bool log_cycles_axis_;
   float pitch_search_start_ms_;
+  bool do_smooth_offset_;
+  float smooth_offset_cycles_;
 };
 }  // namespace aimc
 
