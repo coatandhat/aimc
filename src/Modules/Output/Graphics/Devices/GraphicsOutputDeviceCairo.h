@@ -27,6 +27,8 @@
 #ifndef __GRAPHICS_OUTPUT_DEVICE_CAIRO_H__
 #define __GRAPHICS_OUTPUT_DEVICE_CAIRO_H__
 
+#include <string>
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -35,7 +37,7 @@
 #include "Modules/Output/Graphics/Devices/GraphicsOutputDevice.h"
 
 namespace aimc {
-
+using std::string;
 /*!
  * \class GraphicsOutputDeviceCairo "Output/GraphicsOutputDeviceCairo.h"
  * \brief Output class for output to a graphics file using Cairo
@@ -96,7 +98,7 @@ class GraphicsOutputDeviceCairo : public GraphicsOutputDevice {
   //! \brief The Cairo plotter
   int m_iPlotHandle;
   //! \brief Output directory
-  char m_sDir[PATH_MAX];
+  char m_sDir[FILENAME_MAX];
   //! \brief Current file number
   unsigned int m_iFileNumber;
   //! \brief true if this is the first vertex after gBegin()
@@ -124,7 +126,7 @@ class GraphicsOutputDeviceCairo : public GraphicsOutputDevice {
   cairo_t *m_cCr;
 
   //! \brief Internal store for the input filename
-  char m_sFilename[PATH_MAX];
+  char m_sFilename[FILENAME_MAX];
 
   unsigned int m_iWidth;
   unsigned int m_iHeight;

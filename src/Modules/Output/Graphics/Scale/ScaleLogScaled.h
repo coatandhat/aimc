@@ -14,7 +14,9 @@
 
 #include <math.h>
 
-#include "Modules/Scale/Scale.h"
+#include "Modules/Output/Graphics/Scale/Scale.h"
+
+namespace aimc {
 
 /*!
  * \class ScaleERB "Modules/Scale/ScaleERB.h"
@@ -39,5 +41,5 @@ public:
     return (pow(10, fFreq/21.4f))/0.00437f;
   };
 };
-
+}  // namespace aimc
 #endif /* __MODULE_SCALE_ERB_H__ */

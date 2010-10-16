@@ -12,7 +12,9 @@
 #ifndef __MODULE_SCALE_LINEAR_H__
 #define __MODULE_SCALE_LINEAR_H__
 
-#include "Modules/Scale/Scale.h"
+#include "Modules/Output/Graphics/Scale/Scale.h"
+
+namespace aimc {
 
 /*!
  * \class ScaleLinear "Modules/Scale/ScaleLinear.h"
@@ -35,5 +37,5 @@ public:
     return fFreq;
   };
 };
-
+}  // namepspace aimc
 #endif /* __MODULE_SCALE_LINEAR_H__ */

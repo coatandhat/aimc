@@ -46,8 +46,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "Modules/Output/Graphics/Devices/GraphicsOutputDeviceMovie.h"
 
-#include "Output/GraphicsOutputDeviceMovie.h"
+namespace aimc {
 
 GraphicsOutputDeviceMovie::GraphicsOutputDeviceMovie(Parameters *pParam)
   : GraphicsOutputDeviceCairo(pParam) {  // or GraphicsOutputDevicePlotutils
@@ -63,7 +64,7 @@ bool GraphicsOutputDeviceMovie::Initialize(const char *sSoundFile,
 
   // Check sound file exists
   if ((f = fopen(sSoundFile, "r")) == NULL) {
-    AIM_ERROR(_T("Couldn't open sound file '%s' for movie creation."),
+    LOG_ERROR(_T("Couldn't open sound file '%s' for movie creation."),
              sSoundFile);
     return false;
   }
@@ -72,7 +73,7 @@ bool GraphicsOutputDeviceMovie::Initialize(const char *sSoundFile,
 
   // Check movie output file can be made
   if ( (f=fopen(sMovieFile, "w"))==NULL ) {
-    aimERROR(_T("Couldn't open movie file '%s' to write to."),
+    LOG_ERROR(_T("Couldn't open movie file '%s' to write to."),
              sMovieFile);
     return false;
   }
@@ -96,7 +97,7 @@ bool GraphicsOutputDeviceMovie::Initialize(const char *sSoundFile,
   } else
 #endif
   {
-    AIM_ERROR(_T("Couldn't create a temporary directory for movie output."));
+    LOG_ERROR(_T("Couldn't create a temporary directory for movie output."));
     if (sTmpDir) free(sTmpDir);
     return false;
   }
@@ -165,7 +166,7 @@ void GraphicsOutputDeviceMovie::Stop() {
     printf(sCmdLine);
     printf("\n");
   if (system(sCmdLine)) {
-    AIM_ERROR(_T("Couldn't create movie output."));
+    LOG_ERROR(_T("Couldn't create movie output."));
   }
 
 #ifdef __WX__
@@ -178,7 +179,7 @@ void GraphicsOutputDeviceMovie::Stop() {
   WIN32_FIND_DATA FileData;
   snprintf(sCmdLine, sizeof(sCmdLine)/sizeof(sCmdLine[0]), "%s/*.*", m_sDir);
   if ((hList = FindFirstFile(sCmdLine, &FileData)) == INVALID_HANDLE_VALUE) {
-    AIM_ERROR(_T("Couldn't remove files from temporary directory."));
+    LOG_ERROR(_T("Couldn't remove files from temporary directory."));
     return;
   }
   bool bRMfinished = false;
@@ -199,7 +200,7 @@ void GraphicsOutputDeviceMovie::Stop() {
   DIR *dir;
   struct dirent *dirent;
   if (!(dir = opendir(m_sDir))) {
-    AIM_ERROR(_T("Couldn't remove files in temporary directory."));
+    LOG_ERROR(_T("Couldn't remove files in temporary directory."));
     return;
   }
   while (dirent = readdir(dir)) {
@@ -254,3 +255,4 @@ void GraphicsOutputDeviceMovie::PlotParameterScreen() {
             sStr);
   }
 }
+}  // namespace aimc
