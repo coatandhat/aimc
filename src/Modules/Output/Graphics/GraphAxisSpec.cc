@@ -21,6 +21,8 @@
 
 #include "Modules/Output/Graphics/GraphAxisSpec.h"
 
+namespace aimc {
+
 GraphAxisSpec::GraphAxisSpec(float fMin, float fMax, Scale::ScaleType iScale) {
   m_pScale = NULL;
   m_sLabel = NULL;
@@ -50,7 +52,7 @@ void GraphAxisSpec::SetDisplayRange(float fMin, float fMax) {
 void GraphAxisSpec::SetDisplayScale(Scale::ScaleType iScale) {
   DELETE_IF_NONNULL(m_pScale);
   m_pScale = Scale::Create(iScale);
-  aimASSERT(m_pScale);
+  AIM_ASSERT(m_pScale);
   m_pScale->FromLinearScaledExtrema(m_fMin, m_fMax);
 }
 
@@ -59,7 +61,7 @@ bool GraphAxisSpec::Initialize(Parameters *parameters,
                                float fMin,
                                float fMax,
                                Scale::ScaleType iScale) {
-  AIM_ASSERT(pParam);
+  AIM_ASSERT(parameters);
   AIM_ASSERT(sPrefix && sPrefix[0]!='\0');
   char sParamName[Parameters::MaxParamNameLength];
 
@@ -68,7 +70,7 @@ bool GraphAxisSpec::Initialize(Parameters *parameters,
   snprintf(sParamName, sizeof(sParamName)/sizeof(sParamName[0]),
           "%s.min",
           sPrefix);
-  if (pParam->IsSet(sParamName)) {
+  if (parameters->IsSet(sParamName)) {
     if (strcmp(parameters->GetString(sParamName), "auto") == 0)
       m_fMin = fMin;
     else
@@ -79,7 +81,7 @@ bool GraphAxisSpec::Initialize(Parameters *parameters,
   snprintf(sParamName, sizeof(sParamName)/sizeof(sParamName[0]),
           "%s.max",
           sPrefix);
-  if (pParam->IsSet(sParamName)) {
+  if (parameters->IsSet(sParamName)) {
     if (strcmp(parameters->GetString(sParamName), "auto")==0)
       m_fMax = fMax;
     else
@@ -94,7 +96,7 @@ bool GraphAxisSpec::Initialize(Parameters *parameters,
   snprintf(sParamName, sizeof(sParamName)/sizeof(sParamName[0]),
            "%s.scale",
            sPrefix);
-  if (pParam->IsSet(sParamName)) {
+  if (parameters->IsSet(sParamName)) {
     // Scale change, we updated min/max values already so no need to
     Scale::ScaleType iThisScale;
     const char *sVal = parameters->GetString(sParamName);
@@ -107,7 +109,7 @@ bool GraphAxisSpec::Initialize(Parameters *parameters,
     else if (strcmp(sVal, "log")==0)
       iThisScale = Scale::SCALE_LOG;
     else {
-      AIM_ERROR(_T("Unrecognized scale type in parameter '%s': '%s'"),
+      LOG_ERROR(_T("Unrecognized scale type in parameter '%s': '%s'"),
                   sParamName,
                   sVal);
       return false;
@@ -124,3 +126,4 @@ bool GraphAxisSpec::Initialize(Parameters *parameters,
 
   return true;
 }
+}  // namespace aimc

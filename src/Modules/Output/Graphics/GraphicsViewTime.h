@@ -12,11 +12,11 @@
 #ifndef __GRAPHICS_VIEW_TIME_H__
 #define __GRAPHICS_VIEW_TIME_H__
 
-#include "Support/Signal.h"
 #include "Support/SignalBank.h"
-#include "Output/GraphicsOutputDevice.h"
-#include "Output/GraphicsView.h"
+#include "Modules/Output/Graphics/Devices/GraphicsOutputDevice.h"
+#include "Modules/Output/Graphics/GraphicsView.h"
 
+namespace aimc {
 /*!
  * \class GraphicsViewTime "Output/GraphicsViewTime.h"
  * \brief Time-definition graphics view class
@@ -28,16 +28,19 @@ public:
   /*! \brief Create a new view
    *  \param pParam Main parameter store
    */
-  GraphicsViewTime(AimParameters *pParam);
+  GraphicsViewTime(Parameters *pParam);
   virtual ~GraphicsViewTime() { };
 
   virtual GraphicsViewTime *Clone(GraphicsOutputDevice *pDev);
 
 private:
-  void PlotData(Signal* pSig, float yOffset, float height, float xScale = 1.0);
-  void PlotAxes(Signal* pSig);
-  void PlotAxes(SignalBank* pBank);
-
+  void PlotData(const vector<float> &signal,
+		float sample_rate,
+		float yOffset,
+		float height,
+		float xScale = 1.0);
+  void PlotAxes(const vector<float> &signal);
+  void PlotAxes(const SignalBank &pBank);
 };
-
+}  // namesapce aimc
 #endif /* __GRAPHICS_VIEW_TIME_H__ */

@@ -34,6 +34,8 @@
 
 #include "Modules/Output/Graphics/Devices/GraphicsOutputDevice.h"
 
+namespace aimc {
+
 /*!
  * \class GraphicsOutputDeviceCairo "Output/GraphicsOutputDeviceCairo.h"
  * \brief Output class for output to a graphics file using Cairo
@@ -41,10 +43,9 @@
  * This class outputs a graphics operation to file. It only supports 2d though,
  * so the z-component is ignored.
  */
-class GraphicsOutputDeviceCairo : public GraphicsOutputDevice
-{
+class GraphicsOutputDeviceCairo : public GraphicsOutputDevice {
  public:
-  GraphicsOutputDeviceCairo(AimParameters *pParam);
+  GraphicsOutputDeviceCairo(Parameters *pParam);
   virtual ~GraphicsOutputDeviceCairo();
 
   /*! \brief Initializes this output device, prepares plotting tools.
@@ -129,5 +130,5 @@ class GraphicsOutputDeviceCairo : public GraphicsOutputDevice
   unsigned int m_iHeight;
   bool m_bUseMemoryBuffer;
 };
-
+}  // namespace aimc
 #endif /* __GRAPHICS_OUTPUT_DEVICE_CAIRO_H__ */

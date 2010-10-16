@@ -15,10 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <algorithm>
+
 #include "Support/Common.h"
 
-#include "Output/GraphicsView.h"
-#include "Output/GraphicsOutputDevice.h"
+#include "Modules/Output/Graphics/GraphicsView.h"
+#include "Modules/Output/Graphics/Devices/GraphicsOutputDevice.h"
+
+namespace aimc {
 
 GraphicsView::GraphicsView(Parameters *parameters) : Module(parameters) {
   module_description_ = "";
@@ -34,12 +38,16 @@ GraphicsView::GraphicsView(Parameters *parameters) : Module(parameters) {
   AIM_ASSERT(m_pAxisY);
   m_pAxisFreq = new GraphAxisSpec();
   AIM_ASSERT(m_pAxisFreq);
+  initialized_ = true;
 
-  m_pAxisY->Initialize(m_pParam,
-                       _S("graph.y"),
-                       -1,
-                       1,
-                       Scale::SCALE_LINEAR);
+  if (!m_pAxisY->Initialize(m_pParam,
+                            _S("graph.y"),
+                            -1,
+                            1,
+                            Scale::SCALE_LINEAR)) {
+    LOG_ERROR("Axis initialization failed");
+    initialized_ = false;
+  }
   m_fMarginLeft = m_pParam->GetFloat(_S("graph.margin.left"));
   m_fMarginRight = m_pParam->GetFloat(_S("graph.margin.right"));
   m_fMarginTop = m_pParam->GetFloat(_S("graph.margin.top"));
@@ -54,8 +62,8 @@ GraphicsView::GraphicsView(Parameters *parameters) : Module(parameters) {
   else if (strcmp(sGraphType, _S("none"))==0)
     m_iGraphType = GraphTypeNone;
   else {
-    ret = false;
-    AIM_ERROR(_T("Unrecognized graph type: '%s'"), sGraphType);
+    LOG_ERROR(_T("Unrecognized graph type: '%s'"), sGraphType);
+    initialized_ = false;
   }
 
   if (strcmp(m_pParam->GetString(_S("graph.mindistance")),"auto") == 0)
@@ -63,7 +71,6 @@ GraphicsView::GraphicsView(Parameters *parameters) : Module(parameters) {
     m_fMinPlotDistance = -1;
   else
     m_fMinPlotDistance = m_pParam->GetFloat(_S("graph.mindistance"));
-
 }
 
 GraphicsView::~GraphicsView() {
@@ -72,7 +79,8 @@ GraphicsView::~GraphicsView() {
   DELETE_IF_NONNULL(m_pAxisFreq);
 }
 
-bool
+void GraphicsView::ResetInternal() {
+}
 
 bool GraphicsView::InitializeInternal(const SignalBank &bank) {
   if (!m_pDev) {
@@ -105,10 +113,11 @@ bool GraphicsView::InitializeInternal(const SignalBank &bank) {
   /* Inform graphics output of maximum number of vertices between
    * gBegin*() and gEnd(), for any type of plot. Colormap needs most.
    */
-  if (!m_pDev->Initialize(MAX(10, bank.buffer_length() * 2 + 2))) {
+  if (!m_pDev->Initialize(std::max<int>(10, bank.buffer_length() * 2 + 2))) {
     LOG_ERROR("");
     return false;
   }
+  return true;
 }
 
 void GraphicsView::Process(const SignalBank &bank) {
@@ -133,7 +142,7 @@ void GraphicsView::Process(const SignalBank &bank) {
     // Scale to single channel graphing.
     yOffs = yOffs * (1.0f - height) + height / 2.0;
     yOffs = yOffs * (1.0f - m_fMarginTop - m_fMarginBottom) + m_fMarginBottom;
-    PlotData(bank[i], yOffs, heightMinMargin, xScaling);
+    PlotData(bank[i], bank.sample_rate(), yOffs, heightMinMargin, xScaling);
   }
   m_pDev->gRelease();
 }
@@ -190,7 +199,7 @@ void GraphicsView::PlotDataPoint(float x,
    */
   if (!m_bFirstPoint
       && !isLast
-      && fabs(m_fPrevVal-val) < m_fMinPlotDistance) {
+      && abs(m_fPrevVal-val) < m_fMinPlotDistance) {
     m_iPrevValEqual++;
     // Don't set m_fPrevVal to avoid not catching slow changes
     m_fPrevX = x;
@@ -232,3 +241,4 @@ void GraphicsView::PlotDataPointDirect(float x,
     AIM_ASSERT(0);
   }
 }
+}  // namespace aimc
