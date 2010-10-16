@@ -114,24 +114,6 @@ public:
    */
   void FromLinearScaledExtrema(Scale *pScale);
 
-  /*! \brief Create a new signal bank
-   *  \param iChannels Number of audio channels
-   *  \param iBufferlength Length of the buffer in frames
-   *  \param iSamplerate Samplerate in Hz
-   *  Note that the caller must free the signal bank again.
-   */
-  virtual SignalBank* CreateSignalBank(unsigned int iChannels, unsigned int iBufferlength, unsigned int iSamplerate);
-
-  /*! \overload
-   *  \brief Create a signal bank based on a Signal's parameters
-   *  \param pSig Signal to get parameters from
-   *  pSig is only used to look at parameters like samplerate, nothing is done
-   *  with its contents.
-   *  Note that the caller must free the signal bank again.
-   */
-  virtual SignalBank* CreateSignalBank(/*! \todo const*/ Signal* pSig);
-
-
 protected:
   //! \brief Bottom frequency
   unsigned int m_iMin;

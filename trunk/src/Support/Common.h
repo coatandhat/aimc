@@ -46,6 +46,14 @@
 #  endif
 #endif
 
+#if !defined(_S)
+#  ifdef _UNICODE
+#    define _S(x) L ## x
+#  else
+#    define _S(x) x
+#  endif
+#endif
+
 /*! \brief C++ delete if != NULL
  *
  *  This was used so often, that is was moved to a macro.

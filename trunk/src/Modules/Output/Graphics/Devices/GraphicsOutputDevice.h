@@ -20,6 +20,8 @@
 
 #include "Support/Parameters.h"
 
+namespace aimc {
+
 /*!
  * \class GraphicsOutputDevice "Output/GraphicsOutputDevice.h"
  * \brief General output device class
@@ -61,7 +63,7 @@
  */
 class GraphicsOutputDevice {
  public:
-  GraphicsOutputDevice(AimParameters *pParam);
+  GraphicsOutputDevice(Parameters *pParam);
   virtual ~GraphicsOutputDevice() { };
 
   /*! \brief Initialize the module, sets up everything to Start().
@@ -182,10 +184,10 @@ class GraphicsOutputDevice {
   //! \brief True when animation is running
   bool m_bRunning;
   //! \brief Parameter store
-  AimParameters *m_pParam;
+  Parameters *m_pParam;
 
   //! \brief Pixel Formats
   enum PixelFormat {AIM_PIX_FMT_RGB24_32, AIM_PIX_FMT_RGB24_24};
 };
-
+}  // namespace aimc
 #endif /* __GRAPHICS_OUTPUT_DEVICE__ */

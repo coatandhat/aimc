@@ -32,6 +32,8 @@
 #include "Modules/Output/Graphics/GraphicsView.h"
 #include "Modules/Output/Graphics/GraphicsViewTime.h"
 
+namespace aimc {
+
 GraphicsViewTime::GraphicsViewTime(Parameters *pParam)
   : GraphicsView(pParam) {
 }
@@ -72,25 +74,19 @@ void GraphicsViewTime::PlotAxes(const SignalBank &bank) {
            m_pAxisFreq->m_fMin, m_pAxisFreq->m_fMax,
            m_pAxisFreq->m_pScale->getName());
   m_pDev->gText2f(0.0025f, 0.35f, sTxt, true);
-  if (m_bPlotScaled) {
-    snprintf(sTxt, sizeof(sTxt) / sizeof(sTxt[0]),
-             _S("%s [cycles, %s scale]"),
-             m_pAxisX->m_sLabel ? m_pAxisX->m_sLabel : "",
-             m_pAxisX->m_pScale->getName());
-  } else {
-    snprintf(sTxt, sizeof(sTxt) / sizeof(sTxt[0]),
-             _S("%s [%.2f..%.2f ms, %s scale]"),
-             m_pAxisX->m_sLabel ? m_pAxisX->m_sLabel : "",
-             m_pAxisX->m_fMin,
-             m_pAxisX->m_fMax,
-             m_pAxisX->m_pScale->getName());
-  }
+  snprintf(sTxt, sizeof(sTxt) / sizeof(sTxt[0]),
+	   _S("%s [%.2f..%.2f ms, %s scale]"),
+	   m_pAxisX->m_sLabel ? m_pAxisX->m_sLabel : "",
+	   m_pAxisX->m_fMin,
+	   m_pAxisX->m_fMax,
+	   m_pAxisX->m_pScale->getName());
+ 
   m_pDev->gText2f(m_fMarginLeft, 0.0025f, sTxt, false);
 
   // Frame time
-  snprintf(sTxt, sizeof(sTxt)/sizeof(sTxt[0]), _S("t=%.0f ms"),
-           pBank->getSampleTime(0));
-  m_pDev->gText2f(0.8f, 0.0025f, sTxt, false);
+  //snprintf(sTxt, sizeof(sTxt)/sizeof(sTxt[0]), _S("t=%.0f ms"),
+  //         pBank->getSampleTime(0));
+  //m_pDev->gText2f(0.8f, 0.0025f, sTxt, false);
 }
 
 void GraphicsViewTime::PlotData(const vector<float> &signal,
@@ -98,7 +94,6 @@ void GraphicsViewTime::PlotData(const vector<float> &signal,
                                 float yOffset,
                                 float height,
                                 float xScale) {
-  AIM_ASSERT(pSig);
   AIM_ASSERT(xScale >= 0 && xScale <= 1);
   AIM_ASSERT(height > 0  && height <= 1);
   AIM_ASSERT(yOffset >= 0 && yOffset <= 1);
@@ -113,7 +108,7 @@ void GraphicsViewTime::PlotData(const vector<float> &signal,
   // Draw the signal.
   float x = 0;
   float y = 0;
-  for (int i = 0; i < signal.size(); i++) {
+  for (unsigned int i = 0; i < signal.size(); i++) {
     // Find out where to draw and do so
     x = xScale * i;
     y = signal[i];
@@ -137,3 +132,4 @@ void GraphicsViewTime::PlotData(const vector<float> &signal,
 
   m_pDev->gEnd();
 }
+}  // namespace aimc

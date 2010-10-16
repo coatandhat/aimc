@@ -27,11 +27,14 @@
 #ifndef __GRAPHICS_VIEW_H__
 #define __GRAPHICS_VIEW_H__
 
+#include "Support/Module.h"
 #include "Support/Parameters.h"
 #include "Support/SignalBank.h"
 #include "Modules/Output/Graphics/Scale/Scale.h"
 #include "Modules/Output/Graphics/Devices/GraphicsOutputDevice.h"
 #include "Modules/Output/Graphics/GraphAxisSpec.h"
+
+namespace aimc {
 
 /*!
  * \class GraphicsView "Modules/Output/Graphics/GraphicsView.h"
@@ -69,7 +72,7 @@ public:
    *  using it for plotting.
    */
   virtual bool InitializeInternal(const SignalBank &bank);
-
+  virtual void ResetInternal();
   /*! \brief Set the axes' scale
    *  \param iXScale Scale type of the horizontal axis
    *  \param iYScale Scale type of the vertical axis for signal data
@@ -92,6 +95,7 @@ public:
    *  \param xScale Scaling in x-direction. 1.0 makes it cover the whole length. 0.5 only the left half.
    */
   virtual void PlotData(const vector<float> &signal,
+			float sample_rate,
                         float yOffset,
                         float height,
                         float xScale) = 0;
@@ -177,6 +181,8 @@ public:
   float m_fPrevVal, m_fPrevX, m_fPrevY, m_fPrevHeight;
   //! \brief Number of times m_fValPrev was within range m_fMinPlotDistance
   int m_iPrevValEqual;
-};
 
+  bool initialized_;
+};
+}  // namespace aimc
 #endif /* __GRAPHICS_VIEW_H__ */

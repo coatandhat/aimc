@@ -21,6 +21,8 @@
 #include "Support/Parameters.h"
 #include "Modules/Output/Graphics/Scale/Scale.h"
 
+namespace aimc {
+
 /*! \class GraphAxisSpec "Output/GraphAxisSpec.h"
  *  \brief Axis specification for a GraphicsView
  */
@@ -84,5 +86,7 @@ protected:
   friend class GraphicsView;
   friend class GraphicsViewTime;
 };
+
+}  // namespace aimc
 
 #endif /* __GRAPH_AXIS_SPEC_H__ */

@@ -18,6 +18,8 @@
 #include "Support/Common.h"
 #include "Modules/Output/Graphics/Devices/GraphicsOutputDevice.h"
 
+namespace aimc {
+
 GraphicsOutputDevice::GraphicsOutputDevice(Parameters *pParam) {
   m_pParam = pParam;
 }
@@ -51,3 +53,4 @@ void GraphicsOutputDevice::gText2f(float x,
                                    bool bRotated) {
   gText3f(x, y, 0, sStr, bRotated);
 }
+}  // namespace aimc

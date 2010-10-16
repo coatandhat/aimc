@@ -32,11 +32,12 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "Support/util.h"
-#include "Output/GraphicsOutputDeviceCairo.h"
+#include "Modules/Output/Graphics/Devices/GraphicsOutputDeviceCairo.h"
+
+namespace aimc {
 
 GraphicsOutputDeviceCairo::GraphicsOutputDeviceCairo(Parameters *pParam)
-  : GraphicsOutputDevice(pParam) {
+    : GraphicsOutputDevice(pParam) {
   m_bOutputFile = false;
   m_iFileNumber = 0;
   m_iVertexType = VertexTypeNone;
@@ -281,3 +282,4 @@ void GraphicsOutputDeviceCairo::gRelease() {
   // Finished this one, up to the next!
   m_iFileNumber++;
 }
+}  // namespace aimc
