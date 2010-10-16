@@ -34,6 +34,8 @@ extern "C" {
 #include <ffmpeg/swscale.h>
 }
 
+namespace aimc {
+
 /*!
  * \class LibavformatWriter "Output/GraphicsOutputDeviceMovieDirect.h"
  * \brief Helper class to use libavcodec to write a movie file
@@ -85,5 +87,5 @@ class GraphicsOutputDeviceMovieDirect : public GraphicsOutputDeviceMovie {
  private:
   LibavformatWriter* m_pOutputMovie;
 };
-
+}  // namespace aimc
 #endif /* __GRAPHICS_OUTPUT_DEVICE_MOVIE_DIRECT_H__ */

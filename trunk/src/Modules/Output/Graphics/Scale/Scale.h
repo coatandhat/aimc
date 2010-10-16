@@ -12,7 +12,7 @@
 #ifndef __MODULE_SCALE_H__
 #define __MODULE_SCALE_H__
 
-#include "Support/SignalBank.h"
+namespace aimc {
 
 /*!
  * \class Scale "Modules/Scale/Scale.h"
@@ -137,5 +137,5 @@ protected:
   //! \brief Value used in FromLinearScaled
   float m_fScaledCurDiff;
 };
-
+}  // namespace aimc
 #endif /* __MODULE_SCALE_H__ */

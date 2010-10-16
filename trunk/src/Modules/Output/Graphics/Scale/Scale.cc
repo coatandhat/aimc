@@ -16,6 +16,8 @@
 #include "Modules/Output/Graphics/Scale/ScaleLog.h"
 #include "Modules/Output/Graphics/Scale/ScaleLogScaled.h"
 
+namespace aimc {
+
 Scale *Scale::Create(ScaleType iType,
 		     unsigned int min,
 		     unsigned int max,
@@ -30,11 +32,11 @@ Scale *Scale::Create(ScaleType iType,
   case SCALE_LOGSCALED:
     return static_cast<Scale*>(new ScaleLogScaled(min, max, density));
   default:
-    aimASSERT(0);
+    AIM_ASSERT(0);
     break;
   }
   // Unreachable code
-  aimASSERT(0);
+  AIM_ASSERT(0);
   return NULL;
 }
 
@@ -68,6 +70,7 @@ void Scale::FromLinearScaledExtrema(float fMin, float fMax) {
 }
 
 void Scale::FromLinearScaledExtrema(Scale *pScale) {
-  aimASSERT(pScale);
+  AIM_ASSERT(pScale);
   FromLinearScaledExtrema(pScale->m_fMin, pScale->m_fMax);
 }
+}  // namespace aimc

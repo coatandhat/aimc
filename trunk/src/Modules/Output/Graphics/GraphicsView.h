@@ -131,21 +131,6 @@ public:
    */
   virtual void PlotDataPointDirect(float x, float y, float val, float height);
 
-   /*! \brief Plot a strobe point
-    *  \param x X-coordinate of centre (in OpenGL space)
-    *  \param y Y-coordinate of centre (in OpenGL space)
-    *  \param size Size of the block drawn
-    *  \param colour_r Red colour intensity
-    *  \param colour_g Green colour intensity
-    *  \param colour_b Blue colour intensity
-    */
-  virtual void PlotStrobePoint(float x,
-                               float y,
-                               float size,
-                               float color_r,
-                               float color_g,
-                               float color_b);
-
   //! \brief Where to plot to
   GraphicsOutputDevice *m_pDev;
 

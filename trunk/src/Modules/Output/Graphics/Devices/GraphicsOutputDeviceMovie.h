@@ -27,9 +27,10 @@
 #ifndef __GRAPHICS_OUTPUT_DEVICE_MOVIE_H__
 #define __GRAPHICS_OUTPUT_DEVICE_MOVIE_H__
 
-#include "Support/util.h"
 //#include "Modules/Output/Graphics/Devices/GraphicsOutputDevicePlotutils.h"
 #include "Modules/Output/Graphics/Devices/GraphicsOutputDeviceCairo.h"
+
+namespace aimc {
 
 /*!
  * \class GraphicsOutputDeviceMovie "Output/GraphicsOutputDeviceMovie.h"
@@ -38,7 +39,7 @@
  // GraphicsOutputDevicePlotutils is also possible here
 class GraphicsOutputDeviceMovie : public GraphicsOutputDeviceCairo {
  public:
-  GraphicsOutputDeviceMovie(AimParameters *pParam);
+  GraphicsOutputDeviceMovie(Parameters *pParam);
   virtual ~GraphicsOutputDeviceMovie() { };
 
   /*! \brief Initializes this output device, prepares plotting tools.
@@ -71,5 +72,5 @@ class GraphicsOutputDeviceMovie : public GraphicsOutputDeviceCairo {
   //! \brief Name of the movie file to produce
   char m_sMovieFile[PATH_MAX];
 };
-
+}  // namespace aimc
 #endif /* __GRAPHICS_OUTPUT_DEVICE_MOVIE_H__ */

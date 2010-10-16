@@ -14,7 +14,9 @@
 
 #include <math.h>
 
-#include "Modules/Scale/Scale.h"
+#include "Modules/Output/Graphics/Scale/Scale.h"
+
+namespace aimc {
 
 /*!
  * \class ScaleLog "Modules/Scale/ScaleLog.h"
@@ -38,5 +40,5 @@ public:
     return exp(fFreq);
   };
 };
-
+}  // namespace aimc
 #endif /* __MODULE_SCALE_LOG_H__ */

@@ -55,7 +55,7 @@ bool GraphicsOutputDeviceCairo::Initialize(const char *sDir) {
    * errors in the main Process()ing loop. */
   if ( !OpenFile(0) ) {
     //! \todo Better error message that is more specific about the cause.
-    AIM_ERROR(_T("Could not open output directory '%s' using graphics format '%s'."),
+    LOG_ERROR(_T("Could not open output directory '%s' using graphics format '%s'."),
       m_sDir, m_pParam->GetString("output.img.format") );
     return false;
   }
@@ -121,7 +121,7 @@ bool GraphicsOutputDeviceCairo::OpenFile(unsigned int index) {
       strncpy(m_sFilename, m_sDir, sizeof(m_sFilename)/sizeof(m_sFilename[0]));
       char *pDot = strrchr(m_sFilename, '.');
       if (!pDot) {
-        AIM_ERROR(_T("Please supply extension on filename when using 'auto' format: '%s'"),
+        LOG_ERROR(_T("Please supply extension on filename when using 'auto' format: '%s'"),
                   m_sFilename);
         return false;
       }

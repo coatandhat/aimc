@@ -31,8 +31,9 @@
 #include <string.h>
 #include <math.h>
 
-#include "Support/util.h"
-#include "Output/GraphicsOutputDeviceMovieDirect.h"
+#include "Modules/Output/Graphics/Devices/GraphicsOutputDeviceMovieDirect.h"
+
+namespace aimc {
 
 GraphicsOutputDeviceMovieDirect::GraphicsOutputDeviceMovieDirect(Parameters *params)
   : GraphicsOutputDeviceMovie(params) {
@@ -394,3 +395,4 @@ void LibavformatWriter::fill_image(AVFrame *pict,
                                   int height) {
   memcpy((void*)&(pict->data[0][0]), (void*)pFrameBuffer, width*height*4);
 }
+}  // namespace aimc

@@ -32,6 +32,9 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#define AIM_NAME "AIM-C"
+#define AIM_VERSION_STRING "version_number"
+
 // A macro to disallow the copy constructor and operator= functions
 // This should be used in the private: declarations for a class
 #define DISALLOW_COPY_AND_ASSIGN(TypeName) \
