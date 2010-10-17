@@ -44,8 +44,9 @@ Module::Module(Parameters *parameters) {
 Module::~Module() {
 };
 
-bool Module::Initialize(const SignalBank &input) {
-  // LOG_INFO_NN(_T("-> %s "), module_identifier_.c_str());
+bool Module::Initialize(const SignalBank &input,
+                        Parameters *global_parameters) {
+  global_parameters_ = global_parameters;
   // Validate the input
   if (!input.Validate()) {
     LOG_ERROR(_T("Input SignalBank not valid"));
@@ -57,7 +58,7 @@ bool Module::Initialize(const SignalBank &input) {
     return false;
   }
   // If the module has an output bank, then we can set up the targets
-  // of this module..
+  // of this module.
   if (output_.initialized()) {
     // Check that the output SignalBank has been set up correctly
     if (!output_.Validate()) {
@@ -73,11 +74,9 @@ bool Module::Initialize(const SignalBank &input) {
     set<Module*>::const_iterator it;
     for (it = targets_.begin(); it != targets_.end(); ++it) {
       if (!(*it)->initialized())
-        if (!(*it)->Initialize(output_))
+        if (!(*it)->Initialize(output_, global_parameters_))
           return false;
     }
-  } else {
-    // LOG_INFO(_T("|"));
   }
   initialized_ = true;
   return true;
@@ -101,12 +100,22 @@ bool Module::initialized() const {
 }
 
 bool Module::AddTarget(Module* target_module) {
+  bool result = false;
   if (target_module) {
     pair<set<Module*>::iterator, bool> ret;
     ret = targets_.insert(target_module);
-    return ret.second;
+    result = ret.second;
+    if (result) {
+      if(initialized_) {
+        if(output_.initialized()) {
+          if (!target_module->initialized()) {
+            target_module->Initialize(output_, global_parameters_);
+          }
+        }
+      }
+    }
   }
-  return false;
+  return result;
 }
 
 bool Module::RemoveTarget(Module* target_module) {

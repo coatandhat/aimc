@@ -27,51 +27,83 @@
 #include "Support/ModuleTree.h"
 
 #include "Support/ModuleFactory.h"
+#include "Support/Module.h"
+#include "Support/Parameters.h"
 
 namespace aimc {
-LoadConfigFile(const string &filename) {
-  parameters_.Load(filename.c_str());
+bool ModuleTree::LoadConfigFile(const string &filename) {
+  config_.Load(filename.c_str());
   return ConstructTree();
 }
 
-LoadConfigText(const string &config) {
-  parameters_.Parse(config.c_str());
+bool ModuleTree::LoadConfigText(const string &config) {
+  config_.Parse(config.c_str());
   return ConstructTree();
 }
 
-ConstructTree() {
+bool ModuleTree::ConstructTree() {
   // Make two passes over the configuration file.
   // The first pass creates all the named modules with their parameters.
   bool done = false;
   bool error = false;
-  string module;
+  char module_name_var[AimParameters::MaxParamNameLength];
+  char module_id_var[AimParameters::MaxParamNameLength];
+  char module_parameters_var[AimParameters::MaxParamNameLength];
   int module_number = 1;
   while (!done) {
-    snprintf("module%d", module_number);
-    if (parameters_.IsSet(module + ".name") {
-      string module_name = 
-      string module_id = 
-      string module_params = 
-      modules_[]
+    sprintf(module_name_var, "module%d.name", module_number);
+    sprintf(module_id_var, "module%d.id", module_number);
+    sprintf(module_parameters_var, "module%d.parameters", module_number);
+    if (config_.IsSet(module_name_var) {
+      char* name = config_.GetString(module_name_var));
+      if (module_number == 1) {
+        root_name_ = name;
+      }
+      if (config_.IsSet(module_id_var)) {
+        char* id = config_.GetString(module_id_var));
+        char* parameters = config_.DefaultString(module_parameters_var), "");
+        parameters_[name] = new Parameters();
+        parameters_[name]->Parse(parameters);
+        modules_[name] = factory_.Create(id, parameters_[name].get());
+      } else {
+        LOG_ERROR("id field missing for module named %s", name);
+        error = true;
+        done = true;
+      }
     } else {
       done = true;
     }
     ++module_number;
   }
   // The second pass connects up all the modules into a tree.
-  module_number = 1;
-  while (!done) {
-    module = sprintf("module%d", module_number);
-    if (parameters_.IsSet(module + ".name") {
-      string module_name = 
-      string module_id = 
-      string module_params = 
-      modules_[]
+  char module_child_var[AimParameters::MaxParamNameLength];
+  for (int i = 0; i < modules_.size(); ++i) {
+    int child_number = 1;
+    done = false;
+    sprintf(module_name_var, "module%d.name", module_number);
+    if (config_.IsSet(module_name_var) {
+      char* name = config_.GetString(module_name_var));
+      while (!done) {
+        sprintf(module_child_var, "module%d.child%d", i, child_number);
+        if (config_.IsSet(module_child_var) {
+          char* child = config_.GetString(module_child_var);
+          modules_[name]->AddTarget(modules_[child].get());
+        } else {
+          done = true;
+        }
+      }
+      ++child_number;
     } else {
-      done = true;
+      error = true;
+      break;
     }
-    ++module_number;
   }
   return error;
 }
+
+bool ModuleTree::Initialize(Parameters *global_parameters) {
+  SignalBank s(1,1,1);
+  modules_[root_name_]->Initialize(s, global_parameters);
+}
+
 }  // namespace aimc
