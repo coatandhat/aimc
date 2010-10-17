@@ -108,8 +108,14 @@ class Module {
    * override the default Initialize function. When creating a new module, do
    * not create a new version of Initialize uness you're sure you know what
    * you're doing!
+   *
+   * global_parameters stores things like the input filename, output filenames
+   * and any other metadata that modules might want to share. If present, it 
+   * is propagated to all children. These parameters are mutable and may
+   * change.
    */
-  virtual bool Initialize(const SignalBank &input);
+  virtual bool Initialize(const SignalBank &input,
+                          Parameters *global_parameters);
 
   /*! \brief Returns true if the module has been correctly initialized
    *  \return true if module has been initialized, false otherwise
@@ -162,6 +168,12 @@ class Module {
    */
   void Reset();
 
+  /*! \brief Provide a pointer to the global parameters store.
+   *
+
+   */
+  void SetGlobalParameters();
+
   /*! \brief Return a pointer to the output SignalBank_ for this class.
    *  \return pointer to the SignalBank that this module uses to store its
    * output.
@@ -199,6 +211,7 @@ class Module {
   set<Module*> targets_;
   SignalBank output_;
   Parameters* parameters_;
+  Parameters* global_parameters_;
 
   string module_identifier_;
   string module_type_;

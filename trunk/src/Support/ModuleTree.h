@@ -28,10 +28,11 @@
 #include <hash_map>
 #include <string>
 
-#include "Support/Parameters.h"
-
 namespace aimc {
 using std::string;
+class Module;
+class Parameters;
+
 class ModuleTree {
  public:
   bool ParseConfigFile(const string &filename);
@@ -44,9 +45,10 @@ class ModuleTree {
     return output_filename_prefix_;
   }
  private:
-  Paramters parameters_;
+  Paramters config_;
   string output_filename_prefix_;
   hash_map<string, scoped_ptr<Module> > modules_;
+  hash_map<string, scoped_ptr<Parameters> > parameters_;
   string root_name_;
   DISALLOW_COPY_AND_ASSIGN(ModuleTree);
 };
