@@ -52,9 +52,13 @@ void ModuleGammatone::ResetInternal() {
   state_3_.resize(num_channels_);
   state_4_.resize(num_channels_);
   for (int i = 0; i < num_channels_; ++i) {
+    state_1_[i].clear();
     state_1_[i].resize(3, 0.0f);
+    state_2_[i].clear();
     state_2_[i].resize(3, 0.0f);
+    state_3_[i].clear();
     state_3_[i].resize(3, 0.0f);
+    state_4_[i].clear();
     state_4_[i].resize(3, 0.0f);
   }
 }

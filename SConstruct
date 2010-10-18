@@ -38,6 +38,7 @@ common_sources = ['Support/Common.cc',
                   'Support/Parameters.cc',
                   'Support/Module.cc',
                   'Support/ModuleFactory.cc',
+                  'Support/ModuleTree.cc',
                   'Modules/Input/ModuleFileInput.cc',
                   'Modules/BMM/ModuleGammatone.cc',
                   'Modules/BMM/ModulePZFC.cc',
@@ -50,26 +51,28 @@ common_sources = ['Support/Common.cc',
                   'Modules/Profile/ModuleScaler.cc',
                   'Modules/Output/FileOutputHTK.cc',
                   'Modules/Output/FileOutputAIMC.cc',
-                  'Modules/Features/ModuleGaussians.cc']
+                  'Modules/Features/ModuleGaussians.cc',
+                  'Modules/Features/ModuleDCT.cc' ]
                   
 graphics_sources = [ 'Modules/Output/Graphics/GraphAxisSpec.cc',
                      'Modules/Output/Graphics/GraphicsView.cc',
                      'Modules/Output/Graphics/GraphicsViewTime.cc',
+                     'Modules/Output/Graphics/Scale/Scale.cc',
                      'Modules/Output/Graphics/Devices/GraphicsOutputDevice.cc',
                      'Modules/Output/Graphics/Devices/GraphicsOutputDeviceCairo.cc',
-                     'Modules/Output/Graphics/Devices/GraphicsOutputDeviceMovie.cc',
-                     'Modules/Output/Graphics/Devices/GraphicsOutputDeviceMovieDirect.cc' ]
+                     'Modules/Output/Graphics/Devices/GraphicsOutputDeviceMovie.cc',]
+                     #'Modules/Output/Graphics/Devices/GraphicsOutputDeviceMovieDirect.cc' ]
 graphics_libraries = [ 'cairo', 
-                       '' ]
+                        ]
 
 # List of currently incative source files which we may want to add back in
 sources_disabled = ['Modules/SNR/ModuleNoise.cc',
                     ]
 
 # File which contains main()
-sources = common_sources + ['Main/AIMCopy_SSI_Features_v3.cc']
+#sources = common_sources + graphics_sources + ['Main/AIMCopy_SSI_Features_v3.cc']
 #sources = common_sources + ['Main/AIMCopy_SSI_Features_v4_PZFC.cc']
-#sources = common_sources + ['Main/AIMCopy_SSI_Features_v5_smooth_nap.cc']
+sources = common_sources + graphics_sources + ['Main/AIMCopy.cc']
 #sources = common_sources + ['Main/aimc.cc']
 
 # Test sources
@@ -134,7 +137,7 @@ if compiler == 'msvc':
 elif compiler == 'gcc':
   env['STRIP'] = 'strip'
   env.AppendUnique(CPPFLAGS = ['-Wall'])
-  env.AppendUnique(CPPFLAGS = ['-O3', '-fomit-frame-pointer'])
+  env.AppendUnique(CPPFLAGS = ['-O2',])# '-fomit-frame-pointer'])
   if env['symbols']:
     env.AppendUnique(CPPFLAGS = ['-g'])
   if env['mingw']:
@@ -170,6 +173,7 @@ env.Append(CPPPATH = ['#src'])
 
 # Dependencies
 deplibs = ['sndfile']
+deplibs += graphics_libraries
 
 if target_platform != 'win32':
   for depname in deplibs:

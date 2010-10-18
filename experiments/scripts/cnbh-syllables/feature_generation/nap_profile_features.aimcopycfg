@@ -10,7 +10,7 @@ module2.id = gt
 module2.child1 = SmoothNAP
 
 module3.name = SmoothNAP
-module3.id = nap
+module3.id = hcl
 module3.parameters = <<<ENDPARAMS
 nap.lowpass_cutoff = 100.0
 ENDPARAMS
@@ -27,5 +27,5 @@ module5.name = SmoothNAPFeatures
 module5.id = gaussians
 module5.child1 = SmoothNAPOutput
 
-moudule6.name = SmoothNAPOutput
+module6.name = SmoothNAPOutput
 module6.id = htk_out

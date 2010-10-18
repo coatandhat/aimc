@@ -25,7 +25,7 @@
 namespace aimc {
 
 GraphicsView::GraphicsView(Parameters *parameters) : Module(parameters) {
-  module_description_ = "";
+  module_description_ = "Graphics output.";
   module_identifier_ = "graphics";
   module_type_ = "output";
   module_version_ = "$Id: $";

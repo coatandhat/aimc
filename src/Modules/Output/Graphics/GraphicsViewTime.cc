@@ -36,6 +36,10 @@ namespace aimc {
 
 GraphicsViewTime::GraphicsViewTime(Parameters *pParam)
   : GraphicsView(pParam) {
+    module_description_ = "Graphics output.";
+    module_identifier_ = "graphics_time";
+    module_type_ = "output";
+    module_version_ = "$Id: $";
 }
 
 GraphicsViewTime *GraphicsViewTime::Clone(GraphicsOutputDevice *pDev) {
@@ -75,11 +79,11 @@ void GraphicsViewTime::PlotAxes(const SignalBank &bank) {
            m_pAxisFreq->m_pScale->getName());
   m_pDev->gText2f(0.0025f, 0.35f, sTxt, true);
   snprintf(sTxt, sizeof(sTxt) / sizeof(sTxt[0]),
-	   _S("%s [%.2f..%.2f ms, %s scale]"),
-	   m_pAxisX->m_sLabel ? m_pAxisX->m_sLabel : "",
-	   m_pAxisX->m_fMin,
-	   m_pAxisX->m_fMax,
-	   m_pAxisX->m_pScale->getName());
+	         _S("%s [%.2f..%.2f ms, %s scale]"),
+           m_pAxisX->m_sLabel ? m_pAxisX->m_sLabel : "",
+           m_pAxisX->m_fMin,
+           m_pAxisX->m_fMax,
+           m_pAxisX->m_pScale->getName());
  
   m_pDev->gText2f(m_fMarginLeft, 0.0025f, sTxt, false);
 
