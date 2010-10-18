@@ -43,50 +43,166 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "Modules/Input/ModuleFileInput.h"
-#include "Modules/BMM/ModuleGammatone.h"
-#include "Modules/BMM/ModulePZFC.h"
-#include "Modules/NAP/ModuleHCL.h"
-#include "Modules/Strobes/ModuleParabola.h"
-#include "Modules/SAI/ModuleSAI.h"
-#include "Modules/SSI/ModuleSSI.h"
-#include "Modules/Profile/ModuleSlice.h"
-#include "Modules/Profile/ModuleScaler.h"
-#include "Modules/Features/ModuleGaussians.h"
-#include "Modules/Output/FileOutputHTK.h"
 #include "Support/Common.h"
 #include "Support/FileList.h"
+#include "Support/ModuleTree.h"
 #include "Support/Parameters.h"
 
+namespace aimc {
 using std::ofstream;
 using std::pair;
 using std::vector;
 using std::string;
-int main(int argc, char* argv[]) {
-  string sound_file;
-  string data_file;
-  string config_file;
-  string script_file;
-  bool write_data = false;
-  bool print_version = false;
+class AIMCopy {
+ public:
+  AIMCopy();
+  
+  bool Initialize(string script_filename,
+                  string config_filename);
+  
+  bool WriteConfig(string config_dump_filename,
+                   string config_graph_filename);
+  
+  bool Process();
+  
+ private:
+  bool initialized_;
+  Parameters global_parameters_;
+  ModuleTree tree_;
+  vector<pair<string, string> > script_;
+};
 
-  string version_string(
+
+AIMCopy::AIMCopy() : initialized_(false) {
+  
+}
+  
+bool AIMCopy::Initialize(string script_filename,
+                         string config_filename) {
+  
+  LOG_INFO("AIMCopy: Loading script");
+  script_ = FileList::Load(script_filename);
+  if (script_.size() == 0) {
+   LOG_ERROR("No data read from script file %s", script_filename.c_str());
+   return false;
+  }
+    
+  LOG_INFO("AIMCopy: Loading configuration");
+  if (!tree_.LoadConfigFile(config_filename)) {
+    LOG_ERROR(_T("Failed to load configuration file"));
+    return false;
+  }
+  LOG_INFO("AIMCopy: Successfully loaded configuration");
+  initialized_ = true;
+  return true;
+}
+  
+bool AIMCopy::WriteConfig(string config_dump_filename,
+                          string config_graph_filename) {
+  if (!initialized_) {
+    return false;
+  }
+  
+  if (script_.size() > 0) {
+    global_parameters_.SetString("input_filename", script_[0].first.c_str());
+    global_parameters_.SetString("output_filename_base", script_[0].second.c_str());
+    LOG_INFO("AIMCopy: Initializing tree for initial parameter write.");
+    if (!tree_.Initialize(&global_parameters_)) {
+      LOG_ERROR(_T("Failed to initialize tree."));
+      return false;
+    }
+  } else {
+    LOG_ERROR(_T("No input files in script."));
+    return false;
+  }
+  
+  if (!config_dump_filename.empty()) {
+    LOG_INFO("AIMCopy: Dumping configuration.");
+    ofstream output_stream;
+    output_stream.open(config_dump_filename.c_str());
+    if (output_stream.fail()) {
+      LOG_ERROR(_T("Failed to open configuration file %s for writing."),
+                config_dump_filename.c_str());
+      return false;
+    }
+
+    time_t rawtime;
+    struct tm * timeinfo;
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+    output_stream << "# AIM-C AIMCopy\n";
+    output_stream << "# Run at: " << asctime(timeinfo);
+    char * descr = getenv("USER");
+    if (descr) {
+      output_stream << "# By user: " << descr <<"\n";
+    }      
+    tree_.PrintConfiguration(output_stream);
+    output_stream.close();
+  }
+    
+  if (!config_graph_filename.empty()) {
+    ofstream output_stream;
+    output_stream.open(config_graph_filename.c_str());
+    if (output_stream.fail()) {
+      LOG_ERROR(_T("Failed to open graph file %s for writing."),
+                config_graph_filename.c_str());
+      return false;
+    }
+    tree_.MakeDotGraph(output_stream);
+    output_stream.close();
+  }
+  return true;
+}
+  
+bool AIMCopy::Process() {
+  if (!initialized_) {
+    return false;
+  }
+  for (unsigned int i = 0; i < script_.size(); ++i) {
+    global_parameters_.SetString("input_filename", script_[i].first.c_str());
+    global_parameters_.SetString("output_filename_base", script_[i].second.c_str());
+    if (!tree_.Initialize(&global_parameters_)) {
+      return false;
+    }
+    aimc::LOG_INFO(_T("%s -> %s"),
+                  script_[i].first.c_str(),
+                  script_[i].second.c_str());
+    tree_.Reset();
+    tree_.Process();
+  }
+  return true;
+}
+
+}  // namespace aimc
+
+int main(int argc, char* argv[]) {
+  std::string data_file;
+  std::string dot_file;
+  std::string config_file;
+  std::string script_file;
+
+  const std::string version_string(
     " AIM-C AIMCopy\n"
     "  (c) 2006-2010, Thomas Walters and Willem van Engen\n"
     "  http://www.acoustiscale.org/AIMC/\n"
-    "\n");
+    "\n");                
+    
+  const std::string usage_string(
+    "AIMCopy is intended as a drop-in replacement for HTK's HCopy\n"
+    "command. It is used for making features from audio files for\n"
+    "use with HTK.\n"
+    "Usage: \n"
+    "  <flag>  <meaning>                                 <default>\n"
+    "  -A      Print command line arguments              off\n"
+    "  -C cf   Set config file to cf                     none\n"
+    "  -S f    Set script file to f                      none\n"
+    "  -V      Print version information                 off\n"
+    "  -D d    Write complete parameter set to file d    none\n"    
+    "  -G g    Write graph to file g                     none\n");
 
   if (argc < 2) {
-    printf("%s", version_string.c_str());
-    printf("AIMCopy is intended as a drop-in replacement for HTK's HCopy\n");
-    printf("command. It is used for making features from audio files for\n");
-    printf("use with HTK.\n");
-    printf("Usage: \n");
-    printf("  -A      Print command line arguments  off\n");
-    printf("  -C cf   Set config file to cf         none\n");
-    printf("  -S f    Set script file to f          none\n");
-    printf("  -V      Print version information     off\n");
-    printf("  -D g    Write configuration data to g none\n");
+    std::cout << version_string.c_str();
+    std::cout << usage_string.c_str();
     return -1;
   }
 
@@ -121,95 +237,42 @@ int main(int argc, char* argv[]) {
         return(-1);
       }
       data_file = argv[i];
-      write_data = true;
       continue;
     }
-    if (strcmp(argv[i],"-V") == 0) {
-      print_version = true;
+    if (strcmp(argv[i],"-G") == 0) {
+      if (++i >= argc) {
+        aimc::LOG_ERROR(_T("Graph file name expected after -D"));
+        return(-1);
+      }
+      dot_file = argv[i];
+      continue;
+    }
+   if (strcmp(argv[i],"-V") == 0) {
+      std::cout << version_string;
       continue;
     }
     aimc::LOG_ERROR(_T("Unrecognized command-line argument: %s"), argv[i]);
   }
 
-  if (print_version)
-    printf("%s", version_string.c_str());
-
-  aimc::Parameters params;
-
-  if (!params.Load(config_file.c_str())) {
-    aimc::LOG_ERROR(_T("Couldn't load parameters from file %s"),
-                    config_file.c_str());
+  std::cout << "Configuration file: " << config_file << std::endl;
+  std::cout << "Script file: " << script_file << std::endl;
+  std::cout << "Data file: " << data_file << std::endl;
+  std::cout << "Graph file: " << dot_file << std::endl;
+  
+  aimc::AIMCopy processor;
+  aimc::LOG_INFO("main: Initializing...");
+  if (!processor.Initialize(script_file, config_file)) {
     return -1;
   }
-
-  vector<pair<string, string> > file_list = aimc::FileList::Load(script_file);
-  if (file_list.size() == 0) {
-    aimc::LOG_ERROR("No data read from file %s", script_file.c_str());
+  
+  aimc::LOG_INFO("main: Writing confg...");
+  if (!processor.WriteConfig(data_file, dot_file)) {
     return -1;
   }
-
-  // Set up AIM-C processor here
-  aimc::ModuleFileInput input(&params);
-  aimc::ModuleGammatone bmm(&params);
-  aimc::ModuleHCL nap(&params);
-  aimc::ModuleSlice profile(&params);
-  aimc::ModuleScaler scaler(&params);
-  aimc::ModuleGaussians features(&params);
-  aimc::FileOutputHTK output(&params);
-
-  input.AddTarget(&bmm);
-  bmm.AddTarget(&nap);
-  nap.AddTarget(&profile);
-  profile.AddTarget(&scaler);
-  scaler.AddTarget(&features);
-  features.AddTarget(&output);
-
-  if (write_data) {
-    ofstream outfile(data_file.c_str());
-    if (outfile.fail()) {
-      aimc::LOG_ERROR("Couldn't open data file %s for writing",
-                      data_file.c_str());
-      return -1;
-    }
-    time_t rawtime;
-    struct tm * timeinfo;
-    time(&rawtime);
-    timeinfo = localtime(&rawtime);
-
-
-    outfile << "# AIM-C AIMCopy\n";
-    outfile << "# Run on: " << asctime(timeinfo);
-    char * descr = getenv("USER");
-    if (descr) {
-      outfile << "# By user: " << descr <<"\n";
-    }
-    outfile << "# Module chain: file_input->gt->hcl->slice->scaler->";
-    outfile << "gaussians->out_htk\n";
-    outfile << "# Module versions:\n";
-    outfile << "# " << input.id() << " : " << input.version() << "\n";
-    outfile << "# " << bmm.id() << " : " << bmm.version() << "\n";
-    outfile << "# " << nap.id() << " : " << nap.version() << "\n";
-    outfile << "# " << profile.id() << " : " << profile.version() << "\n";
-    outfile << "# " << scaler.id() << " : " << scaler.version() << "\n";
-    outfile << "# " << features.id() << " : " << features.version() << "\n";
-    outfile << "# " << output.id() << " : " << output.version() << "\n";
-    outfile << "#\n";
-    outfile << "# Parameters:\n";
-    outfile << params.WriteString();
-    outfile.close();
-  }
-
-  for (unsigned int i = 0; i < file_list.size(); ++i) {
-    aimc::LOG_INFO(_T("In:  %s"), file_list[i].first.c_str());
-    aimc::LOG_INFO(_T("Out: %s"), file_list[i].second.c_str());
-
-    output.OpenFile(file_list[i].second.c_str(), 10.0f);
-    if (input.LoadFile(file_list[i].first.c_str())) {
-      input.Process();
-    } else {
-      printf("LoadFile failed for file %s\n", file_list[i].first.c_str());
-    }
-    input.Reset();
+  
+  aimc::LOG_INFO("main: Processing...");
+  if (!processor.Process()) {
+    return -1;
   }
 
   return 0;

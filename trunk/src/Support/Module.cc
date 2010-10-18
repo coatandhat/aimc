@@ -31,6 +31,7 @@
 namespace aimc {
 using std::pair;
 using std::ostream;
+using std::endl;
 Module::Module(Parameters *parameters) {
   initialized_ = false;
   targets_.clear();
@@ -39,6 +40,8 @@ Module::Module(Parameters *parameters) {
   module_type_ = "MODULE TYPE NOT SET";
   module_description_ = "MODULE DESCRIPTION NOT SET";
   module_version_ = "MODULE VERSION NOT SET";
+  instance_name_ = "";
+  done_ = false;
 };
 
 Module::~Module() {
@@ -46,6 +49,9 @@ Module::~Module() {
 
 bool Module::Initialize(const SignalBank &input,
                         Parameters *global_parameters) {
+  if (global_parameters == NULL) {
+    return false;
+  }
   global_parameters_ = global_parameters;
   // Validate the input
   if (!input.Validate()) {
@@ -73,7 +79,7 @@ bool Module::Initialize(const SignalBank &input,
     // this is not checked.
     set<Module*>::const_iterator it;
     for (it = targets_.begin(); it != targets_.end(); ++it) {
-      if (!(*it)->initialized())
+      //if (!(*it)->initialized())
         if (!(*it)->Initialize(output_, global_parameters_))
           return false;
     }
@@ -106,8 +112,8 @@ bool Module::AddTarget(Module* target_module) {
     ret = targets_.insert(target_module);
     result = ret.second;
     if (result) {
-      if(initialized_) {
-        if(output_.initialized()) {
+      if (initialized_) {
+        if (output_.initialized()) {
           if (!target_module->initialized()) {
             target_module->Initialize(output_, global_parameters_);
           }
@@ -141,26 +147,37 @@ void Module::PushOutput() {
   }
 }
 
-void Module::PrintTargets(ostream &out) {
-  out << id();
-  if (targets_.size() > 0) {
-    out << "->(";
-    set<Module*>::const_iterator it;
-    for (it = targets_.begin(); it != targets_.end(); ++it) {
-      (*it)->PrintTargets(out);
-      if (targets_.size() > 1) {
-         out << ",";
-      }
-    }
-    out << ")";
+void Module::PrintTargetsForDot(ostream &out) {
+  //string parameters_string = parameters_->WriteString();
+  out << "  " << instance_name() << " [shape = none, margin = 0, label = <" << endl;
+  out << "  <TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\"> " << endl;
+  out << " <TR><TD>" << instance_name() << "</TD></TR><TR><TD>" << id();
+  out << "</TD></TR></TABLE>>]" << ";" << endl;
+  // <TD><TR>" << parameters_string << "</TD></TR>
+  set<Module*>::const_iterator it;
+  for (it = targets_.begin(); it != targets_.end(); ++it) {
+    out << "  " << instance_name() << " -> " << (*it)->instance_name() << ";" << endl;
+    (*it)->PrintTargetsForDot(out);
   }
 }
 
-void Module::PrintVersions(ostream &out) {
-  out << version() << "\n";
+void Module::PrintTargets(ostream &out) {
   set<Module*>::const_iterator it;
   for (it = targets_.begin(); it != targets_.end(); ++it) {
-     (*it)->PrintVersions(out);
+    out << "  " << instance_name() << " -> " << (*it)->instance_name() << ";" << endl;
+    (*it)->PrintTargets(out);
+  }
+}
+
+void Module::PrintConfiguration(ostream &out) {
+  out << "# " << id() << endl;
+  out << "# " << instance_name() << endl;
+  out << "# " << version() << endl;
+  string parameters_string = parameters_->WriteString();
+  out << parameters_string << endl;
+  set<Module*>::const_iterator it;
+  for (it = targets_.begin(); it != targets_.end(); ++it) {
+     (*it)->PrintConfiguration(out);
   }
 }
 }  // namespace aimc

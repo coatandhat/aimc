@@ -24,32 +24,47 @@
  *  \version \$Id: $
  */
 
-#include <boost/scoped_ptr.hpp>
-#include <hash_map>
+#include <iostream>
+#include <map>
 #include <string>
+
+#include "Support/Common.h"
+#include "Support/Module.h"
+#include "Support/Parameters.h"
+#include "Support/SignalBank.h"
+#include "Support/linked_ptr.h"
 
 namespace aimc {
 using std::string;
-class Module;
-class Parameters;
+using std::map;
+using std::ostream;
 
 class ModuleTree {
  public:
-  bool ParseConfigFile(const string &filename);
-  bool ParseConfigText(const string &config_text);
-  string GetFullConfig()
+  ModuleTree();
+  bool LoadConfigFile(const string &filename);
+  bool LoadConfigText(const string &config_text);
+  string GetFullConfig();
+  bool Initialize(Parameters *global_parameters);
+  void Reset();
+  void PrintConfiguration(ostream &out);
+  void Process();
+  void MakeDotGraph(ostream &out);
   void set_output_filename_prefix(const string &prefix) {
     output_filename_prefix_ = prefix;
-  }
+  };
   string output_filename_prefix() {
     return output_filename_prefix_;
-  }
+  };
  private:
-  Paramters config_;
+  bool ConstructTree();
+  Parameters config_;
+  SignalBank s_;
   string output_filename_prefix_;
-  hash_map<string, scoped_ptr<Module> > modules_;
-  hash_map<string, scoped_ptr<Parameters> > parameters_;
-  string root_name_;
+  map<string, linked_ptr<Module> > modules_;
+  Module *root_module_;
+  map<string, linked_ptr<Parameters> > parameters_;
+  bool initialized_;
   DISALLOW_COPY_AND_ASSIGN(ModuleTree);
 };
 }  // namespace aimc

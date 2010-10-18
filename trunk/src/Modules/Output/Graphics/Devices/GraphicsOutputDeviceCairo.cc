@@ -263,7 +263,7 @@ void GraphicsOutputDeviceCairo::gText3f(float x,
                                         float z,
                                         const char *sStr,
                                         bool bRotated) {
-  cairo_text_extents_t te;
+  //cairo_text_extents_t te;
   if (bRotated) {
     cairo_rotate(m_cCr, M_PI/2);
     cairo_move_to(m_cCr, x ,1-y);

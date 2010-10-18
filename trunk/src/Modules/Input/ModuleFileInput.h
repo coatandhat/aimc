@@ -39,23 +39,6 @@ class ModuleFileInput : public Module {
   explicit ModuleFileInput(Parameters *pParam);
   virtual ~ModuleFileInput();
 
-  /*! \brief Initializes this input device using an audio file
-   *  \param sFilename Path of the file to load
-   *  \return true on success, false on error
-   */
-  bool LoadFile(const char *sFilename);
-
-  /*! \brief Process the loaded file.
-   */
-  void Process();
-
-  /*! \brief Dummy Initialize function. Call LoadFile instead.
-   */
-  virtual bool Initialize(const SignalBank &input);
-
-  /*! \brief Dummy funciton to comply with the Module specification. Gives an
-   *  error message when called.
-   */
   virtual void Process(const SignalBank &input);
 
  private:

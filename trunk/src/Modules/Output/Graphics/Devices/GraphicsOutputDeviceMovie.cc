@@ -203,7 +203,7 @@ void GraphicsOutputDeviceMovie::Stop() {
     LOG_ERROR(_T("Couldn't remove files in temporary directory."));
     return;
   }
-  while (dirent = readdir(dir)) {
+  while ((dirent = readdir(dir))) {
     snprintf(sCmdLine,
              sizeof(sCmdLine)/sizeof(sCmdLine[0]),
              "%s%s",

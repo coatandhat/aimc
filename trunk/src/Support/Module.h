@@ -168,12 +168,6 @@ class Module {
    */
   void Reset();
 
-  /*! \brief Provide a pointer to the global parameters store.
-   *
-
-   */
-  void SetGlobalParameters();
-
   /*! \brief Return a pointer to the output SignalBank_ for this class.
    *  \return pointer to the SignalBank that this module uses to store its
    * output.
@@ -181,8 +175,8 @@ class Module {
   const SignalBank* GetOutputBank() const;
 
   void PrintTargets(ostream &out);
-
-  void PrintVersions(ostream &out);
+  void PrintTargetsForDot(ostream &out);
+  void PrintConfiguration(ostream &out);
 
   string version() const {
     return module_version_;
@@ -199,6 +193,18 @@ class Module {
   string type() const {
     return module_type_;
   }
+  
+  bool done() {
+    return done_;
+  }
+  
+  void set_instance_name(string instance_name) {
+    instance_name_ = instance_name;
+  }
+  
+  string instance_name() {
+    return instance_name_;
+  }
 
  protected:
   void PushOutput();
@@ -208,6 +214,7 @@ class Module {
   virtual bool InitializeInternal(const SignalBank &input) = 0;
 
   bool initialized_;
+  bool done_;
   set<Module*> targets_;
   SignalBank output_;
   Parameters* parameters_;
@@ -217,6 +224,8 @@ class Module {
   string module_type_;
   string module_description_;
   string module_version_;
+  
+  string instance_name_;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(Module);

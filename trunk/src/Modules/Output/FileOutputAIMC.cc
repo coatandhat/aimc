@@ -42,7 +42,7 @@
 namespace aimc {
 FileOutputAIMC::FileOutputAIMC(Parameters *params) : Module(params) {
   module_description_ = "File output in AIMC format";
-  module_identifier_ = "htk_out";
+  module_identifier_ = "aimc_out";
   module_type_ = "output";
   module_version_ = "$Id: FileOutputAIMC.cc 51 2010-03-30 22:06:24Z tomwalters $";
 

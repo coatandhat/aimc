@@ -28,10 +28,12 @@
 #ifndef AIMC_MODULES_OUTPUT_HTK_H_
 #define AIMC_MODULES_OUTPUT_HTK_H_
 
+#include <string>
+
 #include "Support/Module.h"
 #include "Support/SignalBank.h"
 
-// Defines taken from HTKwrite.c and The HTK Book
+// Defines from HTKwrite.c and The HTK Book
 #define H_WAVEFORM    0  // sampled waveform
 #define H_LPC         1  // linear prediction filter coefficients
 #define H_LPREFC      2  // linear prediction reflection coefficients
@@ -69,6 +71,7 @@
 ((((uint32_t) n) >> 24) & 0x000000FF) )
 
 namespace aimc {
+using std::string;
 class FileOutputHTK : public Module {
  public:
   /*! \brief Create a new file output for an HTK format file. Use of this 
@@ -82,7 +85,6 @@ class FileOutputHTK : public Module {
    *  If the file exists it will be overwritten
    *  \return Returns true on success of initialization.
    */
-  bool OpenFile(const char *filename, float frame_period_ms);
   bool CloseFile();
   virtual void Process(const SignalBank &input);
  private:
@@ -104,10 +106,12 @@ class FileOutputHTK : public Module {
   /*! \brief Count of the number of samples in the file, written on close
    */
   int sample_count_;
+  string file_suffix_;
 
   int channel_count_;
   int buffer_length_;
   float frame_period_ms_;
+  int previous_start_time_;
 };
 }  // namespace aimc
 

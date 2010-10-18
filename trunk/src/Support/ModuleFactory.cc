@@ -15,30 +15,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "Modules/Input/ModuleFileInput.h"
+#include "Modules/Features/ModuleGaussians.h"
+#include "Modules/Features/ModuleDCT.h"
 #include "Modules/BMM/ModuleGammatone.h"
 #include "Modules/BMM/ModulePZFC.h"
+#include "Modules/Input/ModuleFileInput.h"
 #include "Modules/NAP/ModuleHCL.h"
-#include "Modules/Strobes/ModuleParabola.h"
-#include "Modules/SAI/ModuleSAI.h"
-#include "Modules/SSI/ModuleSSI.h"
+#include "Modules/Output/FileOutputHTK.h"
+#include "Modules/Output/FileOutputAIMC.h"
+#include "Modules/Output/Graphics/GraphicsViewTime.h"
 #include "Modules/Profile/ModuleSlice.h"
 #include "Modules/Profile/ModuleScaler.h"
-//#include "Modules/Features/ModuleGaussians.h"
-#include "Modules/Output/FileOutputHTK.h"
+#include "Modules/SAI/ModuleSAI.h"
+#include "Modules/SSI/ModuleSSI.h"
+#include "Modules/SNR/ModuleNoise.h"
+#include "Modules/Strobes/ModuleParabola.h"
+#include "Modules/Strobes/ModuleLocalMax.h"
 
 #include "Support/ModuleFactory.h"
 
 namespace aimc {
 Module* ModuleFactory::Create(string module_name_, Parameters* params) {
+  if (module_name_.compare("gaussians") == 0)
+    return new ModuleGaussians(params);
+
+  if (module_name_.compare("dct") == 0)
+    return new ModuleDCT(params);
+
   if (module_name_.compare("gt") == 0)
     return new ModuleGammatone(params);
 
   if (module_name_.compare("pzfc") == 0)
     return new ModulePZFC(params);
-
-  //if (module_name_.compare("gaussians") == 0)
-  //  return new ModuleGaussians(params);
 
   if (module_name_.compare("file_input") == 0)
     return new ModuleFileInput(params);
@@ -48,6 +56,12 @@ Module* ModuleFactory::Create(string module_name_, Parameters* params) {
 
   if (module_name_.compare("htk_out") == 0)
     return new FileOutputHTK(params);
+
+  if (module_name_.compare("aimc_out") == 0)
+    return new FileOutputAIMC(params);
+
+  if (module_name_.compare("graphics_time") == 0)
+    return new GraphicsViewTime(params);
 
   if (module_name_.compare("scaler") == 0)
     return new ModuleScaler(params);
@@ -63,6 +77,9 @@ Module* ModuleFactory::Create(string module_name_, Parameters* params) {
 
   if (module_name_.compare("parabola") == 0)
     return new ModuleParabola(params);
+
+  if (module_name_.compare("local_max") == 0)
+    return new ModuleLocalMax(params);
 
   return NULL;
 }
