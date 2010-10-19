@@ -6,19 +6,18 @@
 AIM-C is built using the [http://www.scons.org/ SCons] build system. SCons is multiplatform, and is based on Python. 
 
 = Build Environment =
-One of the major requirements of AIM-C is that it is written, as far as possible, in standard C++ (including some heavy dependence on the standard library). This means that (in theory at least) it will compile under any reasonably sane C++ compiler. In practice, so far development has taken place mainly using GCC on Mac OS 10.6.
+One of the major requirements of AIM-C is that it is written, as far as possible, in standard C++ (including some heavy dependence on the standard template library). This means that (in theory at least) it will compile under any reasonably sane C++ compiler. In practice, so far development has taken place mainly using GCC on Mac OS 10.6.
 
 = External Dependencies =
-None as yet.
+Current dependencies are [http://www.mega-nerd.com/libsndfile/ libsndfile] and [http://cairographics.org cairo] for audio input and graphics output respectively. [http://www.portaudio.com/ PortAudio] is a requirement for live audio input. This will be ported over soon. The boost c++ extensions are also required for the module that adds noise to the input.
 
-The project uses [http://code.jellycan.com/simpleini/ simpleini] version 4.12 for storing, parsing and writing out parameters files, but this file (and the UTF support code that it requires) is included in the source repository. 
+On Ubuntu, the necessary build tools and dependencies can be installed using the following command.
 
-The original command-line version of AIM-C had dependencies on
-  * [http://www.mega-nerd.com/libsndfile/ libsndfile] for audio file input.
-  * [http://www.portaudio.com/ PortAudio] for live audio input.
-  * [http://www.fftw.org/ FFTW3] for FFTs
+{{{
+sudo apt-get install libsndfile-dev cairo-dev 
+}}}
 
-The libsndfile and portaudio input classes will eventually be ported over to the current version. The dependence on FFTW will likely be dropped, as the FIR gammatone filterbank from the original version is the only filterbank that uses FFT routines, and a basic FFT will likely be fast enough in place of FFTW.
+The project also uses [http://code.jellycan.com/simpleini/ simpleini] version 4.12 for storing, parsing and writing out parameters files, but this file (and the UTF support code that it requires) is included in the source repository. 
 
 = Build Tools =
 == Building ==
