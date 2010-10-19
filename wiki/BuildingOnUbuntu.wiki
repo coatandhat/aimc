@@ -1,0 +1,12 @@
+#summary Quick script to get the sources, install the dependencies and build AIM-C on Ubuntu
+
+Quick script to get the sources, install the dependencies and build AIM-C on Ubuntu. Tested on a clean install of Ubuntu 10.10.
+
+{{{
+#!/bin/bash
+sudo apt-get -y install libsndfile1-dev libcairo-dev subversion scons build-essential libboost-dev doxygen
+svn checkout http://aimc.googlecode.com/svn/trunk/ aimc-read-only
+cd aimc-read-only
+scons
+}}}
+
