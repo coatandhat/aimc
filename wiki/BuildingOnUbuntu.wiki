@@ -23,7 +23,7 @@ Building documentation
 
 {{{
 #!/bin/bash
-sudo apt-get -y install doxygen
+sudo apt-get -y install doxygen graphviz
 cd ~/aimc-read-only
 doxygen doc/Doxyfile
 }}}
