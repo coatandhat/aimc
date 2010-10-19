@@ -52,7 +52,8 @@ class Module {
  public:
   explicit Module(Parameters *parameters);
   virtual ~Module();
-  virtual bool Initialize(const SignalBank &input);
+  virtual bool Initialize(const SignalBank &input,
+                          Parameters *global_parameters);
   bool initialized() const;
   bool AddTarget(Module* target_module);
   bool RemoveTarget(Module* target_module);

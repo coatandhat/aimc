@@ -42,6 +42,7 @@ GraphicsOutputDeviceCairo::GraphicsOutputDeviceCairo(Parameters *pParam)
   m_iFileNumber = 0;
   m_iVertexType = VertexTypeNone;
   m_bUseMemoryBuffer=false;
+  m_pParam->DefaultString("output.img.format", ".png");
 }
 
 bool GraphicsOutputDeviceCairo::Initialize(const char *sDir) {
@@ -56,7 +57,7 @@ bool GraphicsOutputDeviceCairo::Initialize(const char *sDir) {
   if ( !OpenFile(0) ) {
     //! \todo Better error message that is more specific about the cause.
     LOG_ERROR(_T("Could not open output directory '%s' using graphics format '%s'."),
-      m_sDir, m_pParam->GetString("output.img.format") );
+      m_sDir, m_pParam->DefaultString("output.img.format", ".png") );
     return false;
   }
   CloseFile();
