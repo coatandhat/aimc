@@ -30,7 +30,7 @@ GraphicsView::GraphicsView(Parameters *parameters) : Module(parameters) {
   module_type_ = "output";
   module_version_ = "$Id: $";
   
-  m_pDev = NULL;
+  m_pDev = new GraphicsOutputDeviceCairo();
   m_bPlotLabels = false;
   m_pAxisX = new GraphAxisSpec();
   AIM_ASSERT(m_pAxisX);
@@ -40,7 +40,7 @@ GraphicsView::GraphicsView(Parameters *parameters) : Module(parameters) {
   AIM_ASSERT(m_pAxisFreq);
   initialized_ = true;
 
-  if (!m_pAxisY->Initialize(m_pParam,
+  if (!m_pAxisY->Initialize(parameters_,
                             _S("graph.y"),
                             -1,
                             1,
@@ -48,13 +48,13 @@ GraphicsView::GraphicsView(Parameters *parameters) : Module(parameters) {
     LOG_ERROR("Axis initialization failed");
     initialized_ = false;
   }
-  m_fMarginLeft = m_pParam->GetFloat(_S("graph.margin.left"));
-  m_fMarginRight = m_pParam->GetFloat(_S("graph.margin.right"));
-  m_fMarginTop = m_pParam->GetFloat(_S("graph.margin.top"));
-  m_fMarginBottom = m_pParam->GetFloat(_S("graph.margin.bottom"));
-  m_bPlotLabels = m_pParam->GetBool(_S("graph.plotlabels"));
+  m_fMarginLeft = parameters_->GetFloat(_S("graph.margin.left"));
+  m_fMarginRight = parameters_->GetFloat(_S("graph.margin.right"));
+  m_fMarginTop = parameters_->GetFloat(_S("graph.margin.top"));
+  m_fMarginBottom = parameters_->GetFloat(_S("graph.margin.bottom"));
+  m_bPlotLabels = parameters_->GetBool(_S("graph.plotlabels"));
 
-  const char *sGraphType = m_pParam->GetString(_S("graph.type"));
+  const char *sGraphType = parameters_->GetString(_S("graph.type"));
   if (strcmp(sGraphType, _S("line"))==0)
     m_iGraphType = GraphTypeLine;
   else if (strcmp(sGraphType, _S("colormap"))==0)
@@ -66,11 +66,11 @@ GraphicsView::GraphicsView(Parameters *parameters) : Module(parameters) {
     initialized_ = false;
   }
 
-  if (strcmp(m_pParam->GetString(_S("graph.mindistance")),"auto") == 0)
+  if (strcmp(parameters_->GetString(_S("graph.mindistance")),"auto") == 0)
     // -1 means detect later, based on type and Fire() argument
     m_fMinPlotDistance = -1;
   else
-    m_fMinPlotDistance = m_pParam->GetFloat(_S("graph.mindistance"));
+    m_fMinPlotDistance = parameters_->GetFloat(_S("graph.mindistance"));
 }
 
 GraphicsView::~GraphicsView() {
@@ -90,7 +90,7 @@ bool GraphicsView::InitializeInternal(const SignalBank &bank) {
 
   float y_min = bank.centre_frequency(0);
   float y_max = bank.centre_frequency(bank.channel_count() - 1);
-  if (!m_pAxisFreq->Initialize(m_pParam,
+  if (!m_pAxisFreq->Initialize(parameters_,
                                "graph.freq",
                                y_min,
                                y_max,
@@ -101,7 +101,7 @@ bool GraphicsView::InitializeInternal(const SignalBank &bank) {
 
   float x_min = 0.0;
   float x_max = 1000.0 * bank.buffer_length() / bank.sample_rate();
-  if (!m_pAxisX->Initialize(m_pParam,
+  if (!m_pAxisX->Initialize(parameters_,
                             "graph.x",
                             x_min,
                             x_max,

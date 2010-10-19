@@ -134,9 +134,6 @@ public:
   //! \brief Where to plot to
   GraphicsOutputDevice *m_pDev;
 
-  //! \brief Main parameter store
-  Parameters *m_pParam;
-
   //! \brief Axes specifications
   GraphAxisSpec *m_pAxisX, *m_pAxisY, *m_pAxisFreq;
 
