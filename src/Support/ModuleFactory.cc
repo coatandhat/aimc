@@ -16,7 +16,7 @@
 // limitations under the License.
 
 #include "Modules/Features/ModuleGaussians.h"
-#include "Modules/Features/ModuleDCT.h"
+//#include "Modules/Features/ModuleDCT.h"
 #include "Modules/BMM/ModuleGammatone.h"
 #include "Modules/BMM/ModulePZFC.h"
 #include "Modules/Input/ModuleFileInput.h"
@@ -39,8 +39,8 @@ Module* ModuleFactory::Create(string module_name_, Parameters* params) {
   if (module_name_.compare("gaussians") == 0)
     return new ModuleGaussians(params);
 
-  if (module_name_.compare("dct") == 0)
-    return new ModuleDCT(params);
+  //if (module_name_.compare("dct") == 0)
+  //  return new ModuleDCT(params);
 
   if (module_name_.compare("gt") == 0)
     return new ModuleGammatone(params);
