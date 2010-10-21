@@ -21,6 +21,7 @@
 
 #include "Modules/Output/Graphics/GraphicsView.h"
 #include "Modules/Output/Graphics/Devices/GraphicsOutputDevice.h"
+#include "Modules/Output/Graphics/Devices/GraphicsOutputDeviceMovie.h"
 
 namespace aimc {
 
@@ -30,7 +31,7 @@ GraphicsView::GraphicsView(Parameters *parameters) : Module(parameters) {
   module_type_ = "output";
   module_version_ = "$Id: $";
   
-  m_pDev = new GraphicsOutputDeviceCairo();
+  m_pDev = new GraphicsOutputDeviceMovie(parameters);
   m_bPlotLabels = false;
   m_pAxisX = new GraphAxisSpec();
   AIM_ASSERT(m_pAxisX);
@@ -48,13 +49,13 @@ GraphicsView::GraphicsView(Parameters *parameters) : Module(parameters) {
     LOG_ERROR("Axis initialization failed");
     initialized_ = false;
   }
-  m_fMarginLeft = parameters_->GetFloat(_S("graph.margin.left"));
-  m_fMarginRight = parameters_->GetFloat(_S("graph.margin.right"));
-  m_fMarginTop = parameters_->GetFloat(_S("graph.margin.top"));
-  m_fMarginBottom = parameters_->GetFloat(_S("graph.margin.bottom"));
-  m_bPlotLabels = parameters_->GetBool(_S("graph.plotlabels"));
+  m_fMarginLeft = parameters_->DefaultFloat(_S("graph.margin.left"), 0.05);
+  m_fMarginRight = parameters_->DefaultFloat(_S("graph.margin.right"), 0.005);
+  m_fMarginTop = parameters_->DefaultFloat(_S("graph.margin.top"), 0.005);
+  m_fMarginBottom = parameters_->DefaultFloat(_S("graph.margin.bottom"), 0.05);
+  m_bPlotLabels = parameters_->DefaultBool(_S("graph.plotlabels"), true);
 
-  const char *sGraphType = parameters_->GetString(_S("graph.type"));
+  const char *sGraphType = parameters_->DefaultString(_S("graph.type"), "line");
   if (strcmp(sGraphType, _S("line"))==0)
     m_iGraphType = GraphTypeLine;
   else if (strcmp(sGraphType, _S("colormap"))==0)
@@ -66,7 +67,7 @@ GraphicsView::GraphicsView(Parameters *parameters) : Module(parameters) {
     initialized_ = false;
   }
 
-  if (strcmp(parameters_->GetString(_S("graph.mindistance")),"auto") == 0)
+  if (strcmp(parameters_->DefaultString(_S("graph.mindistance"), "auto"),"auto") == 0)
     // -1 means detect later, based on type and Fire() argument
     m_fMinPlotDistance = -1;
   else
@@ -80,6 +81,9 @@ GraphicsView::~GraphicsView() {
 }
 
 void GraphicsView::ResetInternal() {
+  if (m_pDev != NULL) {
+    m_pDev->Stop();
+  }
 }
 
 bool GraphicsView::InitializeInternal(const SignalBank &bank) {
@@ -95,7 +99,7 @@ bool GraphicsView::InitializeInternal(const SignalBank &bank) {
                                y_min,
                                y_max,
                                Scale::SCALE_ERB)) {
-    LOG_ERROR("");
+    LOG_ERROR("Frequency axis init failed.");
     return false;
   }
 
@@ -106,17 +110,21 @@ bool GraphicsView::InitializeInternal(const SignalBank &bank) {
                             x_min,
                             x_max,
                             Scale::SCALE_LINEAR)) {
-     LOG_ERROR("");
+     LOG_ERROR("Time axis init failed.");
      return false;
   }
 
   /* Inform graphics output of maximum number of vertices between
    * gBegin*() and gEnd(), for any type of plot. Colormap needs most.
    */
-  if (!m_pDev->Initialize(std::max<int>(10, bank.buffer_length() * 2 + 2))) {
-    LOG_ERROR("");
+  LOG_INFO("Initializing graphics output device.");
+  
+  if (!m_pDev->Initialize(global_parameters_)) {
+    LOG_ERROR("Graphics output device init failed.");
     return false;
   }
+  m_pDev->Start();
+  previous_start_time_ = 0;
   return true;
 }
 
@@ -145,6 +153,11 @@ void GraphicsView::Process(const SignalBank &bank) {
     PlotData(bank[i], bank.sample_rate(), yOffs, heightMinMargin, xScaling);
   }
   m_pDev->gRelease();
+  
+  frame_rate_ = bank.sample_rate()
+                / (bank.start_time() - previous_start_time_);
+  previous_start_time_ = bank.start_time();
+  global_parameters_->SetFloat("frame_rate", frame_rate_);
 }
 
 void GraphicsView::SetAxisScale(Scale::ScaleType iHori,

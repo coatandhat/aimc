@@ -38,6 +38,7 @@ namespace std {
 #include "Modules/SSI/ModuleSSI.h"
 #include "Modules/Profile/ModuleSlice.h"
 #include "Modules/Profile/ModuleScaler.h"
+#include "Modules/Features/ModuleGaussians.h"
 %}
 
 %include "Support/Parameters.h"
@@ -77,3 +78,4 @@ class Module {
 %include "Modules/SSI/ModuleSSI.h"
 %include "Modules/Profile/ModuleSlice.h"
 %include "Modules/Profile/ModuleScaler.h"
+%include "Modules/Features/ModuleGaussians.h"

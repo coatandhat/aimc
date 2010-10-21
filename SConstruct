@@ -137,7 +137,7 @@ if compiler == 'msvc':
 elif compiler == 'gcc':
   env['STRIP'] = 'strip'
   env.AppendUnique(CPPFLAGS = ['-Wall'])
-  env.AppendUnique(CPPFLAGS = ['-O2',])# '-fomit-frame-pointer'])
+  env.AppendUnique(CPPFLAGS = ['-O1',])# '-fomit-frame-pointer'])
   if env['symbols']:
     env.AppendUnique(CPPFLAGS = ['-g'])
   if env['mingw']:

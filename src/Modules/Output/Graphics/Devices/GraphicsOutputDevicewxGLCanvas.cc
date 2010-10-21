@@ -269,7 +269,7 @@ void GraphicsOutputDevicewxGLCanvas::InitGL() {
     }  else if (strstr(extensions, "GL_EXT_compiled_vertex_array")) {
       m_glLockArraysEXT = (LOCAL_PFNGLLOCKARRAYSEXTPROC)GL_GET_PROC_ADDRESS("glLockArraysEXT");
       m_glUnlockArraysEXT = (LOCAL_PFNGLUNLOCKARRAYSEXTPROC)GL_GET_PROC_ADDRESS("glUnlockArraysEXT");
-      if(!m_glLockArraysEXT || !m_glUnlockArraysEXT)
+      if (!m_glLockArraysEXT || !m_glUnlockArraysEXT)
         AIM_ERROR(_T("OpenGL error on GL_EXT_compiled_vertex_array"));
       else
         m_bVertexArrayLock = true;

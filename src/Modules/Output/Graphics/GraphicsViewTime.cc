@@ -43,7 +43,7 @@ GraphicsViewTime::GraphicsViewTime(Parameters *pParam)
 }
 
 GraphicsViewTime *GraphicsViewTime::Clone(GraphicsOutputDevice *pDev) {
-  GraphicsViewTime *pView = new GraphicsViewTime(m_pParam);
+  GraphicsViewTime *pView = new GraphicsViewTime(parameters_);
   // Copy everything
   pView->m_pAxisX->SetDisplayRange(m_pAxisX->m_fMax, m_pAxisX->m_fMin);
   pView->m_pAxisX->SetDisplayScale(m_pAxisX->m_pScale->getType());
@@ -67,8 +67,8 @@ void GraphicsViewTime::PlotAxes(const SignalBank &bank) {
   m_pDev->gVertex2f(1.0f-m_fMarginRight, m_fMarginBottom);
   m_pDev->gEnd();
 
-  if (!m_bPlotLabels)
-    return;
+  //if (!m_bPlotLabels)
+  //  return;
 
   // Labels
   char sTxt[80];
@@ -88,9 +88,9 @@ void GraphicsViewTime::PlotAxes(const SignalBank &bank) {
   m_pDev->gText2f(m_fMarginLeft, 0.0025f, sTxt, false);
 
   // Frame time
-  //snprintf(sTxt, sizeof(sTxt)/sizeof(sTxt[0]), _S("t=%.0f ms"),
-  //         pBank->getSampleTime(0));
-  //m_pDev->gText2f(0.8f, 0.0025f, sTxt, false);
+  snprintf(sTxt, sizeof(sTxt)/sizeof(sTxt[0]), _S("t=%.0f ms"),
+           1000.0 * bank.start_time() / bank.sample_rate());
+  m_pDev->gText2f(0.8f, 0.0025f, sTxt, false);
 }
 
 void GraphicsViewTime::PlotData(const vector<float> &signal,

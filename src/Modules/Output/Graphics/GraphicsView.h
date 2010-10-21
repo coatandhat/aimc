@@ -163,6 +163,8 @@ public:
   float m_fPrevVal, m_fPrevX, m_fPrevY, m_fPrevHeight;
   //! \brief Number of times m_fValPrev was within range m_fMinPlotDistance
   int m_iPrevValEqual;
+  float frame_rate_;
+  int previous_start_time_;
 
   bool initialized_;
 };
