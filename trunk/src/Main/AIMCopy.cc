@@ -111,6 +111,7 @@ bool AIMCopy::WriteConfig(string config_dump_filename,
       LOG_ERROR(_T("Failed to initialize tree."));
       return false;
     }
+    tree_.Reset();
   } else {
     LOG_ERROR(_T("No input files in script."));
     return false;
@@ -167,8 +168,8 @@ bool AIMCopy::Process() {
     aimc::LOG_INFO(_T("%s -> %s"),
                   script_[i].first.c_str(),
                   script_[i].second.c_str());
-    tree_.Reset();
     tree_.Process();
+    tree_.Reset();
   }
   return true;
 }

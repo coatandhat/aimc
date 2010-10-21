@@ -20,8 +20,8 @@
 
 namespace aimc {
 
-GraphicsOutputDevice::GraphicsOutputDevice(Parameters *pParam) {
-  m_pParam = pParam;
+GraphicsOutputDevice::GraphicsOutputDevice(Parameters *parameters) {
+  parameters_ = parameters;
 }
 
 void GraphicsOutputDevice::gVertex3f(float x,
@@ -49,8 +49,8 @@ void GraphicsOutputDevice::gVertex2f(float x, float y) {
 
 void GraphicsOutputDevice::gText2f(float x,
                                    float y,
-                                   const char *sStr,
-                                   bool bRotated) {
-  gText3f(x, y, 0, sStr, bRotated);
+                                   const char *text_string,
+                                   bool rotated) {
+  gText3f(x, y, 0, text_string, rotated);
 }
 }  // namespace aimc

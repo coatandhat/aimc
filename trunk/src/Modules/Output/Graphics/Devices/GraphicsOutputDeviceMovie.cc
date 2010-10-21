@@ -50,84 +50,90 @@
 
 namespace aimc {
 
-GraphicsOutputDeviceMovie::GraphicsOutputDeviceMovie(Parameters *pParam)
-  : GraphicsOutputDeviceCairo(pParam) {  // or GraphicsOutputDevicePlotutils
-  m_sMovieFile[0] = '\0';
-  m_sSoundFile[0] = '\0';
+GraphicsOutputDeviceMovie::GraphicsOutputDeviceMovie(Parameters *parameters)
+  : GraphicsOutputDeviceCairo(parameters) {
+  sound_filename_.clear();
+  movie_filename_.clear();
 }
 
-bool GraphicsOutputDeviceMovie::Initialize(const char *sSoundFile,
-                                           const char *sMovieFile) {
+bool GraphicsOutputDeviceMovie::Initialize(Parameters *global_parameters) {
+  global_parameters_ = global_parameters;
+  sound_filename_ = global_parameters->GetString("input_filename");
+  string file_suffix = parameters_->DefaultString("filename_suffix", ".mov");
+  movie_filename_ = global_parameters->GetString("output_filename_base")
+                    + file_suffix;
+  
   FILE *f;
-  AIM_ASSERT(sSoundFile);
-  AIM_ASSERT(sMovieFile);
 
   // Check sound file exists
-  if ((f = fopen(sSoundFile, "r")) == NULL) {
+  if ((f = fopen(sound_filename_.c_str(), "r")) == NULL) {
     LOG_ERROR(_T("Couldn't open sound file '%s' for movie creation."),
-             sSoundFile);
+             sound_filename_.c_str());
+    sound_filename_.clear();
     return false;
   }
   fclose(f);
-  strcpy(m_sSoundFile, sSoundFile);
 
   // Check movie output file can be made
-  if ( (f=fopen(sMovieFile, "w"))==NULL ) {
+  if ((f = fopen(movie_filename_.c_str(), "w")) == NULL) {
     LOG_ERROR(_T("Couldn't open movie file '%s' to write to."),
-             sMovieFile);
+             movie_filename_.c_str());
+    movie_filename_.clear();
     return false;
   }
   fclose(f);
-  strcpy(m_sMovieFile, sMovieFile);
 
   // Get a temporary image output directory
   //! \warning Not really safe ... but windows has no mkdtemp()
   //! \todo Make build system check for mkdtemp() to use it when available. See TODO.txt.
-  char *sTmpDir = NULL;
 #ifdef _WINDOWS
-  if ((sTmpDir = _tempnam(NULL, AIM_NAME))
-      && _mkdir(sTmpDir) >= 0) {
-    strcpy(m_sDir, sTmpDir);
-    strcat(m_sDir, "\\"); // Make sure to end with trailing slash
-  } else
-#else
-  strcpy(m_sDir, "/tmp/"AIM_NAME"-movie.XXXXXX");
-  if (mkdtemp(m_sDir)) {
-    strcat(m_sDir, "/"); // Make sure to end with trailing slash
-  } else
-#endif
-  {
+  char *temp_dir = NULL;
+  if ((temp_dir = _tempnam(NULL, AIM_NAME))
+      && _mkdir(temp_dir) >= 0) {
+    directory_ = temp_dir;
+    directory_ += "\\"; // Make sure to end with trailing slash
+  } else  {
     LOG_ERROR(_T("Couldn't create a temporary directory for movie output."));
-    if (sTmpDir) free(sTmpDir);
+    if (temp_dir) {
+      free(temp_dir);
+    }
     return false;
   }
-  if (sTmpDir) {
-    free(sTmpDir);
+  if (temp_dir) {
+    free(temp_dir);
   }
-
+#else
+  char temp_dir[PATH_MAX];
+  strcpy(temp_dir, "/tmp/"AIM_NAME"-movie.XXXXXX");
+  if (mkdtemp(temp_dir)) {
+    directory_ = temp_dir;
+    directory_ += "/"; // Make sure to end with trailing slash    
+  } else {
+    LOG_ERROR(_T("Couldn't create a temporary directory for movie output."));
+    return false;
+  }
+#endif
+  
   // We want png for movie conversion
-  //! \bug This may change the user preference in GUI, hmm what to do? See TODO.txt
-  m_pParam->SetString("output.img.format", "png");
-  //if ( !GraphicsOutputDevicePlotutils::Initialize(m_sDir) ) {
-  if ( !GraphicsOutputDeviceCairo::Initialize(m_sDir) ) {
+  parameters_->SetString("output.img.format", "png");
+  if ( !GraphicsOutputDeviceCairo::Initialize(directory_) ) {
     return false;
   }
-
   return true;
 }
 
 void GraphicsOutputDeviceMovie::Start() {
-  //GraphicsOutputDevicePlotutils::Start();
   GraphicsOutputDeviceCairo::Start();
-  // Just output a single frame to get audio/video in sync, put params in there
+  // Output a couple of frames to get audio/video in sync, put params in there.
+  gGrab();
+  PlotParameterScreen();
+  gRelease();
   gGrab();
   PlotParameterScreen();
   gRelease();
 }
 
 void GraphicsOutputDeviceMovie::Stop() {
-  // Make sure Plotutils is really done writing.
-  //GraphicsOutputDevicePlotutils::Stop();
   GraphicsOutputDeviceCairo::Stop();
   CloseFile();
 
@@ -136,33 +142,28 @@ void GraphicsOutputDeviceMovie::Stop() {
 #else
   printf("Generating movie ... \n");
 #endif
-  AIM_ASSERT(m_pParam);
-  // Convert images and sound file to a movie
-  //! \warning Movie files are overwritten without warning
-  //! \bug ffmpeg only works with colour images, not with bw. So make sure to not use bw only in drawing..
-  // Always convert to audio stream of 44.1kHz or problems may occur in playing or conversio.
-  float fFps = 1000.0 / m_pParam->GetFloat("output.frameperiod");
+  AIM_ASSERT(parameters_);
+  // Convert images and sound file to a movie.
+  //! \warning Movie files are overwritten without warning.
   char sffmpegPath[1024];
-  if (!m_pParam->IsSet("output.ffmpeg_path")) {
+  if (!parameters_->IsSet("output.ffmpeg_path")) {
   strcpy(sffmpegPath,"ffmpeg");
   } else {
-    strcpy(sffmpegPath, m_pParam->GetString("output.ffmpeg_path"));
+    strcpy(sffmpegPath, parameters_->GetString("output.ffmpeg_path"));
   }
   char sCodecOptions[1024];
-  if (!m_pParam->IsSet("output.ffmpeg_codec_options")) {
+  if (!parameters_->IsSet("output.ffmpeg_codec_options")) {
     strcpy(sCodecOptions,"");
   } else {
-    strcpy(sCodecOptions, m_pParam->GetString("output.ffmpeg_codec_options"));
+    strcpy(sCodecOptions, parameters_->GetString("output.ffmpeg_codec_options"));
   }
-
+  float frame_rate = global_parameters_->DefaultFloat("frame_rate", -1.0);
   char sCmdLine[1024]; //!\todo check that snprintf does not want a larger buffer
   snprintf(sCmdLine, sizeof(sCmdLine)/sizeof(sCmdLine[0]),
     "%s -r %.2f -y -i \"%s\" -i \"%s%%06d.png\" "
-    "-title \"%s\" -comment \"Generated by "AIM_NAME" "AIM_VERSION_STRING"\" "
     "-sameq -r %.2f -ar 44100 -acodec pcm_s16le %s \"%s\"",
-    sffmpegPath, fFps, m_sSoundFile, m_sDir,
-    m_pParam->GetString("output.movie.title"),
-    fFps, sCodecOptions, m_sMovieFile);
+    sffmpegPath, frame_rate, sound_filename_.c_str(), directory_.c_str(),
+    frame_rate, sCodecOptions, movie_filename_.c_str());
     printf(sCmdLine);
     printf("\n");
   if (system(sCmdLine)) {
@@ -199,7 +200,7 @@ void GraphicsOutputDeviceMovie::Stop() {
 #else
   DIR *dir;
   struct dirent *dirent;
-  if (!(dir = opendir(m_sDir))) {
+  if (!(dir = opendir(directory_.c_str()))) {
     LOG_ERROR(_T("Couldn't remove files in temporary directory."));
     return;
   }
@@ -207,22 +208,22 @@ void GraphicsOutputDeviceMovie::Stop() {
     snprintf(sCmdLine,
              sizeof(sCmdLine)/sizeof(sCmdLine[0]),
              "%s%s",
-             m_sDir,
+             directory_.c_str(),
              dirent->d_name);
     unlink(sCmdLine);
   }
   closedir(dir);
-  rmdir(m_sDir);
+  rmdir(directory_.c_str());
 #endif
 }
 
 void GraphicsOutputDeviceMovie::PlotParameterScreen() {
-  AIM_ASSERT(m_pParam);
+  AIM_ASSERT(parameters_);
   char sStr[50];
   int lineno = 1;
 
-  float fMarL = m_pParam->GetFloat(_S("graph.margin.left"));
-  float fMarT = m_pParam->GetFloat(_S("graph.margin.top"));
+  float fMarL = parameters_->GetFloat(_S("graph.margin.left"));
+  float fMarT = parameters_->GetFloat(_S("graph.margin.top"));
   float fTextHeight = 1.0f / 50.0f * 1.2; // change this when fontsizing is there!
 
   gText2f(fMarL, 1-(fMarT+fTextHeight*lineno++),
@@ -249,7 +250,7 @@ void GraphicsOutputDeviceMovie::PlotParameterScreen() {
     snprintf(sStr,
              sizeof(sStr)/sizeof(sStr[0]), _S("%s=%s"),
              pPlotParams[i],
-             m_pParam->GetString(pPlotParams[i]));
+             parameters_->GetString(pPlotParams[i]));
     gText2f(fMarL,
             1-(fMarT+fTextHeight*lineno++),
             sStr);

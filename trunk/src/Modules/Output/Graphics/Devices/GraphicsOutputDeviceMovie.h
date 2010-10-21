@@ -27,7 +27,7 @@
 #ifndef __GRAPHICS_OUTPUT_DEVICE_MOVIE_H__
 #define __GRAPHICS_OUTPUT_DEVICE_MOVIE_H__
 
-//#include "Modules/Output/Graphics/Devices/GraphicsOutputDevicePlotutils.h"
+#include <string>
 #include "Modules/Output/Graphics/Devices/GraphicsOutputDeviceCairo.h"
 
 namespace aimc {
@@ -39,7 +39,7 @@ namespace aimc {
  // GraphicsOutputDevicePlotutils is also possible here
 class GraphicsOutputDeviceMovie : public GraphicsOutputDeviceCairo {
  public:
-  GraphicsOutputDeviceMovie(Parameters *pParam);
+  GraphicsOutputDeviceMovie(Parameters *parameters);
   virtual ~GraphicsOutputDeviceMovie() { };
 
   /*! \brief Initializes this output device, prepares plotting tools.
@@ -50,7 +50,7 @@ class GraphicsOutputDeviceMovie : public GraphicsOutputDeviceCairo {
    *  As usual, make sure to call this function before any other. If this
    *  Initialize() failed, you shouldn't try the other functions either.
    */
-  bool Initialize(const char *sSoundFile, const char *sMovieFile);
+  bool Initialize(Parameters *global_parameters);
 
   void Start();
   //! \brief This function now also generates the output movie.
@@ -68,9 +68,9 @@ class GraphicsOutputDeviceMovie : public GraphicsOutputDeviceCairo {
   void PlotParameterScreen();
 
   //! \brief Name of the sound file to be merged with the video
-  char m_sSoundFile[PATH_MAX];
+  string sound_filename_;
   //! \brief Name of the movie file to produce
-  char m_sMovieFile[PATH_MAX];
+  string movie_filename_;
 };
 }  // namespace aimc
 #endif /* __GRAPHICS_OUTPUT_DEVICE_MOVIE_H__ */

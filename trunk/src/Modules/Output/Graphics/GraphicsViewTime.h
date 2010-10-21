@@ -35,10 +35,10 @@ public:
 
 private:
   void PlotData(const vector<float> &signal,
-	float sample_rate,
-	float yOffset,
-	float height,
-	float xScale = 1.0);
+	              float sample_rate,
+	              float yOffset,
+	              float height,
+	              float xScale = 1.0);
   void PlotAxes(const vector<float> &signal);
   void PlotAxes(const SignalBank &pBank);
 };

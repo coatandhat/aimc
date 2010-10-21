@@ -70,23 +70,20 @@ bool GraphAxisSpec::Initialize(Parameters *parameters,
   snprintf(sParamName, sizeof(sParamName)/sizeof(sParamName[0]),
           "%s.min",
           sPrefix);
-  if (parameters->IsSet(sParamName)) {
-    if (strcmp(parameters->GetString(sParamName), "auto") == 0)
-      m_fMin = fMin;
-    else
-      m_fMin = parameters->GetFloat(sParamName);
-  }
+  if (strcmp(parameters->DefaultString(sParamName, "auto"), "auto") == 0)
+    m_fMin = fMin;
+  else
+    m_fMin = parameters->GetFloat(sParamName);
+  
 
   //!   - \c "<prefix>.max", the maximum value; a float or \c 'auto'
   snprintf(sParamName, sizeof(sParamName)/sizeof(sParamName[0]),
           "%s.max",
           sPrefix);
-  if (parameters->IsSet(sParamName)) {
-    if (strcmp(parameters->GetString(sParamName), "auto")==0)
-      m_fMax = fMax;
-    else
-      m_fMax = parameters->GetFloat(sParamName);
-  }
+  if (strcmp(parameters->DefaultString(sParamName, "auto"), "auto")==0)
+    m_fMax = fMax;
+  else
+    m_fMax = parameters->GetFloat(sParamName);
 
   // Make sure ranges are updated properly
   SetDisplayRange(m_fMin, m_fMax);
@@ -96,33 +93,31 @@ bool GraphAxisSpec::Initialize(Parameters *parameters,
   snprintf(sParamName, sizeof(sParamName)/sizeof(sParamName[0]),
            "%s.scale",
            sPrefix);
-  if (parameters->IsSet(sParamName)) {
-    // Scale change, we updated min/max values already so no need to
-    Scale::ScaleType iThisScale;
-    const char *sVal = parameters->GetString(sParamName);
-    if (strcmp(sVal, "auto")==0)
-      iThisScale = iScale;
-    else if (strcmp(sVal, "linear")==0)
-      iThisScale = Scale::SCALE_LINEAR;
-    else if (strcmp(sVal, "erb")==0)
-      iThisScale = Scale::SCALE_ERB;
-    else if (strcmp(sVal, "log")==0)
-      iThisScale = Scale::SCALE_LOG;
-    else {
-      LOG_ERROR(_T("Unrecognized scale type in parameter '%s': '%s'"),
-                  sParamName,
-                  sVal);
-      return false;
-    }
-    SetDisplayScale(iThisScale);
+  // Scale change, we updated min/max values already so no need to
+  Scale::ScaleType iThisScale;
+  const char *sVal = parameters->DefaultString(sParamName, "auto");
+  if (strcmp(sVal, "auto")==0)
+    iThisScale = iScale;
+  else if (strcmp(sVal, "linear")==0)
+    iThisScale = Scale::SCALE_LINEAR;
+  else if (strcmp(sVal, "erb")==0)
+    iThisScale = Scale::SCALE_ERB;
+  else if (strcmp(sVal, "log")==0)
+    iThisScale = Scale::SCALE_LOG;
+  else {
+    LOG_ERROR(_T("Unrecognized scale type in parameter '%s': '%s'"),
+                sParamName,
+                sVal);
+    return false;
   }
+  SetDisplayScale(iThisScale);
+
 
   //!   - \c "<prefix>.label", the label; a string
   snprintf(sParamName, sizeof(sParamName)/sizeof(sParamName[0]),
            "%s.label",
            sPrefix);
-  if (parameters->IsSet(sParamName))
-    m_sLabel = parameters->GetString(sParamName); // Assumes strings remains valid
+  m_sLabel = parameters->DefaultString(sParamName, ""); // Assumes strings remains valid
 
   return true;
 }

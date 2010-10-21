@@ -1,4 +1,4 @@
-// Copyright 2006, Willem van Engen
+// Copyright 2006-2010, Willem van Engen, Thomas Walters
 //
 // AIM-C: A C++ implementation of the Auditory Image Model
 // http://www.acousticscale.org/AIMC
@@ -81,12 +81,15 @@ class GraphicsOutputDevice {
    *
    *  \sa Module::Initialize()
    */
-  virtual bool Initialize(unsigned int iVerticesMax) { return true; };
+
   /*! \overload
    *  This function reloads the parameters; make sure to have at least the
    *  function with maximum parameters called once.
    */
-  virtual bool Initialize() { return true; };
+  virtual bool Initialize(Parameters *global_parameters) {
+    global_parameters_ = global_parameters;
+    return true;
+  };
 
   /*! \brief Create a new drawing
    *  Run this before any other drawing command.
@@ -184,7 +187,8 @@ class GraphicsOutputDevice {
   //! \brief True when animation is running
   bool m_bRunning;
   //! \brief Parameter store
-  Parameters *m_pParam;
+  Parameters *parameters_;
+  Parameters *global_parameters_;
 
   //! \brief Pixel Formats
   enum PixelFormat {AIM_PIX_FMT_RGB24_32, AIM_PIX_FMT_RGB24_24};

@@ -1,4 +1,4 @@
-// Copyright 2007, Thomas Walters
+// Copyright 2007-2010, Thomas Walters, Willem van Engen
 //
 // AIM-C: A C++ implementation of the Auditory Image Model
 // http://www.acousticscale.org/AIMC
@@ -32,6 +32,8 @@
 #include <stdio.h>
 #include <math.h>
 
+#include "cairo-quartz.h"
+
 #include "Modules/Output/Graphics/Devices/GraphicsOutputDeviceCairo.h"
 
 namespace aimc {
@@ -42,47 +44,58 @@ GraphicsOutputDeviceCairo::GraphicsOutputDeviceCairo(Parameters *pParam)
   m_iFileNumber = 0;
   m_iVertexType = VertexTypeNone;
   m_bUseMemoryBuffer=false;
-  m_pParam->DefaultString("output.img.format", ".png");
+  parameters_->DefaultString("output.img.format", ".png");
 }
 
-bool GraphicsOutputDeviceCairo::Initialize(const char *sDir) {
-  Init();
-
-  //! \todo Output to file if sDir is a file, to directory with
-  //! multiple images if it's a directory.
-  strncpy(m_sDir, sDir, sizeof(m_sDir)/sizeof(m_sDir[0]));
+bool GraphicsOutputDeviceCairo::Initialize(string directory) {
+  directory_ = directory;
+  InititalzeInternal();
 
   /* Try to open an image to see if everything is allright. We want to avoid
    * errors in the main Process()ing loop. */
-  if ( !OpenFile(0) ) {
+  /*if (!OpenFile(0)) {
     //! \todo Better error message that is more specific about the cause.
     LOG_ERROR(_T("Could not open output directory '%s' using graphics format '%s'."),
-      m_sDir, m_pParam->DefaultString("output.img.format", ".png") );
+      directory_.c_str(), parameters_->DefaultString("output.img.format", "png"));
     return false;
   }
-  CloseFile();
+  CloseFile();*/
 
   return true;
 }
 
-bool GraphicsOutputDeviceCairo::Initialize() {
+/*bool GraphicsOutputDeviceCairo::Initialize() {
     Init();
     m_bUseMemoryBuffer = true;
     return(true);
-}
+}*/
 
-void GraphicsOutputDeviceCairo::Init() {
-   AIM_ASSERT(m_pParam);
-  /*
-   * Set parameters
-   */
-  m_pParam->GetString("output.img.color.background");
+void GraphicsOutputDeviceCairo::InititalzeInternal() {
+   AIM_ASSERT(parameters_);
 
-  m_bInvertColors = m_pParam->GetBool("output.img.color.invert");
+  parameters_->DefaultString("output.img.color.background", "black");
 
-  // Output size!
-  m_iWidth = m_pParam->GetUInt("output.img.width");
-  m_iHeight = m_pParam->GetUInt("output.img.height");
+  m_bInvertColors = parameters_->DefaultBool("output.img.color.invert", "false");
+
+  // Output size.
+  m_iWidth = parameters_->DefaultInt("output.img.width", 800);
+  m_iHeight = parameters_->DefaultInt("output.img.height", 600);
+  
+  // Cairo's RGB24 format has 32-bit pixels with the upper 8 bits unused.
+  // This is not the same as the plotutils PNG format. This information is transferred by the
+  // function GetPixelFormat. The pixel format is dealt with by the reciever.
+  m_cSurface = cairo_quartz_surface_create(CAIRO_FORMAT_RGB24,
+                                          m_iWidth,
+                                          m_iHeight);
+  m_cCr = cairo_create(m_cSurface);
+  cairo_scale(m_cCr, (float)m_iWidth, (float)m_iHeight);
+  // Now setup things for this plotter.
+  cairo_select_font_face(m_cCr,
+                         parameters_->DefaultString("output.img.fontname",
+                                                    "HersheySans"),
+                         CAIRO_FONT_SLANT_NORMAL,
+                         CAIRO_FONT_WEIGHT_BOLD);
+  cairo_set_font_size (m_cCr, 0.02);
 }
 
 unsigned char* GraphicsOutputDeviceCairo::GetBuffer() {
@@ -93,25 +106,27 @@ unsigned char* GraphicsOutputDeviceCairo::GetBuffer() {
 }
 
 bool GraphicsOutputDeviceCairo::OpenFile(unsigned int index) {
-  const char *strPlottype = m_pParam->GetString("output.img.format");
+  const char *strPlottype = parameters_->GetString("output.img.format");
   if (!m_bUseMemoryBuffer) {
     struct stat fileinfo;
     // Get filename without trailing slash
-    strncpy(m_sFilename, m_sDir, sizeof(m_sFilename)/sizeof(m_sFilename[0]));
+    char filename[PATH_MAX];
+    strncpy(filename, directory_.c_str(), sizeof(filename)/sizeof(filename[0]));
 #ifdef _WINDOWS
-    if (m_sFilename[strlen(m_sFilename)-1]=='\\') {
-      m_sFilename[strlen(m_sFilename)-1]='\0';
+    if (filename[strlen(filename)-1]=='\\') {
+      filename[strlen(filename)-1]='\0';
     }
 #else
-    if (m_sFilename[strlen(m_sFilename)-1]=='/') {
-      m_sFilename[strlen(m_sFilename)-1]='\0';
+    if (filename[strlen(filename)-1]=='/') {
+      filename[strlen(filename)-1]='\0';
     }
 #endif
     // Enumerate files it m_sDir is a directory.
-    if (stat(m_sFilename, &fileinfo) == 0 && (fileinfo.st_mode & S_IFDIR)) {
+    if (stat(filename, &fileinfo) == 0 && (fileinfo.st_mode & S_IFDIR)) {
       // We have a directory: enumerate with index
-      snprintf(m_sFilename, sizeof(m_sFilename)/sizeof(m_sFilename[0]),"%s%06d.%s",
-               m_sDir,
+      snprintf(filename, sizeof(filename) / sizeof(filename[0]),
+               "%s%06d.%s",
+               directory_.c_str(),
                index,
                strPlottype);
       // If type is 'auto', fallback to 'png'
@@ -119,46 +134,34 @@ bool GraphicsOutputDeviceCairo::OpenFile(unsigned int index) {
         strPlottype = "png";
     } else {
       // We have a (probably non-existant) file. Auto-detect type by extension if requested
-      strncpy(m_sFilename, m_sDir, sizeof(m_sFilename)/sizeof(m_sFilename[0]));
-      char *pDot = strrchr(m_sFilename, '.');
+      strncpy(filename,
+              directory_.c_str(),
+              sizeof(filename)/sizeof(filename[0]));
+      char *pDot = strrchr(filename, '.');
       if (!pDot) {
         LOG_ERROR(_T("Please supply extension on filename when using 'auto' format: '%s'"),
-                  m_sFilename);
+                  filename);
         return false;
       }
       strPlottype = &pDot[1];
     }
+    image_filename_ = filename;
     m_bOutputFile= true; //! \todo Should check that it's possible to write to the file
   }
-  // Cairo's RGB24 format has 32-bit pixels with the upper 8 bits unused.
-  // This is not the same as the plotutils PNG format. This information is transferred by the
-  // function GetPixelFormat. The pixel format is dealt with by the reciever.
-  m_cSurface = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
-                                           m_iWidth,
-                                           m_iHeight);
-  m_cCr = cairo_create (m_cSurface);
-  cairo_scale(m_cCr, (float)m_iWidth, (float)m_iHeight);
-  // Now setup things for this plotter.
-  cairo_select_font_face(m_cCr,
-                         m_pParam->GetString("output.img.fontname"),
-                         CAIRO_FONT_SLANT_NORMAL,
-                         CAIRO_FONT_WEIGHT_BOLD);
-  cairo_set_font_size (m_cCr, 0.015);
+
   return true;
 }
 
 void GraphicsOutputDeviceCairo::CloseFile() {
-  // Plotting library
-  if (m_iPlotHandle>0) {
-      cairo_destroy(m_cCr);
-    m_iPlotHandle = 0;
-  }
   // And the output file
   if (m_bOutputFile) {
-    cairo_surface_write_to_png(m_cSurface, m_sFilename);
+    cairo_surface_write_to_png(m_cSurface, image_filename_.c_str());
     m_bOutputFile = false;
   }
-  cairo_surface_destroy(m_cSurface);
+  cairo_set_source_rgb (m_cCr, 0.0, 0.0, 0.0);
+  cairo_paint (m_cCr);
+  //cairo_destroy(m_cCr);
+  //cairo_surface_destroy(m_cSurface);
 }
 
 GraphicsOutputDeviceCairo::~GraphicsOutputDeviceCairo() {
@@ -198,9 +201,9 @@ void GraphicsOutputDeviceCairo::gBeginQuadStrip() {
 
 void GraphicsOutputDeviceCairo::gColor3f(float r, float g, float b) {
   if (m_bInvertColors) {
-    r = 1-r;
-    g = 1-g;
-    b = 1-b;
+    r = 1.0 - r;
+    g = 1.0 - g;
+    b = 1.0 - b;
   }
   cairo_set_source_rgb (m_cCr, r, g, b);
 }
@@ -211,14 +214,14 @@ void GraphicsOutputDeviceCairo::gVertex3f(float x, float y, float z) {
     if (m_bIsFirstVertex) {
       m_bIsFirstVertex = false;
       //pl_fmove(x, y);
-      cairo_move_to(m_cCr, x, 1-y);
+      cairo_move_to(m_cCr, x, 1.0 - y);
     } else {
       //pl_fcont(x, y);
-      cairo_line_to(m_cCr, x, 1-y);
+      cairo_line_to(m_cCr, x, 1.0 - y);
     }
     break;
   case VertexTypeQuad:
-    /* Store vertices until we got four in a row.
+    /* Store vertices until we have four in a row.
      * The order of vertices when processing quads is:
      *    1-----3-----5
      *    |     |     |
@@ -226,11 +229,17 @@ void GraphicsOutputDeviceCairo::gVertex3f(float x, float y, float z) {
      */
     if (m_iPrevVertexCount >= 3) {
       // Plot this quad
-      cairo_move_to(m_cCr, m_aPrevX[0], 1-m_aPrevY[0]);
-      cairo_line_to(m_cCr, m_aPrevX[1], 1-m_aPrevY[1]);
+      //cairo_set_source_rgb(m_cCr, 0.2, 1 - m_aPrevY[0], m_aPrevX[0]);
+      cairo_rectangle (m_cCr, m_aPrevX[2],
+                       1 - m_aPrevY[2], m_aPrevX[2] - m_aPrevX[0],
+                       y - m_aPrevY[2]);
+      cairo_fill (m_cCr);
+      
+      /*cairo_move_to(m_cCr, , );
+      cairo_line_to(m_cCr, , 1 - m_aPrevY[1]);
       cairo_line_to(m_cCr, x, y);
-      cairo_line_to(m_cCr, m_aPrevX[2], 1-m_aPrevY[2]);
-      cairo_close_path (m_cCr);
+      cairo_line_to(m_cCr, m_aPrevX[2], 1 - m_aPrevY[2]);*/
+ 
 
       // Last vertices of this quad are the first of the next
       m_aPrevX[0] = m_aPrevX[2];
@@ -267,7 +276,7 @@ void GraphicsOutputDeviceCairo::gText3f(float x,
   //cairo_text_extents_t te;
   if (bRotated) {
     cairo_rotate(m_cCr, M_PI/2);
-    cairo_move_to(m_cCr, x ,1-y);
+    //cairo_move_to(m_cCr, x ,1-y);
     cairo_show_text(m_cCr, sStr);
     //cairo_identity_matrix(m_cCr);
     cairo_rotate(m_cCr, -M_PI/2);

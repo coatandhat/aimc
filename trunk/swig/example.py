@@ -17,10 +17,11 @@
 # limitations under the License.
 
 import aimc
-params = aimc.Parameters()
+module_params = aimc.Parameters()
+global_params = aimc.Parameters()
 mod_gauss = aimc.ModuleGaussians(params)
 sig = aimc.SignalBank()
 sig.Initialize(115, 1, 44100)
-mod_gauss.Initialize(sig)
+mod_gauss.Initialize(sig, global_params)
 mod_gauss.Process(sig)
 

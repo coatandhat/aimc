@@ -47,12 +47,12 @@ using std::string;
  */
 class GraphicsOutputDeviceCairo : public GraphicsOutputDevice {
  public:
-  GraphicsOutputDeviceCairo(Parameters *pParam);
+  GraphicsOutputDeviceCairo(Parameters *parameters);
   virtual ~GraphicsOutputDeviceCairo();
 
   /*! \brief Initializes this output device, prepares plotting tools.
    *  \param sDir Directory or filename where to put images, max length is
-   *         _MAX_PATH. Must end with slash!!!
+   *         _MAX_PATH. Must end with slash.
    *  \return true on success, false on failure.
    *
    *  sDir can be either a filename, in which case the output will be
@@ -63,8 +63,7 @@ class GraphicsOutputDeviceCairo : public GraphicsOutputDevice {
    *  As usual, make sure to call this function before any other. If this
    *  Initialize() failed, you shouldn't try the other functions either.
    */
-  bool Initialize(const char *sDir);
-  bool Initialize();
+  bool Initialize(string directory);
   void gGrab();
   void gBeginLineStrip();
   void gBeginQuadStrip();
@@ -80,7 +79,7 @@ class GraphicsOutputDeviceCairo : public GraphicsOutputDevice {
   /*! \brief Internal initialisation
    *
    */
-  void Init();
+  void InititalzeInternal();
 
   /*! \brief Open the file with given index for output
    *  \param index File number to open
@@ -95,10 +94,8 @@ class GraphicsOutputDeviceCairo : public GraphicsOutputDevice {
 
   //! \brief Set to true if the input file can be written to
   bool m_bOutputFile;
-  //! \brief The Cairo plotter
-  int m_iPlotHandle;
   //! \brief Output directory
-  char m_sDir[FILENAME_MAX];
+  string directory_;
   //! \brief Current file number
   unsigned int m_iFileNumber;
   //! \brief true if this is the first vertex after gBegin()
@@ -126,7 +123,7 @@ class GraphicsOutputDeviceCairo : public GraphicsOutputDevice {
   cairo_t *m_cCr;
 
   //! \brief Internal store for the input filename
-  char m_sFilename[FILENAME_MAX];
+  string image_filename_;
 
   unsigned int m_iWidth;
   unsigned int m_iHeight;
