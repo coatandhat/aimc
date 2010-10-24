@@ -17,7 +17,7 @@
 sudo apt-get -y update
 sudo apt-get -y install bc subversion scons pkg-config \
                 libsndfile1-dev build-essential libboost-dev \
-                python sox python-matplotlib
+                python sox python-matplotlib libcairo-dev
 
 # For 64-bit systems, uncomment this line:
 sudo apt-get -y install libc6-dev-i386
