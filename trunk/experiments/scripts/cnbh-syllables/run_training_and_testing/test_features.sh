@@ -49,8 +49,8 @@ fi
 
 for total_hmm_states in $HMM_STATES_LIST; do
   for mixture_components in $MIXTURE_COMPONENTS_LIST; do
-    #. $THIS_DIR/run_test_instance.sh &
-    . $THIS_DIR/run_test_instance.sh
+    . $THIS_DIR/run_test_instance.sh &
+    #. $THIS_DIR/run_test_instance.sh
   done
 done
 echo "Waiting..."
