@@ -31,8 +31,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include <limits.h>
 
-#include "cairo-quartz.h"
+//#include "cairo-quartz.h"
 
 #include "Modules/Output/Graphics/Devices/GraphicsOutputDeviceCairo.h"
 
@@ -84,7 +85,7 @@ void GraphicsOutputDeviceCairo::InititalzeInternal() {
   // Cairo's RGB24 format has 32-bit pixels with the upper 8 bits unused.
   // This is not the same as the plotutils PNG format. This information is transferred by the
   // function GetPixelFormat. The pixel format is dealt with by the reciever.
-  m_cSurface = cairo_quartz_surface_create(CAIRO_FORMAT_RGB24,
+  m_cSurface = cairo_image_surface_create(CAIRO_FORMAT_RGB24,
                                           m_iWidth,
                                           m_iHeight);
   m_cCr = cairo_create(m_cSurface);
