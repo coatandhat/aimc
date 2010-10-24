@@ -14,6 +14,14 @@
 # http://htk.eng.cam.ac.uk/
 # NUMBER_OF_CORES - total number of machine cores
 
+sudo apt-get -y update
+sudo apt-get -y install bc subversion scons pkg-config \
+                libsndfile1-dev build-essential libboost-dev \
+                python sox python-matplotlib
+
+# For 64-bit systems, uncomment this line:
+sudo apt-get -y install libc6-dev-i386
+
 # Set these to be the location of your input database, and desired output
 # locations. (Note: the user running this script needs write permissions on
 # the $WORKING_VOLUME.)
@@ -25,6 +33,8 @@ FEATURES_ROOT=$WORKING_VOLUME/003-features/
 HMMS_ROOT=$WORKING_VOLUME/004-hmms/
 HTK_ROOT=$WORKING_VOLUME/software/htk/
 AIMC_ROOT=$WORKING_VOLUME/software/aimc/
+
+AIMCOPY_CONFIGURATION_FILE=./cnbh-syllables/feature_generation/ssi_profile_features.aimcopyconfig
 
 # Number of cores on the experimental machine. Various scripts will try to use
 # this if it's set.
@@ -64,7 +74,7 @@ echo "Converting CNBH-syllables database from FLAC to WAV..."
 # Generate versions of the CNBH syllables spoke pattern with a range of
 # signal-to-noise ratios (SNRs). The versions are put in the directory
 # ${SOUNDS_ROOT}/${SNR}_dB/ for each SNR in $SNRS.
-SNRS="30 27 24 21 18 15 12 9 6 3 0"
+SNRS="45 42 39 36 33" #" 30 27 24 21 18 15 12 9 6 3 0"
 #SNRS="30" # For testing
 ./cnbh-syllables/feature_generation/pink_noise.sh $SOUNDS_ROOT/clean/ "$SNRS"
 
@@ -113,7 +123,7 @@ for SOURCE_SNR in $FEATURE_DIRS; do
     mkdir -p $FEATURES_ROOT/aim/$SOURCE_SNR/
     ./cnbh-syllables/feature_generation/gen_hcopy_aimcopy_script.sh $FEATURES_ROOT/aim/$SOURCE_SNR/ $SOUNDS_ROOT/$SOURCE_SNR/ ""
     # Run the conversion
-    ./cnbh-syllables/feature_generation/run_aimcopy.sh $FEATURES_ROOT/aim/$SOURCE_SNR/ $NUMBER_OF_CORES
+    ./cnbh-syllables/feature_generation/run_aimcopy.sh $AIMCOPY_CONFIGURATION_FILE $FEATURES_ROOT/aim/$SOURCE_SNR/ $NUMBER_OF_CORES
     touch $FEATURES_ROOT/aim/$SOURCE_SNR/.make_aim_features_success
   fi
 done
@@ -124,7 +134,7 @@ mkdir -p $HMMS_ROOT
 # For each of the feature types, we want to run HMMs with a bunch of
 # parameters.
 TRAINING_ITERATIONS="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15" # 16 17 18 19 20"
-#TESTING_ITERATIONS="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"
+#TESTING_ITERATIONS="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15" #" 16 17 18 19 20"
 TESTING_ITERATIONS="15"
 #HMM_STATES="3 4 5 6 7 8"
 HMM_STATES="4"

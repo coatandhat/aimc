@@ -9,8 +9,9 @@ fi
 set -e
 set -u
 
-FEATURES_DIR=$1
-MACHINE_CORES=$2
+AIMCOPY_CONFIGURATION_FILE=$1
+FEATURES_DIR=$2
+MACHINE_CORES=$3
 FILE_LIST=feature_generation_script
 
 echo "Splitting data files over cores..."
@@ -31,7 +32,7 @@ echo -n $total_cores
 echo " tasks..."
 for ((c=1;c<=$MACHINE_CORES;c+=1)); do
   s=${splits[$element]}
-  AIMCopy -D $FEATURES_DIR/aimcopy_config.out -S $s &
+  AIMCopy -C $AIMCOPY_CONFIGURATION_FILE -D $FEATURES_DIR/aimcopy_config.out -S $s &
   let element=element+1
 done
 
