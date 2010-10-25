@@ -25,7 +25,7 @@ sudo apt-get -y install libc6-dev-i386
 # Set these to be the location of your input database, and desired output
 # locations. (Note: the user running this script needs write permissions on
 # the $WORKING_VOLUME.)
-WORKING_VOLUME=/mnt/scratch1
+WORKING_VOLUME=/mnt/scratch0/aim
 
 SYLLABLES_DATABASE_TAR=$WORKING_VOLUME/001-downloaded_sounds_data/cnbh-syllables.tar
 SOUNDS_ROOT=$WORKING_VOLUME/002-sounds/
@@ -75,12 +75,13 @@ echo "Converting CNBH-syllables database from FLAC to WAV..."
 # Generate versions of the CNBH syllables spoke pattern with a range of
 # signal-to-noise ratios (SNRs). The versions are put in the directory
 # ${SOUNDS_ROOT}/${SNR}_dB/ for each SNR in $SNRS.
-SNRS="45 42 39 36 33" #" 30 27 24 21 18 15 12 9 6 3 0"
+SNRS="45"#" 42 39 36 33" #" 30 27 24 21 18 15 12 9 6 3 0"
 #SNRS="30" # For testing
 ./cnbh-syllables/feature_generation/pink_noise.sh $SOUNDS_ROOT/clean/ "$SNRS"
 
 # Make the list of all feature drectories
-FEATURE_DIRS="clean"
+#FEATURE_DIRS="clean"
+FEATURE_DIRS=""
 for SNR in $SNRS; do
   FEATURE_DIRS="$FEATURE_DIRS snr_${SNR}dB"
 done
