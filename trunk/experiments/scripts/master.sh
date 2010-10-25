@@ -34,7 +34,7 @@ HMMS_ROOT=$WORKING_VOLUME/004-hmms/
 HTK_ROOT=$WORKING_VOLUME/software/htk/
 AIMC_ROOT=$WORKING_VOLUME/software/aimc/
 
-THIS_DIR=`basename $0`
+THIS_DIR=`dirname $0`
 AIMCOPY_CONFIGURATION_FILE=$THIS_DIR/cnbh-syllables/feature_generation/ssi_profile_features.aimcopycfg
 
 # Number of cores on the experimental machine. Various scripts will try to use
