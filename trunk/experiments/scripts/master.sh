@@ -34,7 +34,8 @@ HMMS_ROOT=$WORKING_VOLUME/004-hmms/
 HTK_ROOT=$WORKING_VOLUME/software/htk/
 AIMC_ROOT=$WORKING_VOLUME/software/aimc/
 
-AIMCOPY_CONFIGURATION_FILE=./cnbh-syllables/feature_generation/ssi_profile_features.aimcopyconfig
+THIS_DIR=`basename $0`
+AIMCOPY_CONFIGURATION_FILE=$THIS_DIR/cnbh-syllables/feature_generation/ssi_profile_features.aimcopycfg
 
 # Number of cores on the experimental machine. Various scripts will try to use
 # this if it's set.
@@ -100,6 +101,7 @@ fi
 if [ ! -e $AIMC_ROOT/.aimc_build_success ]; then
  ./aimc/build_aimc.sh $AIMC_ROOT
 fi
+export PATH=$PATH:$AIMC_ROOT/build/posix-release/
 
 for SOURCE_SNR in $FEATURE_DIRS; do
   if [ ! -e $FEATURES_ROOT/mfcc/$SOURCE_SNR/.make_mfcc_features_success ]; then
