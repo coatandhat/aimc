@@ -4,6 +4,7 @@
 AIMCOPY=`which AIMCopy`
 if [ "$AIMCOPY" == "" ]; then
   echo "Please build AIM-C and make AIMCopy available in the path"
+  exit -1
 fi
 
 set -e
@@ -32,7 +33,7 @@ echo -n $total_cores
 echo " tasks..."
 for ((c=1;c<=$MACHINE_CORES;c+=1)); do
   s=${splits[$element]}
-  AIMCopy -C $AIMCOPY_CONFIGURATION_FILE -D $FEATURES_DIR/aimcopy_config.out -S $s &
+  AIMCopy -C $AIMCOPY_CONFIGURATION_FILE -D $FEATURES_DIR/aimcopy_config.out -S $s -G $FEATURES_DIR/aimcopy_graph.dot &
   let element=element+1
 done
 
