@@ -51,7 +51,8 @@ common_sources = ['Support/Common.cc',
                   'Modules/Profile/ModuleScaler.cc',
                   'Modules/Output/FileOutputHTK.cc',
                   'Modules/Output/FileOutputAIMC.cc',
-                  'Modules/Features/ModuleGaussians.cc',]
+                  'Modules/Features/ModuleGaussians.cc',
+                  'Modules/Features/ModuleBoxes.cc',]
                   #'Modules/Features/ModuleDCT.cc' ]
                   
 graphics_sources = [ 'Modules/Output/Graphics/GraphAxisSpec.cc',
