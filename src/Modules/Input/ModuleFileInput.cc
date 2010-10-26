@@ -52,20 +52,12 @@ ModuleFileInput::~ModuleFileInput() {
 }
 
 void ModuleFileInput::ResetInternal() {
-  // If there's a file open, rewind to the beginning.
-  if (file_handle_ != NULL) {
-    sf_seek(file_handle_, 0, SEEK_SET);
-    file_position_samples_ = 0;
-  }
-}
-
-bool ModuleFileInput::InitializeInternal(const SignalBank& input) {
   // If there's a file open. Close it.
   if (file_handle_ != NULL) {
     sf_close(file_handle_);
     file_handle_ = NULL;
   }
-  // Open the file
+  // Open a file
   SF_INFO sfinfo;
   memset(reinterpret_cast<void*>(&sfinfo), 0, sizeof(SF_INFO));
 
@@ -79,7 +71,7 @@ bool ModuleFileInput::InitializeInternal(const SignalBank& input) {
      */
     LOG_ERROR(_T("Couldn't read audio file '%s'"),
               global_parameters_->GetString("input_filename"));
-    return false;
+    return;
   }
   
   file_loaded_ = true;
@@ -90,12 +82,15 @@ bool ModuleFileInput::InitializeInternal(const SignalBank& input) {
 
   if (audio_channels_ < 1 || buffer_length_ < 1 || sample_rate_ < 0.0f) {
     LOG_ERROR(_T("Problem with file: audio_channels = %d, buffer_length_ = %d, sample_rate = %f"), audio_channels_, buffer_length_, sample_rate_);
-    return false;
+    return;
   }
 
   output_.Initialize(audio_channels_, buffer_length_, sample_rate_);
   output_.set_start_time(0);
-  
+}
+
+bool ModuleFileInput::InitializeInternal(const SignalBank& input) {
+  ResetInternal();
   return true;
 }
 

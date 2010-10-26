@@ -24,6 +24,7 @@
 #ifndef AIMC_MODULES_SSI_SSI_H_
 #define AIMC_MODULES_SSI_SSI_H_
 
+#include <vector>
 #include "Support/Module.h"
 
 namespace aimc {
@@ -56,6 +57,7 @@ class ModuleSSI : public Module {
   int ssi_width_samples_;
   float ssi_width_cycles_;
   float pivot_cf_;
+  vector<float> h_;
 
   bool do_pitch_cutoff_;
   bool weight_by_cutoff_;
