@@ -96,6 +96,7 @@ void ModuleGaussians::Process(const SignalBank &input) {
     LOG_ERROR(_T("Module ModuleGaussians not initialized."));
     return;
   }
+  output_.set_start_time(input.start_time());
   // Calculate spectral profile
   for (int ch = 0; ch < input.channel_count(); ++ch) {
     m_pSpectralProfile[ch] = 0.0f;

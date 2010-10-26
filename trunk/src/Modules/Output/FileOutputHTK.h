@@ -93,7 +93,7 @@ class FileOutputHTK : public Module {
 
   float ByteSwapFloat(float d);
 
-  void WriteHeader(int nelements, float sampPeriod);
+  void WriteHeader(int nelements);
 
   /*! \brief Whether initialization is done or not
    */
