@@ -55,6 +55,9 @@ class GraphicsOutputDeviceMovie : public GraphicsOutputDeviceCairo {
   void Start();
   //! \brief This function now also generates the output movie.
   void Stop();
+  
+  void Reset(Parameters* global_parameters);
+  
 
  protected:
   /*! \brief Plots a summary of relevant parameters on the output

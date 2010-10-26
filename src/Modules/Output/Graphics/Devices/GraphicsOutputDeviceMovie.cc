@@ -133,6 +133,11 @@ void GraphicsOutputDeviceMovie::Start() {
   gRelease();
 }
 
+void GraphicsOutputDeviceMovie::Reset(Parameters* global_parameters) {
+  Stop();
+  Initialize(global_parameters);
+}
+
 void GraphicsOutputDeviceMovie::Stop() {
   GraphicsOutputDeviceCairo::Stop();
   CloseFile();
