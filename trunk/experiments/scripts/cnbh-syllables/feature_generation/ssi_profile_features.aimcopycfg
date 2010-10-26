@@ -1,7 +1,7 @@
 module1.name = FileInput
 module1.id = file_input
 module1.parameters = <<<ENDPARAMS
-input.buffersize = 512
+input.buffersize = 1024
 ENDPARAMS
 module1.child1 = GammatoneFilterbank
 
