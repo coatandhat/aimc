@@ -35,7 +35,7 @@ module6.child1 = SmoothNAPOutput
 module7.name = SmoothNAPOutput
 module7.id = htk_out
 module7.parameters = <<<ENDPARAMS
-htk_out.file_suffix=.smooth_nap_profile
+htk_out.file_suffix=smooth_nap_profile
 ENDPARAMS
 
 module8.name = StandardNAP
@@ -119,25 +119,25 @@ module20.child1 = SSINoCutoffWholeSliceOutput
 
 module21.name = SSICutoffCycle1SliceOutput
 module21.parameters = <<<ENDPARAMS
-htk_out.file_suffix = .slice_1_cutoff
+htk_out.file_suffix = slice_1_cutoff
 ENDPARAMS
 module21.id = htk_out
 
 module22.name = SSINoCutoffCycle1SliceOutput
 module22.parameters = <<<ENDPARAMS
-htk_out.file_suffix = .slice_1_no_cutoff
+htk_out.file_suffix = slice_1_no_cutoff
 ENDPARAMS
 module22.id = htk_out
 
 module23.name = SSICutoffWholeSliceOutput
 module23.parameters = <<<ENDPARAMS
-htk_out.file_suffix = .ssi_profile_cutoff
+htk_out.file_suffix = ssi_profile_cutoff
 ENDPARAMS
 module23.id = htk_out
 
 module24.name = SSINoCutoffWholeSliceOutput
 module24.parameters = <<<ENDPARAMS
-htk_out.file_suffix = .ssi_profile_no_cutoff
+htk_out.file_suffix = ssi_profile_no_cutoff
 ENDPARAMS
 module24.id = htk_out
 

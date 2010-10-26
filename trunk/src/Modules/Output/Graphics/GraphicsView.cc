@@ -82,7 +82,7 @@ GraphicsView::~GraphicsView() {
 
 void GraphicsView::ResetInternal() {
   if (m_pDev != NULL) {
-    m_pDev->Stop();
+    m_pDev->Reset(global_parameters_);
   }
 }
 

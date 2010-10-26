@@ -182,6 +182,9 @@ class GraphicsOutputDevice {
 
   //! \brief Called when animation stops
   virtual void Stop()  { m_bRunning = false; }
+  
+  virtual void Reset(Parameters* global_parameters) = 0;
+  
 
  protected:
   //! \brief True when animation is running

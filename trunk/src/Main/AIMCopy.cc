@@ -159,18 +159,27 @@ bool AIMCopy::Process() {
   if (!initialized_) {
     return false;
   }
+  bool tree_initialized = false;
   for (unsigned int i = 0; i < script_.size(); ++i) {
     global_parameters_.SetString("input_filename", script_[i].first.c_str());
     global_parameters_.SetString("output_filename_base", script_[i].second.c_str());
-    if (!tree_.Initialize(&global_parameters_)) {
-      return false;
+    if (!tree_initialized) {
+      if (!tree_.Initialize(&global_parameters_)) {
+        return false;
+      }
+      tree_initialized = true;
+    } else {
+      tree_.Reset();
     }
     aimc::LOG_INFO(_T("%s -> %s"),
                   script_[i].first.c_str(),
                   script_[i].second.c_str());
     tree_.Process();
-    tree_.Reset();
   }
+  // A final call to Reset() is required to close any open files.
+  global_parameters_.SetString("input_filename", "");
+  global_parameters_.SetString("output_filename_base", "");
+  tree_.Reset();
   return true;
 }
 
