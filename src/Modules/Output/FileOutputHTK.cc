@@ -68,7 +68,7 @@ bool FileOutputHTK::InitializeInternal(const SignalBank &input) {
     return false;
   }
   if (!header_written_) {
-    WriteHeader(channel_count_ * buffer_length_, frame_period_ms_);
+    WriteHeader(channel_count_ * buffer_length_);
   }
   
   return true;
@@ -77,7 +77,7 @@ bool FileOutputHTK::InitializeInternal(const SignalBank &input) {
 void FileOutputHTK::ResetInternal() {
   // Finalize and close the open file, if there is one.
   if (file_handle_ != NULL && !header_written_) {
-    WriteHeader(channel_count_ * buffer_length_, frame_period_ms_);
+    WriteHeader(channel_count_ * buffer_length_);
   }
   if (file_handle_ != NULL)
     CloseFile();
@@ -94,10 +94,10 @@ void FileOutputHTK::ResetInternal() {
   }
   sample_count_ = 0;
   header_written_ = false;
-  WriteHeader(channel_count_ * buffer_length_, frame_period_ms_);
+  WriteHeader(channel_count_ * buffer_length_);
 }
 
-void FileOutputHTK::WriteHeader(int num_elements, float period_ms) {
+void FileOutputHTK::WriteHeader(int num_elements) {
   if (header_written_)
     return;
 
@@ -112,7 +112,7 @@ void FileOutputHTK::WriteHeader(int num_elements, float period_ms) {
   // To be filled in when the file is done
   int32_t sample_count = 0;
 
-  int32_t sample_period = floor(1e4 * period_ms);
+  int32_t sample_period = floor(1e4 * frame_period_ms_);
   int16_t sample_size = num_elements * sizeof(float);  // NOLINT
 
   // User-defined coefficients with energy term
@@ -170,12 +170,16 @@ bool FileOutputHTK::CloseFile() {
 
   // Write the first 4 bytes of the file
   // with how many samples there are in the file
+  // and the next 4 bytes with the frame period.
   fflush(file_handle_);
   rewind(file_handle_);
   fflush(file_handle_);
   int32_t samples = sample_count_;
   samples = ByteSwap32(samples);
+  int32_t sample_period = floor(1e4 * frame_period_ms_);
+  sample_period = ByteSwap32(sample_period);
   fwrite(&samples, sizeof(samples), 1, file_handle_);
+  fwrite(&sample_period, sizeof(sample_period), 1, file_handle_);
 
   // And close the file
   fclose(file_handle_);
