@@ -94,6 +94,13 @@ bool SignalBank::Initialize(const SignalBank &input) {
   return true;
 }
 
+void SignalBank::Clear() {
+  for (int i = 0; i < channel_count_; ++i) {
+    signals_[i].assign(buffer_length_, 0.0f);
+    strobes_[i].resize(0);
+  }
+}
+
 bool SignalBank::Validate() const {
   if (sample_rate_ <= 0.0f)
     return false;

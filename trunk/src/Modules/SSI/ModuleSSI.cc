@@ -103,6 +103,21 @@ bool ModuleSSI::InitializeInternal(const SignalBank &input) {
     output_.set_centre_frequency(i, input.centre_frequency(i));
   }
   
+  h_.resize(ssi_width_samples_, 0.0);
+  float gamma_min = -1.0f;
+  float gamma_max = log2(ssi_width_cycles_);
+  for (int i = 0; i < ssi_width_samples_; ++i) {
+    if (log_cycles_axis_) {
+      float gamma = gamma_min + (gamma_max - gamma_min)
+                                 * static_cast<float>(i)
+                                 / static_cast<float>(ssi_width_samples_);
+      h_[i]= pow(2.0f, gamma);
+    } else {
+      h_[i] = static_cast<float>(i) * ssi_width_cycles_
+              / static_cast<float>(ssi_width_samples_);
+    }
+  }
+  
   output_.Initialize(channel_count_, ssi_width_samples_, sample_rate_);
   return true;
 }
@@ -157,9 +172,6 @@ void ModuleSSI::Process(const SignalBank &input) {
   if (do_pitch_cutoff_) {
     pitch_index = ExtractPitchIndex(input);
   }
-  
-  float gamma_min = -1.0f;
-  float gamma_max = log2(ssi_width_cycles_);
 
   for (int ch = 0; ch < channel_count_; ++ch) {
     float centre_frequency = input.centre_frequency(ch);
@@ -186,30 +198,20 @@ void ModuleSSI::Process(const SignalBank &input) {
     
     // Copy the buffer from input to output, addressing by h-value.
     for (int i = 0; i < ssi_width_samples_; ++i) {
-      float h;
-      if (log_cycles_axis_) {
-        float gamma = gamma_min + (gamma_max - gamma_min)
-                                   * static_cast<float>(i)
-                                   / static_cast<float>(ssi_width_samples_);
-        h = pow(2.0f, gamma);
-      } else {
-        h = static_cast<float>(i) * ssi_width_cycles_
-            / static_cast<float>(ssi_width_samples_);
-      }
-
+      
       // The index into the input array is a floating-point number, which is
       // split into a whole part and a fractional part. The whole part and
       // fractional part are found, and are used to linearly interpolate
       // between input samples to yield an output sample.
       double whole_part;
-      float frac_part = modf(h * cycle_samples, &whole_part);
+      float frac_part = modf(h_[i] * cycle_samples, &whole_part);
       int sample = floor(whole_part);
 
       float weight = channel_weight;
       
       if (do_smooth_offset_ && do_pitch_cutoff_) {
         // Smoothing around the pitch cutoff line.
-        float pitch_weight = (1.0f + tanh((pitch_h - h)
+        float pitch_weight = (1.0f + tanh((pitch_h - h_[i])
                                           * smooth_pitch_constant)) / 2.0f;
         weight *= pitch_weight;
         //LOG_INFO("Channel %d, Sample %d. Pitch weight: %f", ch, i, pitch_weight);

@@ -99,6 +99,7 @@ class SignalBank {
   void set_centre_frequency(int i, float cf);
   bool initialized() const;
   int channel_count() const;
+  void Clear();
  private:
   int channel_count_;
   int buffer_length_;

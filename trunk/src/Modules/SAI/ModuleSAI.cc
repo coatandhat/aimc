@@ -107,6 +107,8 @@ bool ModuleSAI::InitializeInternal(const SignalBank &input) {
 
 void ModuleSAI::ResetInternal() {
   // Active Strobes
+  output_.Clear();
+  sai_temp_.Clear();
   active_strobes_.clear();
   active_strobes_.resize(channel_count_);
   fire_counter_ = frame_period_samples_ - 1;

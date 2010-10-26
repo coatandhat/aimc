@@ -48,6 +48,9 @@ module9.child1 = SAI
 
 module10.name = SAI
 module10.id = weighted_sai
+module10.parameters = <<<ENDPARAMS
+sai.frame_period_ms=20.0
+ENDPARAMS
 module10.child1 = SSINoPitchCutoff
 module10.child2 = SSIPitchCutoff
 
