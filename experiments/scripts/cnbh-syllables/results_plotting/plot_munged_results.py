@@ -6,7 +6,10 @@ plot_munged_results.py
 
 import numpy as np
 import pylab as p
+import matplotlib as mpl
+mpl.use('PDF')
 import matplotlib.pyplot as plt
+
 
 f=open("results_test_all.csv","r")
 results = dict()
@@ -23,7 +26,7 @@ for line in f:
        snr = 50
     else:
        snr = int(values[2])
-       results[values[3]][values[0]][values[1]][int(values[4])][int(values[5])][int(vlues[6])][snr] = float(values[7])
+       results[values[3]][values[0]][values[1]][int(values[4])][int(values[5])][int(values[6])][snr] = float(values[7])
 #    results[values[3]].append((values[1],values[2],values[2],values[4]))
 
 ax = plt.subplot(111)
@@ -47,4 +50,4 @@ for feature_type in ('mfcc', 'mfcc_vtln', 'aim'):
 p.legend(lines, labels, 'upper left', shadow=True)
 p.xlabel('SNR/dB')
 p.ylabel('Recognition performance %')
-plt.show()
+plt.savefig(output_file)
