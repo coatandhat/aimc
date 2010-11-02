@@ -32,6 +32,15 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+// Defines for windows
+#ifdef _WINDOWS
+#define M_PI 3.14159265359
+#define isnan _isnan
+#define isinf(x) (!_finite(x))
+#define snprintf _snprintf
+#define PATH_MAX _MAX_PATH
+#endif
+
 #define AIM_NAME "AIM-C"
 #define AIM_VERSION_STRING "version_number"
 

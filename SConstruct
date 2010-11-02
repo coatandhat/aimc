@@ -28,8 +28,9 @@ SConstruct file for the aimc project
 import os
 import shutil
 
-# Location of libsndfile on Windows
+# Location of libraries / headers on Windows
 windows_libsndfile_location = "C:\\Program Files\\Mega-Nerd\\libsndfile\\"
+windows_cairo_location = "C:\\Program Files\\cairo\\"
 
 # Sources common to every version
 common_sources = ['Support/Common.cc',
@@ -197,6 +198,11 @@ else:
       # Replace 'sndfile' with 'sndfile-1'
       deplibs.remove('sndfile')
       deplibs.append('libsndfile-1')
+  if 'cairo' in deplibs:
+    shutil.copyfile(windows_cairo_location + '/bin/libcairo-2.dll',
+                    build_dir+'/libcairo-2.dll')
+    env.Append(CPPPATH = [windows_cairo_location + '/include/cairo/'])
+    env.AppendUnique(LIBPATH = [windows_cairo_location + '/lib/'])
 env.AppendUnique(LIBS = deplibs)
 
 

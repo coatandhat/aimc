@@ -28,7 +28,7 @@
 #include "Modules/Profile/ModuleScaler.h"
 #include "Modules/SAI/ModuleSAI.h"
 #include "Modules/SSI/ModuleSSI.h"
-#include "Modules/SNR/ModuleNoise.h"
+//#include "Modules/SNR/ModuleNoise.h"
 #include "Modules/Strobes/ModuleParabola.h"
 #include "Modules/Strobes/ModuleLocalMax.h"
 
