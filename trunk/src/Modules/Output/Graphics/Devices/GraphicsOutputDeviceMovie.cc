@@ -183,7 +183,7 @@ void GraphicsOutputDeviceMovie::Stop() {
 #ifdef _WINDOWS
   HANDLE hList;
   WIN32_FIND_DATA FileData;
-  snprintf(sCmdLine, sizeof(sCmdLine)/sizeof(sCmdLine[0]), "%s/*.*", m_sDir);
+  snprintf(sCmdLine, sizeof(sCmdLine)/sizeof(sCmdLine[0]), "%s/*.*", directory_.c_str());
   if ((hList = FindFirstFile(sCmdLine, &FileData)) == INVALID_HANDLE_VALUE) {
     LOG_ERROR(_T("Couldn't remove files from temporary directory."));
     return;
@@ -193,7 +193,7 @@ void GraphicsOutputDeviceMovie::Stop() {
     snprintf(sCmdLine,
              sizeof(sCmdLine)/sizeof(sCmdLine[0]),
              "%s%s",
-             m_sDir,
+             directory_.c_str(),
              FileData.cFileName);
     remove(sCmdLine);
     if (!FindNextFile(hList, &FileData) && GetLastError() == ERROR_NO_MORE_FILES) {
@@ -201,7 +201,7 @@ void GraphicsOutputDeviceMovie::Stop() {
     }
   }
   FindClose(hList);
-  _rmdir(m_sDir);
+  _rmdir(directory_.c_str());
 #else
   DIR *dir;
   struct dirent *dirent;

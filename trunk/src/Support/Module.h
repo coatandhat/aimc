@@ -27,13 +27,6 @@
 #ifndef AIMC_SUPPORT_MODULE_H_
 #define AIMC_SUPPORT_MODULE_H_
 
-// Several modules expect the M_PI macro and isnan() to be defined
-#ifdef _MSC_VER
-#define M_PI 3.14159265359
-#define isnan _isnan
-#define isinf _isinf
-#endif
-
 #include <iostream>
 #include <set>
 #include <string>

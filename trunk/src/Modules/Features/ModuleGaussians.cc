@@ -27,6 +27,10 @@
 
 #include <math.h>
 
+#ifdef _MSC_VER
+#include <float.h>
+#endif
+
 #include "Modules/Features/ModuleGaussians.h"
 #include "Support/Common.h"
 
@@ -120,7 +124,7 @@ void ModuleGaussians::Process(const SignalBank &input) {
   }
 
   for (int ch = 0; ch < input.channel_count(); ++ch) {
-    m_pSpectralProfile[ch] = pow(m_pSpectralProfile[ch], 0.8);
+    m_pSpectralProfile[ch] = pow(m_pSpectralProfile[ch], 0.8f);
   }
 
   RubberGMMCore(2, true);
