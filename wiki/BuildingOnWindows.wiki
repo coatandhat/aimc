@@ -20,16 +20,15 @@ Download and install [http://www.microsoft.com/express/Downloads/#2010-Visual-CP
 
 The defaults should be fine for installing just VC++ 2010
 
-To build the video output for AIM-C, you'll need to install the Cairo development libraries and a few other support files. According to the page at http://cairographics.org/download/ you need the cairo dev library, libpng and Zlib from [http://www.gtk.org/download-windows.html the GTK Windows downloads page].
+To build the video output for AIM-C, you'll need to install the Cairo development libraries and a few other support files. According to the page at http://cairographics.org/download/ you need the cairo dev library and the runtime libraries for libpng, freetype, fontconfig, expat and Zlib from [http://www.gtk.org/download-windows.html the GTK Windows downloads page]. Unzip all these  into a directory somewhere (I used C:\Program Files\cairo\) and set the windows_cairo_libraries variable at the top of the SConstruct file to the correct path.
 
 To use the noise generator module in AIM-C, you need to install the boost random library.
 To do this download the boost package for your visual studio version from [http://www.boostpro.com/download/ boostpro.com] and install at least the 'random' package.
 (If you don't need this module, you can remove ModuleNoise.cc from the list of modules in the SConstruct file and then you don't need boost at all).
 
 
-
-
-Open Command Prompt
+Then, to build:
+Open (Visual Studio) Command Prompt
 
 cd to the directory of your choice
 
