@@ -3,7 +3,7 @@
 All examples assume a working directory of the root of the AIM-C source tree.
 
 Making a movie of the stabilized auditory image for every file in script.scp using the configuration provided in
-src/Configurations/SAI_movie.aimcconfig.
+[http://code.google.com/p/aimc/source/browse/trunk/src/Configurations/SAI_movie.aimcconfig src/Configurations/SAI_movie.aimcconfig].
 
 Command-line:
 {{{
@@ -16,5 +16,3 @@ sa1.wav sa1.
 sa2.wav sa2.
 sa3.wav sa3.
 }}}
-
-
