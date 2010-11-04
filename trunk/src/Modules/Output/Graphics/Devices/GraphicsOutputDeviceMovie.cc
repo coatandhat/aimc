@@ -141,6 +141,7 @@ void GraphicsOutputDeviceMovie::Reset(Parameters* global_parameters) {
 void GraphicsOutputDeviceMovie::Stop() {
   GraphicsOutputDeviceCairo::Stop();
   CloseFile();
+  m_iFileNumber = 0;
 
 #ifdef __WX__
   // GUI only: popup dialog

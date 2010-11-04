@@ -12,10 +12,10 @@ fid = fopen(filename);
 
 debug = 0;
 
-nFrames = fread( fid, 1, 'int32');
+nFrames = fread( fid, 1, 'uint32');
 period = fread( fid, 1, 'float32'); % Frame period in ms
-nChannels = fread( fid, 1, 'int32'); % vertical axis of an AI
-nSamples = fread( fid, 1, 'int32'); % horizontal axis of an AI
+nChannels = fread( fid, 1, 'uint32'); % vertical axis of an AI
+nSamples = fread( fid, 1, 'uint32'); % horizontal axis of an AI
 sample_rate = fread(fid, 1, 'float32'); % sample rate of each channel in Hz
 
 if nChannels == 1 % temporal profiles

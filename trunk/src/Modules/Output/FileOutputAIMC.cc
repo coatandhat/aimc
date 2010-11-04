@@ -36,6 +36,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <cmath>
+#include <string>
 
 #include "Modules/Output/FileOutputAIMC.h"
 
@@ -45,6 +46,7 @@ FileOutputAIMC::FileOutputAIMC(Parameters *params) : Module(params) {
   module_identifier_ = "aimc_out";
   module_type_ = "output";
   module_version_ = "$Id: FileOutputAIMC.cc 51 2010-03-30 22:06:24Z tomwalters $";
+  file_suffix_ = parameters_->DefaultString("file_suffix", ".aimc");
 
   file_handle_ = NULL;
   header_written_ = false;
@@ -56,19 +58,20 @@ FileOutputAIMC::~FileOutputAIMC() {
     CloseFile();
 }
 
-bool FileOutputAIMC::OpenFile(const char* filename, float frame_period_ms) {
+bool FileOutputAIMC::OpenFile(string &filename) {
   if (file_handle_ != NULL) {
     LOG_ERROR(_T("Couldn't open output file. A file is already open."));
     return false;
   }
 
   // Check that the output file exists and is writeable
-  if ((file_handle_ = fopen(filename, "wb")) == NULL) {
-    LOG_ERROR(_T("Couldn't open output file '%s' for writing."), filename);
+  if ((file_handle_ = fopen(filename.c_str(), "wb")) == NULL) {
+    LOG_ERROR(_T("Couldn't open output file '%s' for writing."), filename.c_str());
     return false;
   }
+  // Write temporary values for the frame count and frame period.
   frame_count_ = 0;
-  frame_period_ms_ = frame_period_ms;
+  frame_period_ms_ = 0.0;
   header_written_ = false;
   if (initialized_) {
     WriteHeader();
@@ -77,22 +80,14 @@ bool FileOutputAIMC::OpenFile(const char* filename, float frame_period_ms) {
 }
 
 bool FileOutputAIMC::InitializeInternal(const SignalBank &input) {
-  if (file_handle_ == NULL) {
-    LOG_ERROR(_T("Couldn't initialize file output. "
-                 "Please call FileOutputAIMC::OpenFile first"));
-    return false;
-  }
-  if (header_written_) {
-    LOG_ERROR(_T("A header has already been written on the output file. "
-                 "Please call FileOutputAIMC::CloseFile to close that file, "
-                 "and FileOutputAIMC::OpenFile to open an new one before "
-                 "calling FileOutputAIMC::Initialize again."));
-    return false;
-  }
   channel_count_ = input.channel_count();
   buffer_length_ = input.buffer_length();  
-  sample_rate_ = input.sample_rate();  
-  WriteHeader();
+  sample_rate_ = input.sample_rate();
+  ResetInternal();
+  if (file_handle_ == NULL) {
+    LOG_ERROR(_T("Couldn't initialize file output."));
+    return false;
+  }
   return true;
 }
 
@@ -102,6 +97,11 @@ void FileOutputAIMC::ResetInternal() {
   }
   if (file_handle_ != NULL)
     CloseFile();
+    
+  string out_filename;
+  out_filename = global_parameters_->GetString("output_filename_base") + file_suffix_;
+  OpenFile(out_filename);
+    
 }
 
 void FileOutputAIMC::WriteHeader() {
@@ -169,7 +169,9 @@ bool FileOutputAIMC::CloseFile() {
   rewind(file_handle_);
   fflush(file_handle_);
   uint32_t frame_count = frame_count_;
+  float sample_period_out = frame_period_ms_;
   fwrite(&frame_count, sizeof(frame_count), 1, file_handle_);
+  fwrite(&sample_period_out, sizeof(sample_period_out), 1, file_handle_);
 
   // And close the file
   fclose(file_handle_);

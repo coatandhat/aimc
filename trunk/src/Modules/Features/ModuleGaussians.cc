@@ -27,7 +27,7 @@
 
 #include <math.h>
 
-#ifdef _MSC_VER
+#ifdef _WINDOWS
 #include <float.h>
 #endif
 
