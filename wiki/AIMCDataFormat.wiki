@@ -7,7 +7,7 @@ The data is stored as 32-bit floats with the native byte-ordering of the machine
 == Header format == 
 The first 20 bytes of the file contain the following fields:
 
-  * 32-bit unsigned integer: frame count - total number of frames in the file (these can be SAIs, filterbank output frames or other things (eg. features))
+  * 32-bit unsigned integer: frame count - total number of frames in the file (these can be SAIs, filterbank output frames or other things (eg. features), but all frames in the file are of the same type)
   * 32-bit float: frame period (the interval between adjacent frames in milliseconds)
   * 32-bit unsigned integer: channel count (number of frequency channels in the output)
   * 32-bit unsigned integer frame length (length of each frame in samples)
