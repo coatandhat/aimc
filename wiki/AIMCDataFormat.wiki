@@ -7,11 +7,11 @@ The data is stored as 32-bit floats with the native byte-ordering of the machine
 == Header format == 
 The first 20 bytes of the file contain the following fields:
 
-32-bit unsigned integer: frame_count
-32-bit float: frame_period_ms
-32-bit unsigned integer: channel_count
-32-bit unsigned integer buffer_length
-32-bit float: sample_rate
+  * 32-bit unsigned integer: frame_count
+  * 32-bit float: frame_period_ms
+  * 32-bit unsigned integer: channel_count
+  * 32-bit unsigned integer buffer_length
+  * 32-bit float: sample_rate
 
 
 
