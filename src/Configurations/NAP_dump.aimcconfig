@@ -1,0 +1,17 @@
+module1.name = FileInput
+module1.id = file_input
+module1.child1 = PZFCFilterbank
+
+module2.name = PZFCFilterbank
+module2.id = pzfc
+module2.child1 = NAP
+
+module3.name = NAP
+module3.id = hcl
+module3.child1 = NAPOutput
+
+module4.name = NAPOutput
+module4.id = aimc_out
+module4.parameters = <<<ENDPARAMS
+output.suffix=nap
+ENDPARAMS
