@@ -1,0 +1,20 @@
+#summary Quick examples of how to use AIMCopy for various tasks.
+
+All examples assume a working directory of the root of the AIM-C source tree.
+
+Making a movie of the stabilized auditory image for every file in script.scp using the configuration provided in
+src/Configurations/SAI_movie.aimcconfig.
+
+Command-line:
+{{{
+build/darwin-release/AIMCopy -C src/Configurations/SAI_movie.aimcconfig -S script.scp
+}}}
+
+Contents of script.scp. This will take sa1.wav sa2.wav and sa3.wav in the working directory and convert them to sa1.mov sa2.mov and sa3.mov respectively. (The .mov suffix is added by the graphics_time module).
+{{{
+sa1.wav sa1.
+sa2.wav sa2.
+sa3.wav sa3.
+}}}
+
+
