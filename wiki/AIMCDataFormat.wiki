@@ -1,0 +1,19 @@
+#summary AIM-C simple data file format.
+
+The module [http://code.google.com/p/aimc/source/browse/trunk/src/Modules/Output/FileOutputAIMC.cc FileOutputAIMC] provides data in a simple format which can be read by other programs. 
+
+The data is stored as 32-bit floats with the native byte-ordering of the machine the file was written on. Before the data, there is a simple header.
+
+== Header format == 
+The first 20 bytes of the file contain the following fields:
+
+32-bit unsigned integer: frame_count
+32-bit float: frame_period_ms
+32-bit unsigned integer: channel_count
+32-bit unsigned integer buffer_length
+32-bit float: sample_rate
+
+
+
+== Reading the files using MATLAB ==
+Use [http://code.google.com/p/aimc/source/browse/trunk/matlab/AIMCread.m the MATLAB AIMCread function] to read the files.
