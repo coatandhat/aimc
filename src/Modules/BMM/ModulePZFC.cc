@@ -169,7 +169,7 @@ bool ModulePZFC::SetPZBankCoeffsOrig() {
     // channel
     output_.set_centre_frequency(i, frequency);
 
-  float zero_frequency = Minimum(M_PI, zero_factor_ * pole_frequency);
+    float zero_frequency = Minimum(M_PI, zero_factor_ * pole_frequency);
 
     // Impulse-invariance mapping
     float z_plane_theta = zero_frequency * sqrt(1.0f - pow(zero_damping_, 2));

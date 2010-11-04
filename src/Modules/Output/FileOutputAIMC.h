@@ -28,6 +28,8 @@
 #ifndef AIMC_MODULES_OUTPUT_AIMC_H_
 #define AIMC_MODULES_OUTPUT_AIMC_H_
 
+#include <string>
+
 #include "Support/Module.h"
 #include "Support/SignalBank.h"
 
@@ -44,7 +46,7 @@ class FileOutputAIMC : public Module {
    *  If the file exists it will be overwritten
    *  \return Returns true on success of initialization.
    */
-  bool OpenFile(const char *filename, float frame_period_ms);
+  bool OpenFile(string &filename);
   bool CloseFile();
   virtual void Process(const SignalBank &input);
  private:
@@ -69,6 +71,7 @@ class FileOutputAIMC : public Module {
   int buffer_length_;
   float sample_rate_;  
   float frame_period_ms_;
+  string file_suffix_;
 };
 }  // namespace aimc
 
