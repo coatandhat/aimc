@@ -113,7 +113,7 @@ void ModuleFileInput::Process(const SignalBank& input) {
     }
   }
 
-  // If the number of saples read is less than the buffer length, the end
+  // If the number of samples read is less than the buffer length, the end
   // of the file has been reached.
   if (read < buffer_length_) {
     // Zero samples at end
