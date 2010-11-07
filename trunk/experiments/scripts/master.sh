@@ -158,8 +158,18 @@ SPOKE_PATTERN_FILE=`pwd`/cnbh-syllables/run_training_and_testing/train_test_sets
     $FEATURES_DIR \
     $FEATURE_SUFFIX
 
-TRAINING_SCRIPT=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$TRAINING_SNR/$TALKERS/training_script
-TRAINING_MASTER_LABEL_FILE=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$TRAINING_SNR/$TALKERS/training_master_label_file
+if [ $TRAINING_SNR == 'random' ]; then
+  TRAINING_SCRIPT=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_script
+  TRAINING_MASTER_LABEL_FILE=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_master_label_file
+  RANDOMIZED_TRAINING_SCRIPT=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_script_randomized
+  RANDOMIZED_TRAINING_MASTER_LABEL_FILE=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/clean/$TALKERS/training_master_label_file_randomized
+  ./cnbh-syllables/run_training_and_testing/train_test_sets/randomize_snrs.py -s clean -f $TRAINING_SCRIPT -m $TRAINING_MASTER_LABEL_FILE -o $RANDOMIZED_TRAINING_SCRIPT -p $RANDOMIZED_TRAINING_MASTER_LABEL_FILE
+  TRAINING_SCRIPT=$RANDOMIZED_TRAINING_SCRIPT
+  TRAINING_MASTER_LABEL_FILE=$RANDOMIZED_TRAINING_MASTER_LABEL_FILE
+else
+  TRAINING_SCRIPT=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$TRAINING_SNR/$TALKERS/training_script
+  TRAINING_MASTER_LABEL_FILE=$HMMS_ROOT/$FEATURE_CLASS/$FEATURE_SUFFIX/$TRAINING_SNR/$TALKERS/training_master_label_file
+fi
 
 TESTING_SCRIPT=$WORK/testing_script
 TESTING_MASTER_LABEL_FILE=$WORK/testing_master_label_file
@@ -191,7 +201,7 @@ FEATURE_SUFFIX=htk
 FEATURE_SIZE=39
 FEATURE_TYPE=MFCC_0_D_A
 TALKERS=inner_talkers
-TRAINING_SNR=clean
+TRAINING_SNR=random
 run_train_test
 ########################
 
@@ -204,7 +214,7 @@ FEATURE_SIZE=39
 FEATURE_TYPE=MFCC_0_D_A
 TALKERS=outer_talkers
 TRAINING_SNR=clean
-run_train_test
+#run_train_test
 ########################
 
 ########################
@@ -214,7 +224,7 @@ FEATURE_SUFFIX=htk
 FEATURE_SIZE=39
 FEATURE_TYPE=MFCC_0_D_A
 TALKERS=inner_talkers
-TRAINING_SNR=clean
+TRAINING_SNR=random
 run_train_test
 ########################
 
@@ -226,8 +236,8 @@ FEATURE_SUFFIX=htk
 FEATURE_SIZE=39
 FEATURE_TYPE=MFCC_0_D_A
 TALKERS=outer_talkers
-TRAINING_SNR=clean
-run_train_test
+TRAINING_SNR=random
+#run_train_test
 ########################
 
 AIM_FEATURE_SUFFIXES="slice_1_no_cutoff ssi_profile_no_cutoff slice_1_cutoff ssi_profile_cutoff smooth_nap_profile"
@@ -241,7 +251,7 @@ FEATURE_SUFFIX=$f
 FEATURE_SIZE=12
 FEATURE_TYPE=USER_E_D_A
 TALKERS=inner_talkers
-TRAINING_SNR=clean
+TRAINING_SNR=random
 run_train_test
 ########################
 
@@ -254,7 +264,7 @@ FEATURE_SIZE=12
 FEATURE_TYPE=USER_E_D_A
 TALKERS=outer_talkers
 TRAINING_SNR=clean
-run_train_test
+#run_train_test
 ########################
 done
 

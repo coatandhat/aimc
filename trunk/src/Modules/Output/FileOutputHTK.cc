@@ -145,7 +145,7 @@ void FileOutputHTK::Process(const SignalBank &input) {
   if (!header_written_) {
     LOG_ERROR(_T("No header has been written on the output file yet. Please "
                  "call FileOutputHTK::Initialize() or FileOutputHTK::Reset() "
-                 " before calling FileOutputHTK::Process()"));
+                 "before calling FileOutputHTK::Process()"));
     return;
   }
   float s;
