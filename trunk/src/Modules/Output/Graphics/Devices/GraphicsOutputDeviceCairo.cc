@@ -35,7 +35,7 @@
 
 #ifdef _WINDOWS
 #  include <direct.h> // for _mkdir&_rmdir
-#else
+#endif
 
 //#include "cairo-quartz.h"
 
