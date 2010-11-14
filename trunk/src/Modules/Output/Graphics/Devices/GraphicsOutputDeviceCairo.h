@@ -64,6 +64,8 @@ class GraphicsOutputDeviceCairo : public GraphicsOutputDevice {
    *  Initialize() failed, you shouldn't try the other functions either.
    */
   bool Initialize(string directory);
+virtual bool Initialize(Parameters *global_parameters);
+  
   void gGrab();
   void gBeginLineStrip();
   void gBeginQuadStrip();
@@ -75,11 +77,12 @@ class GraphicsOutputDeviceCairo : public GraphicsOutputDevice {
   void gRelease();
   unsigned char* GetBuffer();
   int GetPixelFormat();
+  virtual void Reset(Parameters* global_parameters);
  protected:
   /*! \brief Internal initialisation
    *
    */
-  void InititalzeInternal();
+  void InitialzeInternal();
 
   /*! \brief Open the file with given index for output
    *  \param index File number to open

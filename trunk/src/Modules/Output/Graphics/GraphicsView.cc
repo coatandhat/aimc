@@ -30,8 +30,12 @@ GraphicsView::GraphicsView(Parameters *parameters) : Module(parameters) {
   module_identifier_ = "graphics";
   module_type_ = "output";
   module_version_ = "$Id: $";
-  
-  m_pDev = new GraphicsOutputDeviceMovie(parameters);
+
+  if (parameters_->DefaultBool("output.images", false)) {
+    m_pDev = new GraphicsOutputDeviceCairo(parameters_);
+  } else {
+    m_pDev = new GraphicsOutputDeviceMovie(parameters_);
+  }
   m_bPlotLabels = false;
   m_pAxisX = new GraphAxisSpec();
   AIM_ASSERT(m_pAxisX);

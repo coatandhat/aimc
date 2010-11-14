@@ -84,7 +84,7 @@ void GraphicsViewTime::PlotAxes(const SignalBank &bank) {
            m_pAxisX->m_fMin,
            m_pAxisX->m_fMax,
            m_pAxisX->m_pScale->getName());
- 
+
   m_pDev->gText2f(m_fMarginLeft, 0.0025f, sTxt, false);
 
   // Frame time
