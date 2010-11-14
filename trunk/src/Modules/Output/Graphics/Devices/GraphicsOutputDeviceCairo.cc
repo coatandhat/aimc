@@ -33,6 +33,10 @@
 #include <math.h>
 #include <limits.h>
 
+#ifdef _WINDOWS
+#  include <direct.h> // for _mkdir&_rmdir
+#else
+
 //#include "cairo-quartz.h"
 
 #include "Modules/Output/Graphics/Devices/GraphicsOutputDeviceCairo.h"
