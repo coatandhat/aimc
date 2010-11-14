@@ -45,12 +45,37 @@ GraphicsOutputDeviceCairo::GraphicsOutputDeviceCairo(Parameters *pParam)
   m_iFileNumber = 0;
   m_iVertexType = VertexTypeNone;
   m_bUseMemoryBuffer=false;
-  parameters_->DefaultString("output.img.format", ".png");
+  parameters_->DefaultString("output.img.format", "png");
+}
+
+void GraphicsOutputDeviceCairo::Reset(Parameters* global_parameters) {
+  Initialize(global_parameters);
+}
+
+bool GraphicsOutputDeviceCairo::Initialize(Parameters *global_parameters) {
+  global_parameters_ = global_parameters;
+#ifdef _WINDOWS
+  string pathsep("\\");
+#else
+  string pathsep("/");
+#endif
+  directory_ = global_parameters->GetString("output_filename_base") + pathsep;
+    //! \todo Make build system check for mkdtemp() to use it when available. See TODO.txt.
+#ifdef _WINDOWS
+  if (_mkdir(directory_.c_str()) < 0) {
+    LOG_ERROR(_T("Couldn't create directory for image output."));
+    return false;
+  }
+#else
+  mkdir(directory_.c_str(), S_IRWXU);
+#endif
+  InitialzeInternal();
+  return true;
 }
 
 bool GraphicsOutputDeviceCairo::Initialize(string directory) {
   directory_ = directory;
-  InititalzeInternal();
+  InitialzeInternal();
 
   /* Try to open an image to see if everything is allright. We want to avoid
    * errors in the main Process()ing loop. */
@@ -71,7 +96,7 @@ bool GraphicsOutputDeviceCairo::Initialize(string directory) {
     return(true);
 }*/
 
-void GraphicsOutputDeviceCairo::InititalzeInternal() {
+void GraphicsOutputDeviceCairo::InitialzeInternal() {
    AIM_ASSERT(parameters_);
 
   parameters_->DefaultString("output.img.color.background", "black");
@@ -235,12 +260,11 @@ void GraphicsOutputDeviceCairo::gVertex3f(float x, float y, float z) {
                        1 - m_aPrevY[2], m_aPrevX[2] - m_aPrevX[0],
                        y - m_aPrevY[2]);
       cairo_fill (m_cCr);
-      
+
       /*cairo_move_to(m_cCr, , );
       cairo_line_to(m_cCr, , 1 - m_aPrevY[1]);
       cairo_line_to(m_cCr, x, y);
       cairo_line_to(m_cCr, m_aPrevX[2], 1 - m_aPrevY[2]);*/
- 
 
       // Last vertices of this quad are the first of the next
       m_aPrevX[0] = m_aPrevX[2];

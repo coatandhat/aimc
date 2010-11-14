@@ -64,7 +64,7 @@ class SignalBank {
   inline const vector<float> &get_signal(int channel) const {
     return signals_[channel];
   };
-  
+
   // Return a reference to the signal vector. The reference is not
   // const, so the vector is directly modifiable. In order to maintain
   // consistency of the data within the filterbank, the size of this
@@ -74,7 +74,7 @@ class SignalBank {
   inline vector<float> &get_mutable_signal(int channel) {
     return signals_[channel];
   };
-  
+
   inline void set_signal(int channel, vector<float> input) {
     signals_[channel] = input;
   }
