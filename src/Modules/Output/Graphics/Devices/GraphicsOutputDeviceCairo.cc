@@ -66,10 +66,7 @@ bool GraphicsOutputDeviceCairo::Initialize(Parameters *global_parameters) {
   directory_ = global_parameters->GetString("output_filename_base") + pathsep;
     //! \todo Make build system check for mkdtemp() to use it when available. See TODO.txt.
 #ifdef _WINDOWS
-  if (_mkdir(directory_.c_str()) < 0) {
-    LOG_ERROR(_T("Couldn't create directory for image output."));
-    return false;
-  }
+  _mkdir(directory_.c_str());
 #else
   mkdir(directory_.c_str(), S_IRWXU);
 #endif
