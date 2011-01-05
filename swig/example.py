@@ -19,7 +19,7 @@
 import aimc
 module_params = aimc.Parameters()
 global_params = aimc.Parameters()
-mod_gauss = aimc.ModuleGaussians(params)
+mod_gauss = aimc.ModuleGaussians(module_params)
 sig = aimc.SignalBank()
 sig.Initialize(115, 1, 44100)
 mod_gauss.Initialize(sig, global_params)
