@@ -103,11 +103,13 @@ void ModuleFileInput::Process(const SignalBank& input) {
 
   // Read buffersize bytes into buffer
   read = sf_readf_float(file_handle_, &buffer[0], buffer_length_);
-    
+  for (int i = 0; i < 10; i++) { 
+	  LOG_INFO(_T("%i: %f, %f"),i,buffer[2*i],buffer[2*i+1]);
+  }
   // Place the contents of the buffer into the signal bank
   int counter = 0;
-  for (int c = 0; c < audio_channels_; ++c) {
-    for (int i = 0; i < read; ++i) {
+  for (int i = 0; i < read; ++i) {
+	for (int c = 0; c < audio_channels_; ++c) {
       output_.set_sample(c, i, buffer[counter]);
       ++counter;
     }
@@ -117,8 +119,8 @@ void ModuleFileInput::Process(const SignalBank& input) {
   // of the file has been reached.
   if (read < buffer_length_) {
     // Zero samples at end
-    for (int c = 0; c < audio_channels_; ++c) {
-      for (int i = read; i < buffer_length_; ++i) {
+	for (int i = read; i < buffer_length_; ++i) {
+	  for (int c = 0; c < audio_channels_; ++c) {
         output_.set_sample(c, i, 0.0f);
       }
     }
