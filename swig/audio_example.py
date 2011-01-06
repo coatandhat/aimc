@@ -27,19 +27,25 @@ except:
 
 if x.ndim <= 1:
 	x=reshape(x,(x.shape[0],1))
+sr = 1.*sr
 	
 nChannels = x.shape[1]
 
 nSamples = x.shape[0]
 buffer_length = 1024
-zero_pad = numpy.zeros((buffer_length-(nSamples%buffer_length),nChannels)).astype('float')
-print x.shape, zero_pad.shape
-x = numpy.vstack((x,zero_pad))
-print x.shape
+
+#Zero-padding
+#zero_pad = numpy.zeros((buffer_length-(nSamples%buffer_length),nChannels)).astype('float')
+#x = numpy.vstack((x,zero_pad))
+
+#OR
+
+#Drop last incomplete frame (this is what happens in the C++ code)
+nFrames = x.shape[0]/buffer_length
+x = x[:nFrames*buffer_length]
+
 assert(x.shape[0]%buffer_length == 0)
 
-nFrames = x.shape[0]/buffer_length
-print nFrames
 
 sig = aimc.SignalBank()
 sig.Initialize(nChannels,buffer_length,sr)
@@ -56,11 +62,8 @@ local_max.AddTarget(sai)
 global_params = aimc.Parameters()
 pzfc.Initialize(sig,global_params)
 
-
-##One chunk only
-#chunk=x[:buffer_length]
-
 output_list = []
+bank_list =[]
 
 for f in range(nFrames):
 	for i in range(nChannels):
@@ -68,12 +71,17 @@ for f in range(nFrames):
 
 	pzfc.Process(sig)
 	output_bank = sai.GetOutputBank()
+	bank_list.append(output_bank)
 	n_channel = output_bank.channel_count()
 	sig_length = output_bank.buffer_length()
 	output_matrix = numpy.zeros((n_channel,sig_length))
 	for i in range(n_channel):
 		output_matrix[i] = numpy.array(output_bank.get_signal(i))
 	output_list.append(output_matrix)
+
+print 'nFrames, nChannels, nSamples, sample_rate'
+print nFrames, n_channel, sig_length, sr
+
 
 if do_plot:
 	import pylab as P

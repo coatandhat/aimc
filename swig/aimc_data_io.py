@@ -39,4 +39,20 @@ def read_aimc_data(filename):
     data = N.reshape(vec_data,(nFrames, nChannels, nSamples))
     return data, nFrames, period, nChannels, nSamples, sample_rate
 
-#TODO write_aimc_data(data, nFrames, period, nChannels, nSamples, sample_rate)
+def write_aimc_data(filename, data, sample_rate, period = 0.0):
+
+    nFrames, nChannels, nSamples = data.shape
+    
+    file = open(filename,'wb')
+    
+    file.write(pack('i',nFrames))
+    file.write(pack('f',period)) #Not correctly implemented yet
+    file.write(pack('i',nChannels))
+    file.write(pack('i',nSamples))
+    file.write(pack('f',sample_rate))
+    
+    vec_data = data.flatten()
+    for elem in vec_data:
+        file.write(pack('f',elem))
+
+    
