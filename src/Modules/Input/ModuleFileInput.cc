@@ -103,9 +103,7 @@ void ModuleFileInput::Process(const SignalBank& input) {
 
   // Read buffersize bytes into buffer
   read = sf_readf_float(file_handle_, &buffer[0], buffer_length_);
-  for (int i = 0; i < 10; i++) { 
-	  LOG_INFO(_T("%i: %f, %f"),i,buffer[2*i],buffer[2*i+1]);
-  }
+	
   // Place the contents of the buffer into the signal bank
   int counter = 0;
   for (int i = 0; i < read; ++i) {
