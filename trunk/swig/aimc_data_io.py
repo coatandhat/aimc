@@ -55,4 +55,5 @@ def write_aimc_data(filename, data, sample_rate, period = 0.0):
     for elem in vec_data:
         file.write(pack('f',elem))
 
+    file.close()
     
