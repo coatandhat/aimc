@@ -46,6 +46,7 @@ setup (name = 'aimc',
        version = '0.1',
        author      = "Thomas Walters <tom@acousticscale.org>",
        description = """SWIG wrapper round the core of aimc""",
+       options={'build_ext':{'swig_opts':'-c++ -I../src/'}}, #Some versions of SWIG require that we repeat the options here
        ext_modules = [aimc_module],
        py_modules = ["aimc"],
        )
