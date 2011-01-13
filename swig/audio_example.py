@@ -9,8 +9,18 @@
 
 import aimc
 import numpy
+from copy import copy
 
-do_plot=True
+def get_strobe_matrix(strobes,buf_len = 1024):
+	n_channel = len(strobes)
+	strobe_mat = numpy.zeros((n_channel,buf_len))
+	for ch in range(n_channel):
+		for s in strobes[ch]:
+			strobe_mat[ch,s] = 1.
+	return strobe_mat
+
+
+do_plot=False
 # Example wav file
 wavfile = '../test_data/short_example.wav'
 
@@ -26,7 +36,7 @@ except:
 	x=x.astype('float')/float(pow(2,15) - 1)
 
 if x.ndim <= 1:
-	x=reshape(x,(x.shape[0],1))
+	x=numpy.reshape(x,(x.shape[0],1))
 sr = 1.*sr
 	
 nChannels = x.shape[1]
@@ -63,7 +73,8 @@ global_params = aimc.Parameters()
 pzfc.Initialize(sig,global_params)
 
 output_list = []
-bank_list =[]
+strobe_list = []
+centre_freq_list=[]
 
 for f in range(nFrames):
 	for i in range(nChannels):
@@ -71,13 +82,24 @@ for f in range(nFrames):
 
 	pzfc.Process(sig)
 	output_bank = sai.GetOutputBank()
-	bank_list.append(output_bank)
 	n_channel = output_bank.channel_count()
 	sig_length = output_bank.buffer_length()
 	output_matrix = numpy.zeros((n_channel,sig_length))
+	strobes=[]
+	freqs=[]
 	for i in range(n_channel):
 		output_matrix[i] = numpy.array(output_bank.get_signal(i))
+		freqs.append(output_bank.centre_frequency(i))
+		channel_strobes = [] 
+		for j in range(output_bank.strobe_count(i)):
+			channel_strobes.append(output_bank.strobe(i,j))
+		strobes.append(channel_strobes)
+	centre_freq_list.append(freqs)
+	strobe_list.append(strobes)
 	output_list.append(output_matrix)
+#	P.figure()
+#	P.imshow(output_matrix, aspect='auto', origin='lower')
+
 
 print 'nFrames, nChannels, nSamples, sample_rate'
 print nFrames, n_channel, sig_length, sr
