@@ -28,5 +28,5 @@ graph.y.max=0.5
 graph.freq.label=Cochlear Channel
 graph.x.label=Time Interval
 graph.type=colormap
-output.images=true
+output.images=false
 ENDPARAMS
