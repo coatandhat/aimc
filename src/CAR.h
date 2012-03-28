@@ -18,9 +18,10 @@ public:
 
 class CAR_coefficients{
 public:
-	CAR_coefficients(){}
-	CAR_coefficients(CAR_parameters, float, FloatArray);
+	CAR_coefficients(CAR_parameters*, float, FloatArray);
 	virtual ~CAR_coefficients();
+private:
+	CAR_coefficients(){};
 };
 
 #endif /* CAR_H_ */
