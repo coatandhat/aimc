@@ -7,11 +7,11 @@ class AGC_parameters {
 public:
 	AGC_parameters(){
 		n_stages = 4; // redundant?
-//		time_constants = {1, 4, 16, 64};
+		time_constants = {0.002*1, 0.002*4, 0.002*16, 0.002*64};
 		AGC_stage_gain = 2;
-//		decimation = {8, 2, 2, 2};
-//		AGC1_scales = {1.0, 1.4,  2.0, 2.8};
-//		AGC2_scales = {1.6, 2.25, 3.2, 4.5};
+		decimation = {8, 2, 2, 2};
+		AGC1_scales = {1.0, 1.4,  2.0, 2.8};
+		AGC2_scales = {1.6, 2.25, 3.2, 4.5};
 		detect_scale = 0.25;
 		AGC_mix_coeff = 0.5;
 	}
@@ -31,8 +31,10 @@ public:
 
 class AGC_coefficients {
 public:
-	AGC_coefficients();
+	AGC_coefficients(AGC_parameters*, float, int);
 	virtual ~AGC_coefficients();
+private:
+	AGC_coefficients();
 };
 
 #endif /* AGC_H_ */

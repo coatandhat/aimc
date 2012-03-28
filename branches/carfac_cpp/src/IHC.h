@@ -23,8 +23,10 @@ public:
 
 class IHC_coefficients {
 public:
-	IHC_coefficients();
+	IHC_coefficients(IHC_parameters*, float, int);
 	virtual ~IHC_coefficients();
+private:
+	IHC_coefficients(){}
 };
 
 #endif /* IHC_H_ */
