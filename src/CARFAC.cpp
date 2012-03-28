@@ -12,14 +12,15 @@ CARFAC::CARFAC(int fs = DEFAULT_FS,
 		float ERB_break_freq = DEFAULT_ERB_break_freq,
 		float ERB_Q = DEFAULT_ERB_Q){
 
+	// for now, design is to take ownership. Preferences? Make copies, call by value, etc?
 	CAR_params = _CAR_params;
 	IHC_params = _IHC_params;
 	AGC_params = _AGC_params;
 
-	FloatArray pole_freqs; //TODO: do it, or push it down to CAR_coefficients level instead
+	FloatArray pole_freqs; //TODO: do it
 	CAR_coeffs = new CAR_coefficients(CAR_params, fs, pole_freqs);
 
-	// etc ...
+	// etc ... lots of it
 }
 
 CARFAC::~CARFAC() {
