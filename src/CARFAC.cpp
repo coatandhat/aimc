@@ -20,16 +20,19 @@ CARFAC::CARFAC(int fs = DEFAULT_FS,
 	FloatArray pole_freqs; //TODO: do it
 	CAR_coeffs = new CAR_coefficients(CAR_params, fs, pole_freqs);
 
-	// etc ... lots of it
+	int n_ch = 10; // TODO: do the design loops
+	AGC_coeffs = new AGC_coefficients(AGC_params, fs, n_ch);
+
+	IHC_coeffs = new IHC_coefficients(IHC_params, fs, n_ch);
 }
 
 CARFAC::~CARFAC() {
 	delete CAR_coeffs;
-	delete CAR_params;
+	//delete CAR_params;
 
 	delete IHC_coeffs;
-	delete IHC_params;
+	//delete IHC_params;
 
 	delete AGC_coeffs;
-	delete AGC_params;
+	//delete AGC_params;
 }
