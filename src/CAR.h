@@ -14,6 +14,18 @@ class CAR_parameters {
 public:
 	CAR_parameters();
 	virtual ~CAR_parameters();
+
+	float velocity_scale;
+	float v_offset;
+	float v2_corner;
+	float v_damp_max;
+	float min_zeta;
+	float first_pole_theta;
+	float zero_ratio;
+	float high_f_damping_compression;
+	float ERB_per_step;
+	float min_pole_Hz;
+
 };
 
 class CAR_coefficients{

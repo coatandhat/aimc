@@ -5,9 +5,8 @@
 
 typedef std::vector<float> FloatArray;
 
-#define DEFAULT_ERB_break_freq 228.833
-#define DEFAULT_ERB_Q 9.2645
-
-#define DEFAULT_FS 44100
+#define DEFAULT_ERB_break_freq 165.3
+#define DEFAULT_ERB_Q 1000/(24.7*4.37)
+#define DEFAULT_FS 22050
 
 #endif /* CARFAC_COMMON_TYPEDEFS_H_ */
