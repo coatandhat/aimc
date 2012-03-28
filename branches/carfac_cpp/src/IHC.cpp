@@ -1,10 +1,3 @@
-/*
- * IHCparameters.cpp
- *
- *  Created on: 25 mar 2012
- *      Author: ulha
- */
-
 #include "IHC.h"
 
 IHC_parameters::IHC_parameters() {

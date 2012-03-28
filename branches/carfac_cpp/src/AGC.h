@@ -1,10 +1,3 @@
-/*
- * AGC.h
- *
- *  Created on: 25 mar 2012
- *      Author: ulha
- */
-
 #ifndef AGC_H_
 #define AGC_H_
 

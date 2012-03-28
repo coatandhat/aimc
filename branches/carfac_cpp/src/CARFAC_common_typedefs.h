@@ -1,10 +1,3 @@
-/*
- * CARFAC_common_typedefs.h
- *
- *  Created on: 25 mar 2012
- *      Author: ulha
- */
-
 #ifndef CARFAC_COMMON_TYPEDEFS_H_
 #define CARFAC_COMMON_TYPEDEFS_H_
 

@@ -1,10 +1,3 @@
-/*
- * IHC.h
- *
- *  Created on: 25 mar 2012
- *      Author: ulha
- */
-
 #ifndef IHC_H_
 #define IHC_H_
 
