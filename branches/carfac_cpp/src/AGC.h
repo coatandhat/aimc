@@ -34,7 +34,7 @@ public:
 	AGC_coefficients(AGC_parameters*, float, int);
 	virtual ~AGC_coefficients();
 private:
-	AGC_coefficients();
+	AGC_coefficients(){}
 };
 
 #endif /* AGC_H_ */
