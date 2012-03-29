@@ -2,43 +2,44 @@
 #define CAR_H_
 
 #include "CARFAC_common_typedefs.h"
-#include <math.h>
+#include <cmath>
 
 class CAR_parameters {
 public:
-	CAR_parameters(){
-		velocity_scale = 0.2;
-		v_offset = 0.01;
-		v2_corner = 0.2;
-		v_damp_max = 0.01;
-		min_zeta = 0.10;
-		first_pole_theta = 0.085*PI;
-		zero_ratio = sqrt(2);
-		high_f_damping_compression = 0.5;
-		ERB_per_step = 0.5;
-		min_pole_Hz = 30;
-	}
-	virtual ~CAR_parameters(){}
+  CAR_parameters()
+  {
+    velocity_scale_ = 0.2;
+    v_offset_ = 0.01;
+    v2_corner_ = 0.2;
+    v_damp_max_ = 0.01;
+    min_zeta_ = 0.10;
+    first_pole_theta_ = 0.085*kPi;
+    zero_ratio_ = sqrt(2);
+    high_f_damping_compression_ = 0.5;
+    erb_per_step_ = 0.5;
+    min_pole_Hz_ = 30;
+  }
 
-	float velocity_scale;
-	float v_offset;
-	float v2_corner;
-	float v_damp_max;
-	float min_zeta;
-	float first_pole_theta;
-	float zero_ratio;
-	float high_f_damping_compression;
-	float ERB_per_step;
-	float min_pole_Hz;
+  virtual ~CAR_parameters(){}
 
+  float velocity_scale_;
+  float v_offset_;
+  float v2_corner_;
+  float v_damp_max_;
+  float min_zeta_;
+  float first_pole_theta_;
+  float zero_ratio_;
+  float high_f_damping_compression_;
+  float erb_per_step_;
+  float min_pole_Hz_;
 };
 
 class CAR_coefficients{
 public:
-	CAR_coefficients(CAR_parameters*, float, FloatArray);
-	virtual ~CAR_coefficients();
+  CAR_coefficients(CAR_parameters*, float, FloatArray);
+  virtual ~CAR_coefficients();
 private:
-	CAR_coefficients(){}
+  CAR_coefficients(){}
 };
 
 #endif /* CAR_H_ */
