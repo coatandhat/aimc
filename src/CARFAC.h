@@ -13,7 +13,7 @@ class CARFAC{
 public:
   CARFAC(int, CAR_parameters*, IHC_parameters*, AGC_parameters*, float, float);
   virtual ~CARFAC();
-  static float ERB_Hz(float,float,float);
+  static float ERB_Hz(float, float, float);
 
   float fs_;
   float max_channels_per_octave_;

@@ -21,11 +21,11 @@ CARFAC::CARFAC(int fs = kDefaultFs,
 
   float pole_hz = car_params->first_pole_theta_* fs / (2*kPi);
   while (pole_hz > car_params->min_pole_hz_){
-      pole_freqs_.push_back(pole_hz); // STL specific
+      pole_freqs_.push_back(pole_hz); // TODO: STL specific
       pole_hz = pole_hz - car_params->erb_per_step_ *
                 ERB_Hz(pole_hz, erb_break_freq, erb_q);
   }
-  n_ch_ = pole_freqs_.size(); // STL specific
+  n_ch_ = pole_freqs_.size();
 
   max_channels_per_octave_ = log(2) / log(pole_freqs_[0]/pole_freqs_[1]);
 

@@ -40,6 +40,13 @@ class CAR_coefficients{
 public:
   CAR_coefficients(CAR_parameters*, float, FloatArray);
   virtual ~CAR_coefficients();
+
+  FloatArray r1_coeffs;
+  FloatArray a0_coeffs;
+  FloatArray c0_coeffs;
+  FloatArray h_coeffs;
+  FloatArray g0_coeffs;
+
 private:
   CAR_coefficients();
 };
