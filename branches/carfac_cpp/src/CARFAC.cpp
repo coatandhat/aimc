@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "CARFAC.h"
 #include "CAR.h"
 #include "IHC.h"
@@ -24,6 +26,8 @@ CARFAC::CARFAC(int fs = kDefaultFs,
                 ERB_Hz(pole_hz, erb_break_freq, erb_q);
   }
   n_ch_ = pole_freqs_.size(); // STL specific
+
+  max_channels_per_octave_ = log(2) / log(pole_freqs_[0]/pole_freqs_[1]);
 
   // replace with feeding this (as const ref) instead? Saves storing doubly
   car_coeffs_ = new CAR_coefficients(car_params_, fs_, pole_freqs_);

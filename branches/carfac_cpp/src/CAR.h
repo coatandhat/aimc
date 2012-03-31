@@ -16,8 +16,7 @@ public:
     zero_ratio_(sqrt(2)),
     high_f_damping_compression_(0.5),
     erb_per_step_(0.5),
-    min_pole_hz_(30)
-  {
+    min_pole_hz_(30){
     // do nothing more
   }
 
