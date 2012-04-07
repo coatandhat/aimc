@@ -29,12 +29,13 @@ CARFAC::CARFAC(int fs = kDefaultFs,
 
   max_channels_per_octave_ = log(2) / log(pole_freqs_[0]/pole_freqs_[1]);
 
-  // replace with feeding this (as const ref) instead? Saves storing doubly
+  //TODO: pass const references?
   car_coeffs_ = new CAR_coefficients(car_params_, fs_, pole_freqs_);
   ihc_coeffs_ = new IHC_coefficients(ihc_params_, fs_, n_ch_);
   agc_coeffs_ = new AGC_coefficients(agc_params_, fs_, n_ch_);
 
-  // move this into AGC_coefficients constructor instead
+  //TODO: move this into AGC_coefficients constructor instead? This style
+  // makes me a bit wary.
   agc_coeffs_->detect_scale_ = agc_params_->detect_scale_ /
                                (ihc_coeffs_->saturation_output_ *
                                agc_coeffs_->agc_gain_);
@@ -42,11 +43,10 @@ CARFAC::CARFAC(int fs = kDefaultFs,
 
 }
 
-//move this somewhere else?
-
+//TODO: move this somewhere else?
 float CARFAC::ERB_Hz(float cf_hz){
   return ERB_Hz(cf_hz, 1000/4.37, 1000/(24.7*4.37));
-} // is it really intentional to use this default value thing in matlab code?
+} // TODO: is it really intentional to use this default value thing in matlab code?
 float CARFAC::ERB_Hz(float cf_hz, float erb_break_freq, float erb_q){
   return (erb_break_freq + cf_hz) / erb_q;
 }
@@ -55,6 +55,9 @@ CARFAC::~CARFAC() {
   delete car_coeffs_;
   delete ihc_coeffs_;
   delete agc_coeffs_;
+
+  //TODO: as the current design takes ownership OR creates news params,
+  //deletion is a ambiguos. Revise this design!
 
   //delete car_params_;
   //delete ihc_params_;
