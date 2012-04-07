@@ -37,7 +37,11 @@ CAR_coefficients::CAR_coefficients(CAR_parameters* car_params, float fs,
 
       h_coeffs_[i] = c0_coeffs_[i] * f;
 
-      g0_coeffs_[i] = 0; // TODO: matlab design a bit hacky - think for bit
+      //TODO: g0_coeffs_ calculated here for now. Let's talk about this, need
+      // to see the whole picture of what makes sense.
+      // Related: I believe CAR, IHC and AGC classes would be beneficial!
+      float tmp = 1 - 2*r1_coeffs_[i]*a0_coeffs_[i] + r1_coeffs_[i]*r1_coeffs_[i];
+      g0_coeffs_[i] = tmp / ( tmp + h_coeffs_[i]*r1_coeffs_[i]*c0_coeffs_[i]);
   }
 
 }
