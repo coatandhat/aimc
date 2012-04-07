@@ -41,11 +41,12 @@ public:
   CAR_coefficients(CAR_parameters*, float, FloatArray);
   virtual ~CAR_coefficients();
 
-  FloatArray r1_coeffs;
-  FloatArray a0_coeffs;
-  FloatArray c0_coeffs;
-  FloatArray h_coeffs;
-  FloatArray g0_coeffs;
+  FloatArray r1_coeffs_;
+  FloatArray a0_coeffs_;
+  FloatArray c0_coeffs_;
+  FloatArray h_coeffs_;
+  FloatArray g0_coeffs_;
+  FloatArray zr_coeffs_;
 
 private:
   CAR_coefficients();
