@@ -45,7 +45,7 @@ CARFAC::CARFAC(int fs = kDefaultFs,
 
 //TODO: move this somewhere else?
 float CARFAC::ERB_Hz(float cf_hz){
-  return ERB_Hz(cf_hz, 1000/4.37, 1000/(24.7*4.37));
+  return ERB_Hz(cf_hz, kDefaultErbBreakFreq, kDefaultErbQ);
 } // TODO: is it really intentional to use this default value thing in matlab code?
 float CARFAC::ERB_Hz(float cf_hz, float erb_break_freq, float erb_q){
   return (erb_break_freq + cf_hz) / erb_q;
