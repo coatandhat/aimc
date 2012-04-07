@@ -8,7 +8,7 @@ CAR_coefficients::CAR_coefficients(CAR_parameters* car_params, float fs,
 
   float f = pow(car_params->zero_ratio_, 2) + 1;
 
-  // dirty FloatArray initialisation. Redo this later
+  // TODO: dirty FloatArray initialisation. Redo this later
   r1_coeffs_= pole_freqs;
   a0_coeffs_= pole_freqs;
   c0_coeffs_= pole_freqs;
@@ -22,8 +22,8 @@ CAR_coefficients::CAR_coefficients(CAR_parameters* car_params, float fs,
   float x;
   float ff = car_params->high_f_damping_compression_;
 
-  // temp loop until we get eigen in
-  for(float i=0; i<theta.size(); i++){
+  // TODO: temp loop until we get eigen in  (or we just leave it like this)
+  for(float i=0; i<pole_freqs.size(); i++){
       theta[i] *= (2*kPi*fs); // scalar mult.
       c0_coeffs_[i] = sin(theta[i]);
       a0_coeffs_[i] = cos(theta[i]);
@@ -33,13 +33,12 @@ CAR_coefficients::CAR_coefficients(CAR_parameters* car_params, float fs,
 
       min_zeta_mod = (car_params->min_zeta_ + 0.25 *
           (CARFAC::ERB_Hz(pole_freqs[i])/pole_freqs[i]-car_params->min_zeta_));
-
       r1_coeffs_[i] = 1-zr_coeffs_[i]*min_zeta_mod;
 
       h_coeffs_[i] = c0_coeffs_[i] * f;
-  }
 
-  // g0_coeffs_[i] = ... TODO: restructure this!
+      g0_coeffs_[i] = 0; // TODO: matlab design a bit hacky - think for bit
+  }
 
 }
 
