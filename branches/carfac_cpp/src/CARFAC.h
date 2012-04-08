@@ -5,15 +5,12 @@
 #include "IHC.h"
 #include "AGC.h"
 
-const double kDefaultErbBreakFreq = 165.3;
-const double kDefaultErbQ = 1000/(24.7*4.37);
 const double kDefaultFs = 22050;
 
 class CARFAC{
 public:
-  CARFAC(int, CAR_parameters*, IHC_parameters*, AGC_parameters*, float, float);
+  CARFAC(int, CAR_parameters*, IHC_parameters*, AGC_parameters*);
   virtual ~CARFAC();
-  static float ERB_Hz(float);
   static float ERB_Hz(float, float, float);
 
   float fs_;

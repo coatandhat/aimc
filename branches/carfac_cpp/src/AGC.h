@@ -44,7 +44,7 @@ public:
   FloatArray agc_polez1_;
   FloatArray agc_polez2_;
   FloatArray agc_spatial_iterations_;
-  std::vector<FloatArray> agc_spatial_fir_;
+  FloatMatrix agc_spatial_fir_;
   FloatArray agc_spatial_n_taps_;
   FloatArray agc_mix_coeffs_;
   float agc_gain_;
