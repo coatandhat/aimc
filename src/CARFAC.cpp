@@ -10,9 +10,7 @@
 CARFAC::CARFAC(int fs = kDefaultFs,
               CAR_parameters* car_params = new CAR_parameters(),
               IHC_parameters* ihc_params = new IHC_parameters(),
-              AGC_parameters* agc_params = new AGC_parameters(),
-              float erb_break_freq = kDefaultErbBreakFreq,
-              float erb_q = kDefaultErbQ) : n_ears_(0) {
+              AGC_parameters* agc_params = new AGC_parameters()) : n_ears_(0) {
 
   // Design is to take ownership. Preferences? Make copies, call by value, etc?
   car_params_ = car_params;
@@ -23,7 +21,8 @@ CARFAC::CARFAC(int fs = kDefaultFs,
   while (pole_hz > car_params->min_pole_hz_){
       pole_freqs_.push_back(pole_hz); // TODO: STL specific
       pole_hz = pole_hz - car_params->erb_per_step_ *
-                ERB_Hz(pole_hz, erb_break_freq, erb_q);
+                ERB_Hz(pole_hz, car_params->erb_break_freq_,
+                    car_params->erb_q_);
   }
   n_ch_ = pole_freqs_.size();
 
@@ -35,18 +34,12 @@ CARFAC::CARFAC(int fs = kDefaultFs,
   agc_coeffs_ = new AGC_coefficients(agc_params_, fs_, n_ch_);
 
   //TODO: move this into AGC_coefficients constructor instead? This style
-  // makes me a bit wary.
+  // makes me (ulha) a bit wary.
   agc_coeffs_->detect_scale_ = agc_params_->detect_scale_ /
                                (ihc_coeffs_->saturation_output_ *
                                agc_coeffs_->agc_gain_);
-
-
 }
 
-//TODO: move this somewhere else?
-float CARFAC::ERB_Hz(float cf_hz){
-  return ERB_Hz(cf_hz, kDefaultErbBreakFreq, kDefaultErbQ);
-} // TODO: is it really intentional to use this default value thing in matlab code?
 float CARFAC::ERB_Hz(float cf_hz, float erb_break_freq, float erb_q){
   return (erb_break_freq + cf_hz) / erb_q;
 }
@@ -57,7 +50,7 @@ CARFAC::~CARFAC() {
   delete agc_coeffs_;
 
   //TODO: as the current design takes ownership OR creates news params,
-  //deletion is a ambiguos. Revise this design!
+  //deletion is a ambiguos. Revise this design?
 
   //delete car_params_;
   //delete ihc_params_;

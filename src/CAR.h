@@ -4,6 +4,9 @@
 #include "CARFAC_common.h"
 #include <cmath>
 
+const double kDefaultErbBreakFreq = 165.3;
+const double kDefaultErbQ = 1000/(24.7*4.37);
+
 class CAR_parameters{
 public:
   CAR_parameters():
@@ -16,7 +19,10 @@ public:
     zero_ratio_(sqrt(2)),
     high_f_damping_compression_(0.5),
     erb_per_step_(0.5),
-    min_pole_hz_(30){
+    min_pole_hz_(30),
+    erb_break_freq_(kDefaultErbBreakFreq),
+    erb_q_(kDefaultErbQ)
+  {
     // do nothing more
   }
 
@@ -34,6 +40,8 @@ public:
   float high_f_damping_compression_;
   float erb_per_step_;
   float min_pole_hz_;
+  float erb_break_freq_;
+  float erb_q_;
 };
 
 class CAR_coefficients{
