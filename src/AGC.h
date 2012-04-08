@@ -36,10 +36,23 @@ public:
   AGC_coefficients(AGC_parameters*, float, int);
   virtual ~AGC_coefficients();
 
-  float detect_scale_;
+  int n_ch_;
+  int n_agc_stages_;
+  float agc_stage_gain_;
+  FloatArray agc_epsilon_;
+  FloatArray decimation_;
+  FloatArray agc_polez1_;
+  FloatArray agc_polez2_;
+  FloatArray agc_spatial_iterations_;
+  std::vector<FloatArray> agc_spatial_fir_;
+  FloatArray agc_spatial_n_taps_;
+  FloatArray agc_mix_coeffs_;
   float agc_gain_;
+  float detect_scale_;
+  
 private:
   AGC_coefficients();
+  FloatArray FIR_coeffs(int, float, float, int, bool*);
 };
 
 #endif /* AGC_H_ */
