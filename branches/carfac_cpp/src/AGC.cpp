@@ -80,8 +80,7 @@ AGC_coefficients::AGC_coefficients(AGC_parameters* AGC_params,
       agc_mix_coeffs_[stage] = AGC_params->agc_mix_coeff_/(tau * (fs/decim));
   }
   agc_gain_ = total_DC_gain;
-  
-  // TODO Computation of the detect_scale_ member
+  detect_scale_ = AGC_params->detect_scale_/total_DC_gain;
 }
 AGC_coefficients::~AGC_coefficients(){
   // TODO Auto-generated destructor stub
