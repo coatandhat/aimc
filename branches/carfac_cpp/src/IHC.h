@@ -6,9 +6,9 @@ class IHC_parameters{
 public:
   IHC_parameters() :
     tau_lpf_(0.000080),
-    tau1_out_(0.020),
+    tau1_out_(0.010),
     tau1_in_(0.20),
-    tau2_out_(0.005),
+    tau2_out_(0.0025),
     tau2_in_(0.005){
     // do nothing more
   }
