@@ -33,11 +33,6 @@ CARFAC::CARFAC(int fs = kDefaultFs,
   ihc_coeffs_ = new IHC_coefficients(ihc_params_, fs_, n_ch_);
   agc_coeffs_ = new AGC_coefficients(agc_params_, fs_, n_ch_);
 
-  //TODO: move this into AGC_coefficients constructor instead? This style
-  // makes me (ulha) a bit wary.
-  agc_coeffs_->detect_scale_ = agc_params_->detect_scale_ /
-                               (ihc_coeffs_->saturation_output_ *
-                               agc_coeffs_->agc_gain_);
 }
 
 float CARFAC::ERB_Hz(float cf_hz, float erb_break_freq, float erb_q){

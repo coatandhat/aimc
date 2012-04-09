@@ -9,8 +9,8 @@ AGC_coefficients::AGC_coefficients(AGC_parameters* AGC_params,
   float total_DC_gain = 0.0;
   float tau, ntimes, delay, spread_sq, u, p, dp;
   int n_taps = 0, n_iterations = 1;
-  bool FIR_OK = false;
-  
+//  bool FIR_OK = false;
+
   n_ch_ = n_ch;
   n_agc_stages_ = AGC_params->n_stages_;
   agc_stage_gain_ = AGC_params->agc_stage_gain_;
@@ -40,28 +40,31 @@ AGC_coefficients::AGC_coefficients(AGC_parameters* AGC_params,
     dp = delay*(1 - 2*p + p*p)*0.5;
     agc_polez1_[stage] = p - dp;
     agc_polez2_[stage] = p + dp;
-    
-    while(!FIR_OK){
-      switch(n_taps){
-        case 0:
-          n_taps = 3;
-          break;
-        case 3:
-          n_taps = 5;
-          break;
-        case 5:
-          n_iterations++;
-          if(n_iterations > 16){
-            printf("Too many n_iterations in CARFAC_DesignAGC\n");
-            exit(1);
-          }
-          break;
-        default:
-          printf("Bad n_taps in CARFAC_DesignAGC\n");
-          exit(1);
-      }
-      agc_spatial_FIR = FIR_coeffs(n_taps, spread_sq, delay, n_iterations, &FIR_OK);
-    }
+
+//    while(!FIR_OK){
+//      switch(n_taps){
+//        case 0:
+//          n_taps = 3;
+//          break;
+//        case 3:
+//          n_taps = 5;
+//          break;
+//        case 5:
+//          n_iterations++;
+//          if(n_iterations > 16){
+//            printf("Too many n_iterations in CARFAC_DesignAGC\n");
+//            exit(1);
+//          }
+//          break;
+//        default:
+//          printf("Bad n_taps in CARFAC_DesignAGC\n");
+//          exit(1);
+//      }
+//      agc_spatial_FIR = FIR_coeffs(n_taps, spread_sq, delay, n_iterations, &FIR_OK);
+//    }
+
+    agc_spatial_FIR = Build_FIR_coeffs(spread_sq, delay, &n_iterations, &n_taps);
+
     agc_spatial_iterations_[stage] = (float) n_iterations;
     agc_spatial_n_taps_[stage] = (float) n_taps;
     agc_spatial_fir_.push_back(FloatArray());
@@ -84,36 +87,77 @@ AGC_coefficients::~AGC_coefficients(){
   // TODO Auto-generated destructor stub
 }
 
-FloatArray  AGC_coefficients::FIR_coeffs(int n_taps, float var, float mn, int n_iter, bool* ptr_FIR_OK)
-{
+//FloatArray  AGC_coefficients::FIR_coeffs(int n_taps, float var, float mn, int n_iter, bool* ptr_FIR_OK)
+//{
+//  float a, b;
+//  FloatArray FIR(3);
+//  mn /= n_iter;
+//  var /= n_iter;
+//
+//  switch(n_taps){
+//    case 3:
+//      a = (var + mn*mn - mn)/2;
+//      b = (var + mn*mn + mn)/2;
+//      FIR[0] = a;
+//      FIR[1] = 1.0 - a - b;
+//      FIR[2] = b;
+//      if(FIR[1] >= 0.2)
+//        *ptr_FIR_OK = true;
+//      break;
+//    case 5:
+//      a = ((var + mn*mn)*2/5 - mn*2/3)/2;
+//      b = ((var + mn*mn)*2/5 + mn*2/3)/2;
+//      FIR[0] = a/2;
+//      FIR[1] = 1.0 - a - b;
+//      FIR[2] = b;
+//      if(FIR[1] >= 0.1)
+//        *ptr_FIR_OK = true;
+//      break;
+//    default:
+//      printf("Bad n_taps in AGC_spatial_FIR\n");
+//      exit(1);
+//  }
+//
+//  return FIR;
+//}
+
+FloatArray AGC_coefficients::Build_FIR_coeffs(float var, float mn, int* ptr_iters, int* ptr_taps){
   float a, b;
   FloatArray FIR(3);
-  mn /= n_iter;
-  var /= n_iter;
-  
-  switch(n_taps){
-    case 3:
-      a = (var + mn*mn - mn)/2;
-      b = (var + mn*mn + mn)/2;
-      FIR[0] = a;
-      FIR[1] = 1.0 - a - b;
-      FIR[2] = b;
-      if(FIR[1] >= 0.2)
-        *ptr_FIR_OK = true;
-      break;
-    case 5:
-      a = ((var + mn*mn)*2/5 - mn*2/3)/2;
-      b = ((var + mn*mn)*2/5 + mn*2/3)/2;
-      FIR[0] = a/2;
-      FIR[1] = 1.0 - a - b;
-      FIR[2] = b;
-      if(FIR[1] >= 0.1)
-        *ptr_FIR_OK = true;
-      break;
-    default:
-      printf("Bad n_taps in AGC_spatial_FIR\n");
-      exit(1);
+
+  // Try with 3 FIR taps
+  a = (var + mn*mn - mn)/2;
+  b = (var + mn*mn + mn)/2;
+  FIR[0] = a;
+  FIR[1] = 1.0 - a - b;
+  FIR[2] = b;
+
+  if(FIR[1] >= 0.2){
+    *ptr_taps = 3;
+    return FIR;
   }
-  
-  return FIR;
+  else //Try with 5 FIR taps
+    {
+      for(int n_iter = 1; n_iter<16; n_iter++){
+        mn /= n_iter;
+        var /= n_iter;
+
+        a = ((var + mn*mn)*2/5 - mn*2/3)/2;
+        b = ((var + mn*mn)*2/5 + mn*2/3)/2;
+        FIR[0] = a/2;
+        FIR[1] = 1.0 - a - b;
+        FIR[2] = b;
+
+        *ptr_iters = n_iter;
+
+        if(FIR[1] >= 0.1){
+            *ptr_taps = 5;
+            return FIR;
+        }
+      }
+      //TODO: discuss how we handle errors
+      printf("Too many iterations in FIR_coeffs\n");
+      FIR = {0, 0, 0};
+      return FIR;
+   }
 }
