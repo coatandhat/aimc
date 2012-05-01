@@ -166,9 +166,9 @@ void GraphicsOutputDeviceMovie::Stop() {
   float frame_rate = global_parameters_->DefaultFloat("frame_rate", -1.0);
   char sCmdLine[1024]; //!\todo check that snprintf does not want a larger buffer
   snprintf(sCmdLine, sizeof(sCmdLine)/sizeof(sCmdLine[0]),
-    "%s -y -i \"%s\" -i \"%s%%06d.png\" "
+    "%s -y -i \"%s\" -r %.2f -i \"%s%%06d.png\" "
     "-sameq -r %.2f -ar 44100 -acodec pcm_s16le %s \"%s\"",
-    sffmpegPath, sound_filename_.c_str(), directory_.c_str(),
+    sffmpegPath, sound_filename_.c_str(), frame_rate, directory_.c_str(),
     frame_rate, sCodecOptions, movie_filename_.c_str());
     printf(sCmdLine);
     printf("\n");
