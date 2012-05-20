@@ -3,10 +3,10 @@
 #include "CARFAC.h"
 #include <cmath>
 
-CAR_coefficients::CAR_coefficients(CAR_parameters* car_params, float fs,
+CAR_coefficients::CAR_coefficients(CAR_parameters* car_params_p, float fs,
                                    FloatArray pole_freqs){
 
-  float f = pow(car_params->zero_ratio_, 2) + 1;
+  float f = pow(car_params_p->zero_ratio_, 2) + 1;
 
   // TODO: dirty FloatArray initialization.
   r1_coeffs_= pole_freqs;
@@ -20,7 +20,7 @@ CAR_coefficients::CAR_coefficients(CAR_parameters* car_params, float fs,
 
   float min_zeta_mod;
   float x;
-  float ff = car_params->high_f_damping_compression_;
+  float ff = car_params_p->high_f_damping_compression_;
 
   // TODO: temp loop until we get eigen in  (or we just leave it like this)
   for(float i=0; i<pole_freqs.size(); i++){
@@ -31,10 +31,10 @@ CAR_coefficients::CAR_coefficients(CAR_parameters* car_params, float fs,
       x = theta[i]/kPi;
       zr_coeffs_[i] = kPi * (x - ff * x*x*x);
 
-      min_zeta_mod = (car_params->min_zeta_ + 0.25 * (CARFAC::ERB_Hz(
-                      pole_freqs[i], car_params->erb_break_freq_,
-                      car_params->erb_q_) / pole_freqs[i]
-                     - car_params->min_zeta_));
+      min_zeta_mod = (car_params_p->min_zeta_ + 0.25 * (CARFAC::ERB_Hz(
+                      pole_freqs[i], car_params_p->erb_break_freq_,
+                      car_params_p->erb_q_) / pole_freqs[i]
+                     - car_params_p->min_zeta_));
 
       r1_coeffs_[i] = 1-zr_coeffs_[i]*min_zeta_mod;
 

@@ -52,7 +52,6 @@ public:
   
 private:
   AGC_coefficients();
-//  FloatArray FIR_coeffs(int, float, float, int, bool*);
   FloatArray Build_FIR_coeffs(float, float, int*, int*);
 };
 
