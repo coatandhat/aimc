@@ -1,6 +1,6 @@
 #include "IHC.h"
 
-IHC_coefficients::IHC_coefficients(IHC_parameters* IHC_params, float fs, int n_ch){
+IHC_coefficients::IHC_coefficients(IHC_parameters* IHC_params_p, float fs, int n_ch){
   // TODO stuff!
 }
 
