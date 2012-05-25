@@ -24,5 +24,5 @@ TEST(CARFACDesignTest, NumberOfEars) {
   int arbitrary_number = 1347;
 
   CARFAC* fooCarfac = new CARFAC(arbitrary_number, car_params, ihc_params, agc_params, 2);
-  EXPECT_EQ(fooCarfac->n_ears_, foobadooba->ears_.size());
+  EXPECT_EQ(fooCarfac->n_ears_, fooCarfac->ears_.size());
 }
