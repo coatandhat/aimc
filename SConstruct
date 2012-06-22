@@ -52,6 +52,7 @@ common_sources = ['Support/Common.cc',
                   'Modules/Profile/ModuleScaler.cc',
                   'Modules/Output/FileOutputHTK.cc',
                   'Modules/Output/FileOutputAIMC.cc',
+                  'Modules/Output/OSCOutput.cc',
                   'Modules/Features/ModuleGaussians.cc',
                   'Modules/Features/ModuleBoxes.cc',]
                   #'Modules/Features/ModuleDCT.cc' ]
@@ -177,6 +178,9 @@ env.Append(CPPPATH = ['#src'])
 deplibs = ['sndfile']
 deplibs += graphics_libraries
 
+env.Append(CPPPATH = ['#external/oscpack/oscpack/include/'])
+env.AppendUnique(LIBPATH = ['#external/oscpack/oscpack/lib/'])
+
 if target_platform != 'win32':
   for depname in deplibs:
     env.ParseConfig('pkg-config --cflags --libs ' + depname)
@@ -203,6 +207,8 @@ else:
                     build_dir+'/libcairo-2.dll')
     env.Append(CPPPATH = [windows_cairo_location + '/include/cairo/'])
     env.AppendUnique(LIBPATH = [windows_cairo_location + '/lib/'])
+    
+deplibs.append('liboscpack')
 env.AppendUnique(LIBS = deplibs)
 
 
