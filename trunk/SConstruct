@@ -178,8 +178,8 @@ env.Append(CPPPATH = ['#src'])
 deplibs = ['sndfile']
 deplibs += graphics_libraries
 
-env.Append(CPPPATH = ['#external/oscpack/oscpack/include/'])
-env.AppendUnique(LIBPATH = ['#external/oscpack/oscpack/lib/'])
+env.Append(CPPPATH = ['#external/oscpack/'])
+env.AppendUnique(LIBPATH = ['#external/oscpack/'])
 
 if target_platform != 'win32':
   for depname in deplibs:
