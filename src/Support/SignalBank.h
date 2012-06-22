@@ -64,6 +64,12 @@ class SignalBank {
   inline const vector<float> &get_signal(int channel) const {
     return signals_[channel];
   };
+  
+  inline const vector<int>& get_strobes(int channel) const {
+    //DCHECK(channel > 0);
+    //DCHECK(channel < strobes.size());
+    return strobes_[channel];
+  };
 
   // Return a reference to the signal vector. The reference is not
   // const, so the vector is directly modifiable. In order to maintain

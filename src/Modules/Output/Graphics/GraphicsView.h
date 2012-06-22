@@ -95,10 +95,24 @@ public:
    *  \param xScale Scaling in x-direction. 1.0 makes it cover the whole length. 0.5 only the left half.
    */
   virtual void PlotData(const vector<float> &signal,
-			float sample_rate,
+			                  float sample_rate,
                         float yOffset,
                         float height,
                         float xScale) = 0;
+  
+  virtual void PlotStrobes(const vector<float>& signal,
+                           const vector<int>& strobes,
+                           float sample_rate,
+                           float y_offset,
+                           float height,
+                           float x_scale,
+                           float diameter) = 0;
+  
+  virtual void PlotStrobe(float x,
+                          float y,
+                          float val,
+                          float height,
+                          float diameter);
 
   /*! \brief Plot the axes for a signal bank
    *  \param pSig Signal to plot the axes for
@@ -167,6 +181,7 @@ public:
   int previous_start_time_;
 
   bool initialized_;
+  bool plotting_strobes_;
 };
 }  // namespace aimc
 #endif /* __GRAPHICS_VIEW_H__ */

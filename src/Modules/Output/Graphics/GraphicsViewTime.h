@@ -34,13 +34,19 @@ public:
   virtual GraphicsViewTime *Clone(GraphicsOutputDevice *pDev);
 
 private:
-  void PlotData(const vector<float> &signal,
-	              float sample_rate,
-	              float yOffset,
-	              float height,
-	              float xScale = 1.0);
-  void PlotAxes(const vector<float> &signal);
-  void PlotAxes(const SignalBank &pBank);
+  virtual void PlotData(const vector<float> &signal,
+	                      float sample_rate,
+	                      float yOffset,
+	                      float height,
+	                      float xScale = 1.0);
+  virtual void PlotStrobes(const vector<float>& signal,
+                           const vector<int>& strobes,
+                           float sample_rate,
+                           float y_offset,
+                           float height,
+                           float x_scale,
+                           float diameter);
+  virtual void PlotAxes(const SignalBank &pBank);
 };
 }  // namesapce aimc
 #endif /* __GRAPHICS_VIEW_TIME_H__ */
