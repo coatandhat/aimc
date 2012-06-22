@@ -93,6 +93,31 @@ void GraphicsViewTime::PlotAxes(const SignalBank &bank) {
   m_pDev->gText2f(0.8f, 0.0025f, sTxt, false);
 }
 
+void GraphicsViewTime::PlotStrobes(const vector<float>& signal,
+                                   const vector<int>& strobes,
+                                   float sample_rate,
+                                   float y_offset,
+                                   float height,
+                                   float x_scale,
+                                   float diameter) {
+  x_scale *= 1000.0 / sample_rate;
+  m_pDev->gColor3f(1.0f, 0.0f, 0.0f);
+  for (vector<int>::const_iterator i = strobes.begin();
+       i != strobes.end(); ++i) {
+    float x = *i * x_scale;
+    float y = signal[*i];
+    x = m_pAxisX->m_pScale->FromLinearScaled(x) + 0.5f;
+    y = m_pAxisY->m_pScale->FromLinearScaled(y);
+
+    if (x < 0.0)
+      continue;
+
+    // Now fit it into the drawing area.
+    x = x * (1.0f - m_fMarginLeft - m_fMarginRight) + m_fMarginLeft;  // fit inside x-axis area
+    PlotStrobe(x, y_offset, y, height, diameter);
+  }
+}
+
 void GraphicsViewTime::PlotData(const vector<float> &signal,
                                 float sample_rate,
                                 float yOffset,

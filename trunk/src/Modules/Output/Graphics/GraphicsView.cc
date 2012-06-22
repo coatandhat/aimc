@@ -58,6 +58,7 @@ GraphicsView::GraphicsView(Parameters *parameters) : Module(parameters) {
   m_fMarginTop = parameters_->DefaultFloat(_S("graph.margin.top"), 0.005);
   m_fMarginBottom = parameters_->DefaultFloat(_S("graph.margin.bottom"), 0.05);
   m_bPlotLabels = parameters_->DefaultBool(_S("graph.plotlabels"), true);
+  plotting_strobes_ = parameters_->DefaultBool(_S("graph.plot_strobes"), false);
 
   const char *sGraphType = parameters_->DefaultString(_S("graph.type"), "line");
   if (strcmp(sGraphType, _S("line"))==0)
@@ -136,6 +137,7 @@ void GraphicsView::Process(const SignalBank &bank) {
   float height = 1.0 / bank.channel_count();
   float heightMinMargin = height * (1.0f - m_fMarginBottom - m_fMarginTop);
   float xScaling = 1.0f;
+  float diameter = height / 5.0;
 
   m_pDev->gGrab();
   PlotAxes(bank);
@@ -155,6 +157,10 @@ void GraphicsView::Process(const SignalBank &bank) {
     yOffs = yOffs * (1.0f - height) + height / 2.0;
     yOffs = yOffs * (1.0f - m_fMarginTop - m_fMarginBottom) + m_fMarginBottom;
     PlotData(bank[i], bank.sample_rate(), yOffs, heightMinMargin, xScaling);
+    if (plotting_strobes_) {
+      PlotStrobes(bank[i], bank.get_strobes(i), bank.sample_rate(),
+                  yOffs, heightMinMargin ,xScaling, diameter);
+    }
   }
   m_pDev->gRelease();
   
@@ -233,6 +239,35 @@ void GraphicsView::PlotDataPoint(float x,
     m_bFirstPoint = false;
   }
   PlotDataPointDirect(x, y, val, height);
+}
+
+void GraphicsView::PlotStrobe(float x, float y, float val,
+                              float height,
+                              float diameter) {
+  switch(m_iGraphType) {
+  case GraphTypeLine:
+    m_pDev->gBeginQuadStrip();
+    m_pDev->gVertex2f(x + diameter, y + val * height + diameter);
+    m_pDev->gVertex2f(x + diameter, y + val * height - diameter);
+    m_pDev->gVertex2f(x - diameter, y + val * height - diameter);
+    m_pDev->gVertex2f(x - diameter, y + val * height + diameter);
+    m_pDev->gEnd();
+    break;
+  case GraphTypeColormap:
+    m_pDev->gBeginQuadStrip();
+    m_pDev->gVertex2f(x + diameter, y + diameter);
+    m_pDev->gVertex2f(x + diameter, y - diameter);
+    m_pDev->gVertex2f(x - diameter, y - diameter);
+    m_pDev->gVertex2f(x - diameter, y + diameter);
+    m_pDev->gEnd();
+    break;
+  case GraphTypeNone:
+    // Nothing: just for testing computation overhead of graphing
+    break;
+  default:
+    // Shouldn't happen
+    AIM_ASSERT(0);
+  } 
 }
 
 void GraphicsView::PlotDataPointDirect(float x,
