@@ -45,6 +45,7 @@
 #endif
 #include <stdio.h>
 #include <string.h>
+#include <limits.h>
 
 #include "Modules/Output/Graphics/Devices/GraphicsOutputDeviceMovie.h"
 
@@ -168,10 +169,10 @@ void GraphicsOutputDeviceMovie::Stop() {
   snprintf(sCmdLine, sizeof(sCmdLine)/sizeof(sCmdLine[0]),
     "%s -y -i \"%s\" -r %.2f -i \"%s%%06d.png\" "
     "-sameq -r %.2f -ar 44100 -acodec pcm_s16le %s \"%s\"",
-    sffmpegPath, sound_filename_.c_str(), frame_rate, directory_.c_str(),
-    frame_rate, sCodecOptions, movie_filename_.c_str());
-    printf(sCmdLine);
-    printf("\n");
+           sffmpegPath, sound_filename_.c_str(), frame_rate, directory_.c_str(),
+           frame_rate, sCodecOptions, movie_filename_.c_str());
+  printf("%s", sCmdLine);
+  printf("\n");
   if (system(sCmdLine)) {
     LOG_ERROR(_T("Couldn't create movie output."));
   }
