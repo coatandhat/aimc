@@ -52,11 +52,11 @@ common_sources = ['Support/Common.cc',
                   'Modules/Profile/ModuleScaler.cc',
                   'Modules/Output/FileOutputHTK.cc',
                   'Modules/Output/FileOutputAIMC.cc',
-                  'Modules/Output/OSCOutput.cc',
+                  #'Modules/Output/OSCOutput.cc',
                   'Modules/Features/ModuleGaussians.cc',
                   'Modules/Features/ModuleBoxes.cc',]
                   #'Modules/Features/ModuleDCT.cc' ]
-                  
+
 graphics_sources = [ 'Modules/Output/Graphics/GraphAxisSpec.cc',
                      'Modules/Output/Graphics/GraphicsView.cc',
                      'Modules/Output/Graphics/GraphicsViewTime.cc',
@@ -65,7 +65,7 @@ graphics_sources = [ 'Modules/Output/Graphics/GraphAxisSpec.cc',
                      'Modules/Output/Graphics/Devices/GraphicsOutputDeviceCairo.cc',
                      'Modules/Output/Graphics/Devices/GraphicsOutputDeviceMovie.cc',]
                      #'Modules/Output/Graphics/Devices/GraphicsOutputDeviceMovieDirect.cc' ]
-graphics_libraries = [ 'cairo', 
+graphics_libraries = [ 'cairo',
                         ]
 
 # List of currently incative source files which we may want to add back in
@@ -84,10 +84,10 @@ test_sources += common_sources
 
 # Define the command-line options for running scons
 options = Variables()
-options.Add(BoolVariable('mingw', 
+options.Add(BoolVariable('mingw',
                          'Compile on Windows using mingw rather than msvc',
                          False))
-options.Add(BoolVariable('symbols', 
+options.Add(BoolVariable('symbols',
                          'Add debuging symbols when compiling on gcc',
                          False))
 
@@ -114,7 +114,7 @@ env.SConsignFile(os.path.join(build_dir,'.sconsign'))
 
 # Set any platform-specific environment variables and options
 if target_platform == 'win32':
-  env.AppendUnique(CPPDEFINES = ['_WINDOWS', 'WIN32', 
+  env.AppendUnique(CPPDEFINES = ['_WINDOWS', 'WIN32',
                                  'WINVER=0x0400', '_CONSOLE'])
 elif target_platform == 'darwin':
   env.AppendUnique(CPPDEFINES = ['_MACOSX'])
@@ -122,8 +122,8 @@ elif target_platform == 'darwin':
 # Compiler selection based on platform
 # compiler can be one of: gcc msvc
 compiler = 'gcc'
-if (build_platform == 'win32' 
-    and target_platform == 'win32' 
+if (build_platform == 'win32'
+    and target_platform == 'win32'
     and not env['mingw']):
   compiler = 'msvc'
 
@@ -131,7 +131,7 @@ if (build_platform == 'win32'
 # Microsoft visual studio
 if compiler == 'msvc':
   env.AppendUnique(CPPFLAGS = ['/arch:SSE2', '/nologo', '/W3', '/EHsc'])
-  env.AppendUnique(CPPDEFINES = ['_CRT_SECURE_NO_DEPRECATE', 
+  env.AppendUnique(CPPDEFINES = ['_CRT_SECURE_NO_DEPRECATE',
                                  '_RINT_REQUIRED'])
   env.AppendUnique(CPPFLAGS = ['/Ox'])
   env.AppendUnique(CPPDEFINES = ['NDEBUG', '_ATL_MIN_CRT'])
@@ -150,8 +150,8 @@ elif compiler == 'gcc':
 else:
   print('Unsupported compiler: ' + compiler)
   Exit(1)
- 
-# To make a statically-linked version for os 10.4 and up... 
+
+# To make a statically-linked version for os 10.4 and up...
 #if build_platform == 'darwin':
 #  env.AppendUnique(CPPFLAGS = ['-arch', 'i386'])
 #  env.AppendUnique(LINKFLAGS = ['-arch', 'i386'])
@@ -162,7 +162,7 @@ else:
 #  env.Replace(CC = ['gcc-4.0'])
 #  env.Replace(CXX = ['gcc-4.0'])
 #  env.AppendUnique(CPPFLAGS = ['-fno-stack-protector','-isysroot', '/Developer/SDKs/MacOSX10.5.sdk', '-mmacosx-version-min=10.4'])
-#  deplibs = ['sndfile', 'flac', 'vorbis', 'vorbisenc', 'ogg']  
+#  deplibs = ['sndfile', 'flac', 'vorbis', 'vorbisenc', 'ogg']
 if not target_platform == 'win32':
   # On windows, utf support is builtin for SimpleIni
   # but not on other platforms
@@ -178,8 +178,8 @@ env.Append(CPPPATH = ['#src'])
 deplibs = ['sndfile']
 deplibs += graphics_libraries
 
-env.Append(CPPPATH = ['#external/oscpack/'])
-env.AppendUnique(LIBPATH = ['#external/oscpack/'])
+#env.Append(CPPPATH = ['#external/oscpack/'])
+#env.AppendUnique(LIBPATH = ['#external/oscpack/'])
 
 if target_platform != 'win32':
   for depname in deplibs:
@@ -207,8 +207,8 @@ else:
                     build_dir+'/libcairo-2.dll')
     env.Append(CPPPATH = [windows_cairo_location + '/include/cairo/'])
     env.AppendUnique(LIBPATH = [windows_cairo_location + '/lib/'])
-    
-deplibs.append('liboscpack')
+
+#deplibs.append('liboscpack')
 env.AppendUnique(LIBS = deplibs)
 
 

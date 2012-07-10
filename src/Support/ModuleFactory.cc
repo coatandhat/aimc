@@ -23,7 +23,7 @@
 #include "Modules/NAP/ModuleHCL.h"
 #include "Modules/Output/FileOutputHTK.h"
 #include "Modules/Output/FileOutputAIMC.h"
-#include "Modules/Output/OSCOutput.h"
+//#include "Modules/Output/OSCOutput.h"
 #include "Modules/Output/Graphics/GraphicsViewTime.h"
 #include "Modules/Profile/ModuleSlice.h"
 #include "Modules/Profile/ModuleScaler.h"
@@ -58,8 +58,8 @@ Module* ModuleFactory::Create(string module_name_, Parameters* params) {
   if (module_name_.compare("htk_out") == 0)
     return new FileOutputHTK(params);
 
-  if (module_name_.compare("osc_out") == 0)
-    return new OSCOutput(params);
+  // if (module_name_.compare("osc_out") == 0)
+  //   return new OSCOutput(params);
 
   if (module_name_.compare("aimc_out") == 0)
     return new FileOutputAIMC(params);
