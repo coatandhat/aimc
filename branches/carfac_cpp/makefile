@@ -19,7 +19,7 @@ SRC_HEADERS = $(SRC_HEADERDIR)/*.h
 CPPFLAGS += -I$(SRC_HEADERDIR) -I$(GTEST_DIR)/include
 CXXFLAGS += -g -Wall -Wextra -std=gnu++0x #IMPORTANT note gnu++0x
 
-UNITS = AGC CAR CARFAC Ear IHC #Add build units here (without the .cpp)
+UNITS = CARFAC AGC CAR Ear IHC #Add build units here (without the .cpp)
 SRC_OBJ = $(addprefix $(SRC_DIR)/, $(addsuffix .o, $(UNITS)))
 
 GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
@@ -27,37 +27,38 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
                 
 GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 
-all : CARFAC_unittest AGC_unittest #make some other "main" target
+all : 
+    CARFAC_unittest AGC_unittest #make some other "main" target
 
 clean :
-	rm -f *.o *.a src/*.o unittest/*.o *_unittest.exe
+    rm -f *.o *.a src/*.o unittest/*.o *_unittest.exe
 
 CARFAC_unittest : $(SRC_TESTDIR)/CARFAC_unittest.o $(SRC_OBJ)
 
 # pattern magic
 $(SRC_DIR)/%.o : %.cpp $(SRC_HEADERS) #normal source
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(.SOURCE)
+    $(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(.SOURCE)
 
 $(SRC_TESTDIR)/%.o : %.cpp $(SRC_HEADERS) $(GTEST_HEADERS) # unittest
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(.SOURCE)
+    $(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(.SOURCE)
 
 %_unittest : $(SRC_DIR)/%.o $(SRC_TESTDIR)/%_unittest.o gtest_main.a #unittest
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+    $(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 #	./$@.exe # launches the test - disabled, as failing tests stops the build
 # end pattern magic
 
 # gtest stuff
 gtest-all.o : $(GTEST_SRCS_)
-	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
+    $(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
             $(GTEST_DIR)/src/gtest-all.cc
             
 gtest_main.o : $(GTEST_SRCS_)
-	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
+    $(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
             $(GTEST_DIR)/src/gtest_main.cc
 
 gtest.a : gtest-all.o
-	$(AR) $(ARFLAGS) $@ $^
+    $(AR) $(ARFLAGS) $@ $^
 
 gtest_main.a : gtest-all.o gtest_main.o
-	$(AR) $(ARFLAGS) $@ $^
+    $(AR) $(ARFLAGS) $@ $^
 # end gtest stuff
