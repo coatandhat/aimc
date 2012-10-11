@@ -21,9 +21,7 @@ TEST(CARFACDesignTest, NumberOfEars) {
   IHC_parameters ihc_params = IHC_parameters();
   AGC_parameters agc_params = AGC_parameters();
 
-  int fs = kDefaultFs;
-
-  CARFAC fooCarfac = CARFAC(fs, &car_params, &ihc_params, &agc_params, 2);
+  CARFAC fooCarfac = CARFAC(kDefaultFs, &car_params, &ihc_params, &agc_params, 2);
   EXPECT_EQ(fooCarfac.n_ears_, fooCarfac.ears_.size());
 }
 
@@ -32,12 +30,10 @@ TEST(CARFACDesignTest, MaxChannelsPerOctave) {
   IHC_parameters ihc_params = IHC_parameters();
   AGC_parameters agc_params = AGC_parameters();
 
-  int fs = kDefaultFs;
-
   car_params.erb_per_step_ = 2*0.5; //not sure if this is the best way to design this test... I'm just doing _something_ here.
   float expected_max_channels_per_octave = 10.56/2;
   float tolerance = 0.25;
 
-  CARFAC fooCarfac = CARFAC(fs, &car_params, &ihc_params, &agc_params, 1);
+  CARFAC fooCarfac = CARFAC(kDefaultFs, &car_params, &ihc_params, &agc_params, 1);
   ASSERT_NEAR(fooCarfac.max_channels_per_octave_, expected_max_channels_per_octave, tolerance);
 }

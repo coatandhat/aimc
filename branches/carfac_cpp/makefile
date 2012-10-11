@@ -23,7 +23,7 @@ SRC_HEADERS = $(SRC_HEADERDIR)/*.h
 CPPFLAGS += -I$(SRC_HEADERDIR) -I$(GTEST_DIR)/include
 CXXFLAGS += -g -Wall -Wextra -std=gnu++0x #IMPORTANT note gnu++0x
 
-UNITS = CARFAC AGC CAR Ear IHC #Add build units here (without the .cpp)
+UNITS = CARFAC AGC CAR Ear IHC unit_conversion #Add build units here (without the .cpp)
 SRC_OBJ = $(addprefix $(SRC_DIR)/, $(addsuffix .o, $(UNITS)))
 
 GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
@@ -39,10 +39,12 @@ libcarfac : $(SRC_DIR)/CARFAC.o $(SRC_OBJ)
 example_program : libcarfac
 	# likely some example executable that runs the whole thing...
 
-unittest: CARFAC_unittest AGC_unittest
+unittest: $(foreach unit, $(UNITS), $(addsuffix _unittest, $(unit)))
 	$(foreach binary, $^, ./$(addsuffix $(EXE_EXTENSION), $(binary));)
 	
-CARFAC_unittest : $(SRC_TESTDIR)/CARFAC_unittest.o $(SRC_OBJ)
+CARFAC_unittest : $(SRC_OBJ)
+CAR_unittest : $(SRC_OBJ) #$(SRC_DIR)/unit_conversion.o
+Ear_unittest : $(SRC_OBJ)
 
 clean :
 	rm -f *.o *.a src/*.o unittest/*.o *_unittest* *.dll *.exe

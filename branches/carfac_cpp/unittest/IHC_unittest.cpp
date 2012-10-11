@@ -1,7 +1,7 @@
 #include "CARFAC_common.h"
-#include "AGC.h"
+#include "IHC.h"
 #include "gtest/gtest.h"
 
 // Do tests here
-TEST(AGCDesignTest, Stub) {
+TEST(IHCDesignTest, Stub) {
 }

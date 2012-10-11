@@ -5,7 +5,7 @@
 #include "IHC.h"
 #include "AGC.h"
 #include "Ear.h"
-
+#include "unit_conversion.h"
 #include "CARFAC_common.h"
 
 CARFAC::CARFAC(int fs,
@@ -29,8 +29,4 @@ CARFAC::CARFAC(int fs,
   n_ears_ = n_ears;
   Ear ear = Ear(car_params, ihc_params, agc_params, pole_freqs_, n_ch_, fs);
   ears_.assign(n_ears_, ear);
-}
-
-float CARFAC::ERB_Hz(float cf_hz, float erb_break_freq, float erb_q){
-  return (erb_break_freq + cf_hz) / erb_q;
 }
