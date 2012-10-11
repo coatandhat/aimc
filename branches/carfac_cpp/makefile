@@ -32,6 +32,7 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 
 all : libcarfac unittest
+	make cleanup
 
 libcarfac : $(SRC_DIR)/CARFAC.o $(SRC_OBJ)
 	$(CXX) -shared $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@$(LIB_EXTENSION) -fPIC
@@ -46,8 +47,11 @@ CARFAC_unittest : $(SRC_OBJ)
 CAR_unittest : $(SRC_OBJ) #$(SRC_DIR)/unit_conversion.o
 Ear_unittest : $(SRC_OBJ)
 
-clean :
-	rm -f *.o *.a src/*.o unittest/*.o *_unittest* *.dll *.exe
+cleanup :
+	rm -f *.o *.a src/*.o unittest/*.o 
+
+clean : cleanup
+	rm -f *.dll *.exe
 
 # pattern magic
 $(SRC_DIR)/%.o : %.cpp $(SRC_HEADERS) #normal source
