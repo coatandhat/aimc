@@ -32,7 +32,6 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 
 all : libcarfac unittest
-	make cleanup
 
 libcarfac : $(SRC_DIR)/CARFAC.o $(SRC_OBJ)
 	$(CXX) -shared $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@$(LIB_EXTENSION) -fPIC
