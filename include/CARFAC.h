@@ -12,7 +12,6 @@ const double kDefaultFs = 22050;
 class CARFAC{
 public:
   CARFAC(int, CAR_parameters*, IHC_parameters*, AGC_parameters*, int);
-  virtual ~CARFAC();
   static float ERB_Hz(float, float, float);
 
   float fs_;
@@ -25,7 +24,6 @@ public:
   std::vector<Ear> ears_;
 
 private:
-  CARFAC(){};
 
 };
 

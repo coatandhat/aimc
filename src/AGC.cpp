@@ -3,6 +3,19 @@
 #include <stdlib.h>
 #include <stdio.h>  
 
+AGC_parameters::AGC_parameters():
+n_stages_(4),
+time_constants_({0.002*1, 0.002*4, 0.002*16, 0.002*64}),
+agc_stage_gain_(2),
+decimation_({8, 2, 2, 2}),
+agc1_scales_({1.0, 1.4,  2.0, 2.8}),
+agc2_scales_({1.6, 2.25, 3.2, 4.5}),
+detect_scale_(0.25),
+agc_mix_coeff_(0.5)
+{
+  // do nothing more
+}
+
 AGC_coefficients::AGC_coefficients(AGC_parameters* AGC_params_p,
                                    float fs, int n_ch){
   float decim = 1.0;
@@ -58,9 +71,6 @@ AGC_coefficients::AGC_coefficients(AGC_parameters* AGC_params_p,
   }
   agc_gain_ = total_DC_gain;
   detect_scale_ = AGC_params_p->detect_scale_/total_DC_gain;
-}
-AGC_coefficients::~AGC_coefficients(){
-  // TODO Auto-generated destructor stub
 }
 
 FloatArray AGC_coefficients::Build_FIR_coeffs(float var, float mn, int* ptr_iters, int* ptr_taps){

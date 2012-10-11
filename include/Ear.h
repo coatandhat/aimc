@@ -24,11 +24,7 @@ public:
   IHC_coefficients* ihc_coeffs_p_;
   AGC_coefficients* agc_coeffs_p_;
 
-  virtual
-  ~Ear();
-
 private:
-  Ear();
 
 };
 

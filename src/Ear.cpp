@@ -19,7 +19,3 @@ Ear::Ear(CAR_parameters* car_params, IHC_parameters* ihc_params, AGC_parameters*
   ihc_coeffs_p_ = new IHC_coefficients(&ihc_params_, fs, n_ch);
   agc_coeffs_p_ = new AGC_coefficients(&agc_params_, fs, n_ch);
 }
-
-Ear::~Ear() {
-  // TODO Auto-generated destructor stub
-}

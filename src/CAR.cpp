@@ -3,8 +3,26 @@
 #include "CARFAC.h"
 #include <cmath>
 
+CAR_parameters::CAR_parameters():
+	  velocity_scale_(0.2),
+	  v_offset_(0.01),
+	  v2_corner_(0.2),
+	  v_damp_max_(0.01),
+	  min_zeta_(0.10),
+	  first_pole_theta_(0.085*kPi),
+	  zero_ratio_(sqrt(2)),
+	  high_f_damping_compression_(0.5),
+	  erb_per_step_(0.5),
+	  min_pole_hz_(30),
+	  erb_break_freq_(kDefaultErbBreakFreq),
+	  erb_q_(kDefaultErbQ)
+{
+    // do nothing more!
+}
+
 CAR_coefficients::CAR_coefficients(CAR_parameters* car_params_p, float fs,
-                                   FloatArray pole_freqs){
+                                   FloatArray pole_freqs)
+{
 
   float f = pow(car_params_p->zero_ratio_, 2) + 1;
 
@@ -47,8 +65,4 @@ CAR_coefficients::CAR_coefficients(CAR_parameters* car_params_p, float fs,
       g0_coeffs_[i] = tmp / ( tmp + h_coeffs_[i]*r1_coeffs_[i]*c0_coeffs_[i]);
   }
 
-}
-
-CAR_coefficients::~CAR_coefficients(){
-  // TODO Auto-generated destructor stub
 }
