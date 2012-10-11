@@ -19,7 +19,8 @@ public:
 
 class AGC_coefficients {
 public:
-  AGC_coefficients(AGC_parameters*, float, int);
+  AGC_coefficients(AGC_parameters* AGC_params_p,
+      float fs, int n_ch);
 
   int n_ch_;
   int n_agc_stages_;
@@ -36,7 +37,7 @@ public:
   float detect_scale_;
   
 private:
-  FloatArray Build_FIR_coeffs(float, float, int*, int*);
+  FloatArray Build_FIR_coeffs(float var, float mn, int* ptr_iters, int* ptr_taps);
 };
 
 #endif /* AGC_H_ */
