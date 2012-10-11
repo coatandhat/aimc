@@ -11,7 +11,11 @@ const double kDefaultFs = 22050;
 
 class CARFAC{
 public:
-  CARFAC(int, CAR_parameters*, IHC_parameters*, AGC_parameters*, int);
+  CARFAC(int fs,
+      CAR_parameters* car_params,
+      IHC_parameters* ihc_params,
+      AGC_parameters* agc_params,
+      int n_ears);
 
   float fs_;
 

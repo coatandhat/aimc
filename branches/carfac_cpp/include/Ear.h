@@ -14,7 +14,7 @@
 
 class Ear {
 public:
-  Ear(CAR_parameters*, IHC_parameters*, AGC_parameters*, FloatArray, int, float);
+  Ear(CAR_parameters* car_params, IHC_parameters* ihc_params, AGC_parameters* agc_params, FloatArray pole_freqs, int n_ch, float fs);
 
   CAR_parameters car_params_;
   IHC_parameters ihc_params_;

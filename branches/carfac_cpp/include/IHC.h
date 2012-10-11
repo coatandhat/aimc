@@ -15,7 +15,7 @@ public:
 
 class IHC_coefficients{
 public:
-  IHC_coefficients(IHC_parameters*, float, int);
+  IHC_coefficients(IHC_parameters* IHC_params_p, float fs, int n_ch);
 
   float saturation_output_;
 

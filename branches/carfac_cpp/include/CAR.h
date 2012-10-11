@@ -27,7 +27,8 @@ public:
 
 class CAR_coefficients{
 public:
-  CAR_coefficients(CAR_parameters*, float, FloatArray);
+  CAR_coefficients(CAR_parameters* car_params_p, float fs,
+      FloatArray pole_freqs);
 
   FloatArray r1_coeffs_;
   FloatArray a0_coeffs_;
