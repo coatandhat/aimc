@@ -1,7 +1,7 @@
 #include "CARFAC_common.h"
-#include "AGC.h"
+#include "Ear.h"
 #include "gtest/gtest.h"
 
 // Do tests here
-TEST(AGCDesignTest, Stub) {
+TEST(EarDesignTest, Stub) {
 }

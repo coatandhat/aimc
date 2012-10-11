@@ -2,6 +2,7 @@
 #include "CARFAC_common.h"
 #include "CARFAC.h"
 #include <cmath>
+#include "unit_conversion.h"
 
 CAR_parameters::CAR_parameters():
 	  velocity_scale_(0.2),
@@ -49,7 +50,7 @@ CAR_coefficients::CAR_coefficients(CAR_parameters* car_params_p, float fs,
       x = theta[i]/kPi;
       zr_coeffs_[i] = kPi * (x - ff * x*x*x);
 
-      min_zeta_mod = (car_params_p->min_zeta_ + 0.25 * (CARFAC::ERB_Hz(
+      min_zeta_mod = (car_params_p->min_zeta_ + 0.25 * (ERB_Hz(
                       pole_freqs[i], car_params_p->erb_break_freq_,
                       car_params_p->erb_q_) / pole_freqs[i]
                      - car_params_p->min_zeta_));
