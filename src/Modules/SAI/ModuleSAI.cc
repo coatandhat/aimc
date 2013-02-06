@@ -208,7 +208,7 @@ void ModuleSAI::Process(const SignalBank &input) {
           sig *= decay_factor;
 
           // Update the temporary SAI buffer
-          output_.set_sample(ch, delay, output_.sample(ch, delay) + sig);
+          sai_temp_.set_sample(ch, delay, sai_temp_.sample(ch, delay) + sig);
         }
       }
 
