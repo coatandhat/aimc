@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$classCoefficients.html" title="Coefficients" alt="" coords="7,59,97,88"/>
+<area shape="rect" id="node3" href="$classAGCCoeff.html" title="AGCCoeff" alt="" coords="147,5,229,35"/>
+<area shape="rect" id="node5" href="$classCARCoeff.html" title="CARCoeff" alt="" coords="147,59,229,88"/>
+<area shape="rect" id="node7" href="$classIHCCoeff.html" title="IHCCoeff" alt="" coords="149,112,227,141"/>
+</map>

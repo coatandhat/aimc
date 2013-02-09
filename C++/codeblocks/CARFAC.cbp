@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="CARFAC" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../CARFAC" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="../CARFAC" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="../AGC.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../AGC.H" />
+		<Unit filename="../AGCCoeff.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../AGCCoeff.H" />
+		<Unit filename="../AGCParam.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../AGCParam.H" />
+		<Unit filename="../AGCState.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../AGCState.H" />
+		<Unit filename="../CAR.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../CAR.H" />
+		<Unit filename="../CARCoeff.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../CARCoeff.H" />
+		<Unit filename="../CARFACCommon.H" />
+		<Unit filename="../CARParam.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../CARParam.H" />
+		<Unit filename="../CARState.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../CARState.H" />
+		<Unit filename="../Coefficients.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../Coefficients.H" />
+		<Unit filename="../Ear.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../Ear.H" />
+		<Unit filename="../EarComponent.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../EarComponent.H" />
+		<Unit filename="../Ears.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../Ears.H" />
+		<Unit filename="../IHC.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../IHC.H" />
+		<Unit filename="../IHCCoeff.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../IHCCoeff.H" />
+		<Unit filename="../IHCParam.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../IHCParam.H" />
+		<Unit filename="../IHCState.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../IHCState.H" />
+		<Unit filename="../Makefile" />
+		<Unit filename="../Parameters.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../Parameters.H" />
+		<Unit filename="../State.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../State.H" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
