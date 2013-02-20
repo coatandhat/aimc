@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['a0_5fcoeffs',['a0_coeffs',['../classCARCoeff.html#a2afe815f09bdac1af53244b55365f211',1,'CARCoeff']]],
   ['ac_5fcorner_5fhz',['ac_corner_Hz',['../classIHCParam.html#af2edbea861df9e71c3ab097a1ea20be7',1,'IHCParam']]],
   ['agc',['agc',['../classEar.html#a464fb557a2852865fc29242900ee1306',1,'Ear']]],
   ['agc1_5fscales',['AGC1_scales',['../classAGCParam.html#adf027a80d6669e72d735fff7d41801d7',1,'AGCParam']]],

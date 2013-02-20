@@ -2,6 +2,8 @@ var classCARParam =
 [
     [ "CARParam", "classCARParam.html#ae51711029751deb3eb3c5138f046ef8e", null ],
     [ "~CARParam", "classCARParam.html#a96ab5ca0d828c34a84022b214dced443", null ],
+    [ "CAR", "classCARParam.html#a090b35b339c09320d7dae48a06832261", null ],
+    [ "Ear", "classCARParam.html#a38fd42a55b0aa61f4176bba8ace93988", null ],
     [ "ERB_break_freq", "classCARParam.html#a2a8d58983bb2562c7bb54d6f571a5265", null ],
     [ "ERB_per_step", "classCARParam.html#a0fb27aee54d472914e03569ba40512b7", null ],
     [ "ERB_Q", "classCARParam.html#a6af2a4247b1a0bb380176787d379418c", null ],

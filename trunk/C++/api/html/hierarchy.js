@@ -22,6 +22,7 @@ var hierarchy =
       [ "CARParam", "classCARParam.html", null ],
       [ "IHCParam", "classIHCParam.html", null ]
     ] ],
+    [ "PsychoAcoustics", "classPsychoAcoustics.html", null ],
     [ "State", "classState.html", [
       [ "AGCState", "classAGCState.html", null ],
       [ "CARState", "classCARState.html", null ],

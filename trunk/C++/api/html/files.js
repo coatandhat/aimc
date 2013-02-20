@@ -35,6 +35,8 @@ var files =
     [ "IHCState.H", "IHCState_8H.html", null ],
     [ "Parameters.C", "Parameters_8C.html", null ],
     [ "Parameters.H", "Parameters_8H.html", null ],
+    [ "PsychoAcoustics.C", "PsychoAcoustics_8C.html", null ],
+    [ "PsychoAcoustics.H", "PsychoAcoustics_8H.html", null ],
     [ "State.C", "State_8C.html", null ],
     [ "State.H", "State_8H.html", null ]
 ];

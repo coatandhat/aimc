@@ -100,7 +100,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a href="Ear_8H.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// Copyright 2013 Matt R. Flax &lt;flatmax\@&gt; All Rights Reserved.</span>
-<a name="l00002"></a>00002 <span class="comment">// Author Matt Flax &lt;flatmax\@&gt;</span>
+<a name="l00002"></a>00002 <span class="comment">// Author Matt Flax &lt;flatmax@&gt;</span>
 <a name="l00003"></a>00003 <span class="comment">//</span>
 <a name="l00004"></a>00004 <span class="comment">// This C++ file is part of an implementation of Lyon&#39;s cochlear model:</span>
 <a name="l00005"></a>00005 <span class="comment">// &quot;Cascade of Asymmetric Resonators with Fast-Acting Compression&quot;</span>
@@ -125,17 +125,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00024"></a>00024 <span class="preprocessor">#include &quot;<a class="code" href="AGC_8H.html">AGC.H</a>&quot;</span>
 <a name="l00025"></a>00025 
 <a name="l00032"></a><a class="code" href="classEar.html">00032</a> <span class="keyword">class </span><a class="code" href="classEar.html">Ear</a> {
-<a name="l00033"></a>00033 
-<a name="l00034"></a><a class="code" href="classEar.html#a59243a8664d2c7d8bd3e5153e7f55e78">00034</a>         <a class="code" href="classCAR.html">CAR</a> <a class="code" href="classEar.html#a59243a8664d2c7d8bd3e5153e7f55e78" title="The cascade of asymmetric resontaors for this ear.">car</a>; 
-<a name="l00035"></a><a class="code" href="classEar.html#ac11c4afecd6ca8353fa7d2ed4689bbf6">00035</a>         <a class="code" href="classIHC.html">IHC</a> <a class="code" href="classEar.html#ac11c4afecd6ca8353fa7d2ed4689bbf6" title="The inner hair cell for this ear.">ihc</a>; 
-<a name="l00036"></a><a class="code" href="classEar.html#a464fb557a2852865fc29242900ee1306">00036</a>         <a class="code" href="classAGC.html">AGC</a> <a class="code" href="classEar.html#a464fb557a2852865fc29242900ee1306" title="The automatic gain control for this ear.">agc</a>; 
-<a name="l00037"></a>00037 
-<a name="l00038"></a>00038 <span class="keyword">public</span>:
-<a name="l00039"></a>00039     <a class="code" href="classEar.html#a58d5147ee3eb694d0b2e94897dd7bf57">Ear</a>();
-<a name="l00040"></a>00040     <span class="keyword">virtual</span> <a class="code" href="classEar.html#aadc3da8092733631bcdde1bfa3f3734a">~Ear</a>();
-<a name="l00041"></a>00041 };
-<a name="l00042"></a>00042 
-<a name="l00043"></a>00043 <span class="preprocessor">#endif // EAR_H_</span>
+<a name="l00033"></a><a class="code" href="classEar.html#a8087301947ab7dc0bba049f332d44508">00033</a>     <a class="code" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0" title="The floating point type.">FP_TYPE</a> <a class="code" href="classEar.html#a8087301947ab7dc0bba049f332d44508" title="The sample rate.">fs</a>; 
+<a name="l00034"></a><a class="code" href="classEar.html#a9cbbd291568ea2756b17311cbe7a0d84">00034</a>     <a class="code" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0" title="The floating point type.">FP_TYPE</a> <a class="code" href="classEar.html#a9cbbd291568ea2756b17311cbe7a0d84" title="How many channels in each octave.">max_channels_per_octave</a>; 
+<a name="l00035"></a><a class="code" href="classEar.html#a9c34579dc3e48bf40cc2a62677d1546e">00035</a>     <span class="keywordtype">int</span> <a class="code" href="classEar.html#a9c34579dc3e48bf40cc2a62677d1546e" title="The number of channels (in the ear)">n_ch</a>; 
+<a name="l00036"></a>00036 
+<a name="l00037"></a><a class="code" href="classEar.html#a59243a8664d2c7d8bd3e5153e7f55e78">00037</a>     <a class="code" href="classCAR.html">CAR</a> <a class="code" href="classEar.html#a59243a8664d2c7d8bd3e5153e7f55e78" title="The cascade of asymmetric resontaors for this ear.">car</a>; 
+<a name="l00038"></a><a class="code" href="classEar.html#ac11c4afecd6ca8353fa7d2ed4689bbf6">00038</a>     <a class="code" href="classIHC.html">IHC</a> <a class="code" href="classEar.html#ac11c4afecd6ca8353fa7d2ed4689bbf6" title="The inner hair cell for this ear.">ihc</a>; 
+<a name="l00039"></a><a class="code" href="classEar.html#a464fb557a2852865fc29242900ee1306">00039</a>     <a class="code" href="classAGC.html">AGC</a> <a class="code" href="classEar.html#a464fb557a2852865fc29242900ee1306" title="The automatic gain control for this ear.">agc</a>; 
+<a name="l00040"></a>00040 
+<a name="l00041"></a>00041 <span class="keyword">public</span>:
+<a name="l00045"></a>00045     <a class="code" href="classEar.html#a8ffb11429ea872af900dac31252349a2">Ear</a>(<a class="code" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0" title="The floating point type.">FP_TYPE</a> fs_);
+<a name="l00046"></a>00046 
+<a name="l00049"></a>00049     <a class="code" href="classEar.html#a8ffb11429ea872af900dac31252349a2">Ear</a>(<span class="keywordtype">void</span>);
+<a name="l00050"></a>00050     <span class="keyword">virtual</span> <a class="code" href="classEar.html#ac5734e338464ee157d92fa0e7fe1ae9e">~Ear</a>(<span class="keywordtype">void</span>);
+<a name="l00051"></a>00051 
+<a name="l00054"></a>00054     <span class="keywordtype">void</span> <a class="code" href="classEar.html#adf9d9b3c1e85d28dbd6921a06101b12b">design</a>(<span class="keywordtype">void</span>);
+<a name="l00055"></a>00055 };
+<a name="l00056"></a>00056 
+<a name="l00057"></a>00057 <span class="preprocessor">#endif // EAR_H_</span>
 </pre></div></div><!-- contents -->
 </div>
 <!-- window showing the filter options -->
@@ -143,7 +150,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -156,7 +163,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul>
       <li class="navelem"><a class="el" href="Ear_8H.html">Ear.H</a>      </li>
 
-    <li class="footer">Generated on Sun Feb 10 2013 10:47:45 for CARFAC C++ by
+    <li class="footer">Generated on Thu Feb 21 2013 09:31:11 for CARFAC C++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

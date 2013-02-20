@@ -100,7 +100,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a href="CARCoeff_8H.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// Copyright 2013 Matt R. Flax &lt;flatmax\@&gt; All Rights Reserved.</span>
-<a name="l00002"></a>00002 <span class="comment">// Author Matt Flax &lt;flatmax\@&gt;</span>
+<a name="l00002"></a>00002 <span class="comment">// Author Matt Flax &lt;flatmax@&gt;</span>
 <a name="l00003"></a>00003 <span class="comment">//</span>
 <a name="l00004"></a>00004 <span class="comment">// This C++ file is part of an implementation of Lyon&#39;s cochlear model:</span>
 <a name="l00005"></a>00005 <span class="comment">// &quot;Cascade of Asymmetric Resonators with Fast-Acting Compression&quot;</span>
@@ -122,13 +122,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00021"></a>00021 <span class="preprocessor"></span>
 <a name="l00022"></a>00022 <span class="preprocessor">#include &quot;<a class="code" href="Coefficients_8H.html">Coefficients.H</a>&quot;</span>
 <a name="l00023"></a>00023 
-<a name="l00030"></a><a class="code" href="classCARCoeff.html">00030</a> <span class="keyword">class </span><a class="code" href="classCARCoeff.html">CARCoeff</a> : <span class="keyword">public</span> <a class="code" href="classCoefficients.html">Coefficients</a> {
-<a name="l00031"></a>00031 <span class="keyword">public</span>:
-<a name="l00032"></a>00032     <a class="code" href="classCARCoeff.html#ad5af264c24fe76bad741cacc6dcfad1d">CARCoeff</a>();
-<a name="l00033"></a>00033     <span class="keyword">virtual</span> <a class="code" href="classCARCoeff.html#ae6e76dc2758eb843781b57bbff6bff66">~CARCoeff</a>();
-<a name="l00034"></a>00034 };
-<a name="l00035"></a>00035 
-<a name="l00036"></a>00036 <span class="preprocessor">#endif // CARCOEFFS_H_</span>
+<a name="l00024"></a>00024 <span class="keyword">class </span><a class="code" href="classCAR.html">CAR</a>; <span class="comment">// required for decleration as a friend</span>
+<a name="l00025"></a>00025 
+<a name="l00032"></a><a class="code" href="classCARCoeff.html">00032</a> <span class="keyword">class </span><a class="code" href="classCARCoeff.html">CARCoeff</a> : <span class="keyword">public</span> <a class="code" href="classCoefficients.html">Coefficients</a> {
+<a name="l00033"></a><a class="code" href="classCARCoeff.html#acb8f8059ee713d13e4653e70ff22ad16">00033</a>     Matrix&lt;FP_TYPE, Dynamic,1&gt; <a class="code" href="classCARCoeff.html#acb8f8059ee713d13e4653e70ff22ad16" title="Dick, whats this ?">r1_coeffs</a>; 
+<a name="l00034"></a><a class="code" href="classCARCoeff.html#a2afe815f09bdac1af53244b55365f211">00034</a>     Matrix&lt;FP_TYPE, Dynamic,1&gt; <a class="code" href="classCARCoeff.html#a2afe815f09bdac1af53244b55365f211" title="Dick, whats this ?">a0_coeffs</a>; 
+<a name="l00035"></a><a class="code" href="classCARCoeff.html#ab3490241c1adfc3168d8a4c12d01c092">00035</a>     Matrix&lt;FP_TYPE, Dynamic,1&gt; <a class="code" href="classCARCoeff.html#ab3490241c1adfc3168d8a4c12d01c092" title="Dick, whats this ?">c0_coeffs</a>; 
+<a name="l00036"></a><a class="code" href="classCARCoeff.html#a03d63906917a37988f490c3457044f92">00036</a>     Matrix&lt;FP_TYPE, Dynamic,1&gt; <a class="code" href="classCARCoeff.html#a03d63906917a37988f490c3457044f92" title="Dick, whats this ?">h_coeffs</a>; 
+<a name="l00037"></a><a class="code" href="classCARCoeff.html#a237c9626e6f94557003d278626b59d74">00037</a>     Matrix&lt;FP_TYPE, Dynamic,1&gt; <a class="code" href="classCARCoeff.html#a237c9626e6f94557003d278626b59d74" title="Dick, whats this ?">g0_coeffs</a>; 
+<a name="l00038"></a><a class="code" href="classCARCoeff.html#a02caa6298db68be987d78634e5ce2d06">00038</a>     Matrix&lt;FP_TYPE, Dynamic,1&gt; <a class="code" href="classCARCoeff.html#a02caa6298db68be987d78634e5ce2d06" title="Dick, whats this ?">zr_coeffs</a>; 
+<a name="l00039"></a>00039 
+<a name="l00040"></a>00040 <span class="keyword">public</span>:
+<a name="l00041"></a>00041     <a class="code" href="classCARCoeff.html#ad5af264c24fe76bad741cacc6dcfad1d" title="Constructor.">CARCoeff</a>(); 
+<a name="l00042"></a>00042     <span class="keyword">virtual</span> <a class="code" href="classCARCoeff.html#ae6e76dc2758eb843781b57bbff6bff66" title="Destructor.">~CARCoeff</a>(); 
+<a name="l00043"></a>00043 
+<a name="l00044"></a><a class="code" href="classCARCoeff.html#a090b35b339c09320d7dae48a06832261">00044</a>     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classCAR.html">CAR</a>;
+<a name="l00045"></a>00045 };
+<a name="l00046"></a>00046 
+<a name="l00047"></a>00047 <span class="preprocessor">#endif // CARCOEFFS_H_</span>
 </pre></div></div><!-- contents -->
 </div>
 <!-- window showing the filter options -->
@@ -136,7 +147,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -149,7 +160,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul>
       <li class="navelem"><a class="el" href="CARCoeff_8H.html">CARCoeff.H</a>      </li>
 
-    <li class="footer">Generated on Sun Feb 10 2013 10:47:45 for CARFAC C++ by
+    <li class="footer">Generated on Thu Feb 21 2013 09:31:11 for CARFAC C++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>
