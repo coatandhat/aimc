@@ -1,5 +1,5 @@
 // Copyright 2013 Matt R. Flax <flatmax\@> All Rights Reserved.
-// Author Matt Flax <flatmax\@>
+// Author Matt Flax <flatmax@>
 //
 // This C++ file is part of an implementation of Lyon's cochlear model:
 // "Cascade of Asymmetric Resonators with Fast-Acting Compression"
@@ -21,6 +21,8 @@
 
 #include "EarComponent.H" // includes the various {CAR, IHC, AGC} {Coeff, Param, State} .H files
 
+class Ear;
+
 /**
     \author {Matt Flax <flatmax\@>}
     \date 2013.02.08
@@ -28,9 +30,26 @@
 Cascade of asymmetric resonators (CAR).
 */
 class CAR : public EarComponent<CARCoeff, CARParam, CARState> {
+    Array<FP_TYPE, Dynamic,1> pole_freqs; ///< The vector of pole frequencies used in filter design and variable estimation
+
+    protected:
+
+    /** Method to design the auditory filter coefficients
+    \param fs The sample rate in Hz
+    */
+    void designFilters(FP_TYPE fs, int n_ch);
+
+    /** Return the stage gain g needed to get unity gain at DC
+    \param relative_undamping Dick whats this ?
+    \return The stage gain required to obtain 0 dB at DC.
+    */
+    Array<FP_TYPE, Dynamic, 1> stageG(Array<FP_TYPE, Dynamic, 1> &relative_undamping);
+
     public:
         CAR();
         virtual ~CAR();
+
+    friend class Ear;
 };
 
 #endif // CAR_H_

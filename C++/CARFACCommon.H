@@ -1,5 +1,5 @@
 // Copyright 2013 Matt R. Flax <flatmax\@> All Rights Reserved.
-// Author Matt Flax <flatmax\@>
+// Author Matt Flax <flatmax@>
 //
 // This C++ file is part of an implementation of Lyon's cochlear model:
 // "Cascade of Asymmetric Resonators with Fast-Acting Compression"
@@ -21,11 +21,14 @@
 
 typedef float FP_TYPE; ///< The floating point type
 #define AGC_STAGE_COUNT 4 ///< The number of cascades in the AGC
+#define DEFAULT_SAMPLERATE 22050. ///< The default sample rate in Hz
 
 #include <iostream>
 using namespace std;
 #include <Eigen/Dense>
 using namespace Eigen;
+
+#include "PsychoAcoustics.H"
 
 /**
     \mainpage CARFAC C++

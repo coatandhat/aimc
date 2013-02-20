@@ -1,5 +1,5 @@
 // Copyright 2013 Matt R. Flax <flatmax\@> All Rights Reserved.
-// Author Matt Flax <flatmax\@>
+// Author Matt Flax <flatmax@>
 //
 // This C++ file is part of an implementation of Lyon's cochlear model:
 // "Cascade of Asymmetric Resonators with Fast-Acting Compression"
@@ -20,6 +20,9 @@
 #define CARPARAMS_H_
 
 #include "Parameters.H"
+
+class CAR; // required for decleration as a friend
+class Ear;
 
 /**
     \author {Matt Flax <flatmax\@>}
@@ -48,6 +51,9 @@ public:
              FP_TYPE ERB_per_step_=0.5, FP_TYPE min_pole_Hz_=30., FP_TYPE ERB_break_freq_=165.3,
              FP_TYPE ERB_Q_=1000./(24.7*4.37));
     virtual ~CARParam(); ///< Destructor
+
+    friend class CAR;
+    friend class Ear;
 };
 
 #endif // CARPARAMS_H_

@@ -20,12 +20,12 @@
 # Author : Matt Flax <flatmax\@>
 # Date : 2012.02.08
 
-SRC= AGC.C AGCCoeff.C AGCParam.C AGCState.C CAR.C CARCoeff.C CARParam.C CARState.C Coefficients.C Ear.C EarComponent.C Ears.C IHC.C IHCCoeff.C IHCParam.C IHCState.C Parameters.C State.C
+SRC= AGC.C AGCCoeff.C AGCParam.C AGCState.C CAR.C CARCoeff.C CARParam.C CARState.C Coefficients.C Ear.C EarComponent.C Ears.C IHC.C IHCCoeff.C IHCParam.C IHCState.C Parameters.C State.C PsychoAcoustics.C
 OBJ= $(SRC:.C=.o)
 
-CFLAGS = `pkg-config --cflags eigen3` #-std=c++0x
+CFLAGS = `pkg-config --cflags eigen3`
 
-all: lib
+all: lib ex
 
 VERMAJ=1
 VERMIN=0
@@ -39,6 +39,9 @@ lib: ${OBJ}
 	${CXX} -shared -Wl,-soname,${LIBNAMEMAJ} -o ${LIBNAME} ${OBJ}
 	ln -sf ${LIBNAME} ${LIBNAMEMAJ}
 	ln -sf ${LIBNAMEMAJ} ${LIBNAMEBASE}
+
+ex:
+	${CXX} ${CFLAGS} -I`pwd` -o test/EarTest test/EarTest.C -L`pwd` -lCARFAC
 
 doc:
 	doxygen Doxyfile

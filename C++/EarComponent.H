@@ -1,5 +1,5 @@
 // Copyright 2013 Matt R. Flax <flatmax\@> All Rights Reserved.
-// Author Matt Flax <flatmax\@>
+// Author Matt Flax <flatmax@>
 //
 // This C++ file is part of an implementation of Lyon's cochlear model:
 // "Cascade of Asymmetric Resonators with Fast-Acting Compression"
@@ -29,6 +29,8 @@
 #include "IHCParam.H"
 #include "IHCState.H"
 
+#include "CARFACCommon.H"
+
 /**
     \author {Matt Flax <flatmax\@>}
     \date 2013.02.08
@@ -43,7 +45,7 @@ protected:
     PARAMTYPE param;
     STATETYPE state;
 public:
-    EarComponent(){}
+    EarComponent() {}
     virtual ~EarComponent(){}
 };
 

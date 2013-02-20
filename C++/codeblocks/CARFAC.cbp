@@ -101,10 +101,17 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../Parameters.H" />
+		<Unit filename="../PsychoAcoustics.C">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../PsychoAcoustics.H" />
 		<Unit filename="../State.C">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../State.H" />
+		<Unit filename="../test/EarTest.C">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />

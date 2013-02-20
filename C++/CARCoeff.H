@@ -1,5 +1,5 @@
 // Copyright 2013 Matt R. Flax <flatmax\@> All Rights Reserved.
-// Author Matt Flax <flatmax\@>
+// Author Matt Flax <flatmax@>
 //
 // This C++ file is part of an implementation of Lyon's cochlear model:
 // "Cascade of Asymmetric Resonators with Fast-Acting Compression"
@@ -21,6 +21,8 @@
 
 #include "Coefficients.H"
 
+class CAR; // required for decleration as a friend
+
 /**
     \author {Matt Flax <flatmax\@>}
     \date 2013.02.08
@@ -28,9 +30,18 @@
     Coefficients for the Cascaded Auditory Resonators
 */
 class CARCoeff : public Coefficients {
+    Matrix<FP_TYPE, Dynamic,1> r1_coeffs; ///< Dick, whats this ?
+    Matrix<FP_TYPE, Dynamic,1> a0_coeffs; ///< Dick, whats this ?
+    Matrix<FP_TYPE, Dynamic,1> c0_coeffs; ///< Dick, whats this ?
+    Matrix<FP_TYPE, Dynamic,1> h_coeffs; ///< Dick, whats this ?
+    Matrix<FP_TYPE, Dynamic,1> g0_coeffs; ///< Dick, whats this ?
+    Matrix<FP_TYPE, Dynamic,1> zr_coeffs; ///< Dick, whats this ?
+
 public:
-    CARCoeff();
-    virtual ~CARCoeff();
+    CARCoeff(); ///< Constructor
+    virtual ~CARCoeff(); ///< Destructor
+
+    friend class CAR;
 };
 
 #endif // CARCOEFFS_H_
