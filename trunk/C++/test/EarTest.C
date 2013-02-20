@@ -21,12 +21,12 @@
     \date 2013.02.08
 */
 
-#include "AGCCoeff.H"
+#include "Ear.H"
 
-AGCCoeff::AGCCoeff() {
-    //ctor
-}
+//int main(int argc, char *argv[]){
+int main(){
 
-AGCCoeff::~AGCCoeff() {
-    //dtor
+    Ear ear;
+
+    return 0;
 }

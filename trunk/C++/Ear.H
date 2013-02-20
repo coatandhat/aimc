@@ -1,5 +1,5 @@
 // Copyright 2013 Matt R. Flax <flatmax\@> All Rights Reserved.
-// Author Matt Flax <flatmax\@>
+// Author Matt Flax <flatmax@>
 //
 // This C++ file is part of an implementation of Lyon's cochlear model:
 // "Cascade of Asymmetric Resonators with Fast-Acting Compression"
@@ -30,14 +30,28 @@
 Class which encapsulates an ear, using the CAR, IHC and AGC classes
 */
 class Ear {
+    FP_TYPE fs; ///< The sample rate
+    FP_TYPE max_channels_per_octave; ///< How many channels in each octave
+    int n_ch; ///< The number of channels (in the ear)
 
-        CAR car; ///< The cascade of asymmetric resontaors for this ear
-        IHC ihc; ///< The inner hair cell for this ear
-        AGC agc; ///< The automatic gain control for this ear
+    CAR car; ///< The cascade of asymmetric resontaors for this ear
+    IHC ihc; ///< The inner hair cell for this ear
+    AGC agc; ///< The automatic gain control for this ear
 
 public:
-    Ear();
-    virtual ~Ear();
+    /** Constructor specifying the sample rate
+    \param fs_ The sample rate to use
+    */
+    Ear(FP_TYPE fs_);
+
+    /** Constructor using the DEFAULT_SAMPLERATE as the sample rate
+    */
+    Ear(void);
+    virtual ~Ear(void);
+
+    /** Estimates the number of filter stages and executes the dsign method for each of CAR, AGC and IHC
+    */
+    void design(void);
 };
 
 #endif // EAR_H_

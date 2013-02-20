@@ -16,17 +16,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+#include "PsychoAcoustics.H"
+
 /**
     \author {Matt Flax <flatmax\@>}
     \date 2013.02.08
 */
 
-#include "AGCCoeff.H"
-
-AGCCoeff::AGCCoeff() {
-    //ctor
+FP_TYPE PsychoAcoustics::Hz2ERB(FP_TYPE CFHz, FP_TYPE ERBBreakFreq, FP_TYPE ERBQ){
+    return (ERBBreakFreq + CFHz) / ERBQ;
 }
 
-AGCCoeff::~AGCCoeff() {
-    //dtor
+Array<FP_TYPE, Dynamic, 1> PsychoAcoustics::Hz2ERB(Array<FP_TYPE, Dynamic, 1> &CFHz, FP_TYPE ERBBreakFreq, FP_TYPE ERBQ){
+    return (ERBBreakFreq + CFHz) / ERBQ;
 }

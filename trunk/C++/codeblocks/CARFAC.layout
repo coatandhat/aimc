@@ -1,118 +1,127 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="../AGC.C" open="1" top="0" tabpos="2">
-		<Cursor position="899" topLine="0" />
-	</File>
-	<File name="../AGC.H" open="1" top="0" tabpos="3">
-		<Cursor position="1028" topLine="0" />
-	</File>
-	<File name="../AGCCoeff.C" open="1" top="0" tabpos="4">
-		<Cursor position="899" topLine="0" />
-	</File>
-	<File name="../AGCCoeff.H" open="1" top="0" tabpos="5">
-		<Cursor position="969" topLine="0" />
-	</File>
-	<File name="../AGCParam.C" open="1" top="0" tabpos="6">
-		<Cursor position="899" topLine="0" />
-	</File>
-	<File name="../AGCParam.H" open="1" top="0" tabpos="7">
-		<Cursor position="967" topLine="0" />
-	</File>
-	<File name="../AGCState.C" open="1" top="0" tabpos="8">
-		<Cursor position="899" topLine="0" />
-	</File>
-	<File name="../AGCState.H" open="1" top="0" tabpos="9">
-		<Cursor position="960" topLine="0" />
-	</File>
-	<File name="../CAR.C" open="1" top="0" tabpos="10">
-		<Cursor position="899" topLine="0" />
-	</File>
-	<File name="../CAR.H" open="1" top="0" tabpos="11">
-		<Cursor position="1028" topLine="0" />
-	</File>
-	<File name="../CARCoeff.C" open="1" top="0" tabpos="12">
-		<Cursor position="899" topLine="0" />
-	</File>
-	<File name="../CARCoeff.H" open="1" top="0" tabpos="13">
-		<Cursor position="969" topLine="0" />
-	</File>
-	<File name="../CARFACCommon.H" open="1" top="1" tabpos="1">
-		<Cursor position="5661" topLine="113" />
-	</File>
-	<File name="../CARParam.C" open="1" top="0" tabpos="14">
-		<Cursor position="899" topLine="0" />
-	</File>
-	<File name="../CARParam.H" open="1" top="0" tabpos="15">
-		<Cursor position="967" topLine="0" />
-	</File>
-	<File name="../CARState.C" open="1" top="0" tabpos="16">
-		<Cursor position="899" topLine="0" />
-	</File>
-	<File name="../CARState.H" open="1" top="0" tabpos="17">
-		<Cursor position="960" topLine="0" />
-	</File>
-	<File name="../Coefficients.C" open="1" top="0" tabpos="18">
-		<Cursor position="899" topLine="0" />
-	</File>
-	<File name="../Coefficients.H" open="1" top="0" tabpos="19">
-		<Cursor position="948" topLine="0" />
-	</File>
-	<File name="../Ear.C" open="1" top="0" tabpos="20">
-		<Cursor position="899" topLine="0" />
-	</File>
-	<File name="../Ear.H" open="1" top="0" tabpos="21">
-		<Cursor position="982" topLine="2" />
-	</File>
-	<File name="../EarComponent.C" open="1" top="0" tabpos="22">
-		<Cursor position="899" topLine="0" />
-	</File>
-	<File name="../EarComponent.H" open="1" top="0" tabpos="23">
-		<Cursor position="1290" topLine="8" />
-	</File>
-	<File name="../Ears.C" open="1" top="0" tabpos="24">
-		<Cursor position="899" topLine="0" />
-	</File>
-	<File name="../Ears.H" open="1" top="0" tabpos="25">
+	<File name="../AGC.C" open="0" top="0" tabpos="2">
 		<Cursor position="94" topLine="0" />
 	</File>
-	<File name="../IHC.C" open="1" top="0" tabpos="26">
-		<Cursor position="899" topLine="0" />
+	<File name="../AGC.H" open="0" top="0" tabpos="3">
+		<Cursor position="94" topLine="0" />
 	</File>
-	<File name="../IHC.H" open="1" top="0" tabpos="27">
-		<Cursor position="1028" topLine="0" />
+	<File name="../AGCCoeff.C" open="0" top="0" tabpos="4">
+		<Cursor position="94" topLine="0" />
 	</File>
-	<File name="../IHCCoeff.C" open="1" top="0" tabpos="28">
-		<Cursor position="899" topLine="0" />
+	<File name="../AGCCoeff.H" open="0" top="0" tabpos="5">
+		<Cursor position="94" topLine="0" />
 	</File>
-	<File name="../IHCCoeff.H" open="1" top="0" tabpos="29">
-		<Cursor position="969" topLine="0" />
+	<File name="../AGCParam.C" open="0" top="0" tabpos="5">
+		<Cursor position="94" topLine="1" />
 	</File>
-	<File name="../IHCParam.C" open="1" top="0" tabpos="30">
-		<Cursor position="899" topLine="0" />
+	<File name="../AGCParam.H" open="0" top="0" tabpos="5">
+		<Cursor position="1149" topLine="13" />
 	</File>
-	<File name="../IHCParam.H" open="1" top="0" tabpos="31">
-		<Cursor position="967" topLine="0" />
+	<File name="../AGCState.C" open="0" top="0" tabpos="8">
+		<Cursor position="94" topLine="0" />
 	</File>
-	<File name="../IHCState.C" open="1" top="0" tabpos="32">
-		<Cursor position="899" topLine="0" />
+	<File name="../AGCState.H" open="0" top="0" tabpos="9">
+		<Cursor position="94" topLine="0" />
 	</File>
-	<File name="../IHCState.H" open="1" top="0" tabpos="33">
-		<Cursor position="960" topLine="0" />
+	<File name="../CAR.C" open="1" top="0" tabpos="1">
+		<Cursor position="3569" topLine="65" />
 	</File>
-	<File name="../Makefile" open="1" top="0" tabpos="34">
-		<Cursor position="876" topLine="0" />
+	<File name="../CAR.H" open="1" top="0" tabpos="2">
+		<Cursor position="1679" topLine="26" />
 	</File>
-	<File name="../Parameters.C" open="1" top="0" tabpos="35">
-		<Cursor position="899" topLine="0" />
+	<File name="../CARCoeff.C" open="0" top="0" tabpos="12">
+		<Cursor position="94" topLine="0" />
 	</File>
-	<File name="../Parameters.H" open="1" top="0" tabpos="36">
-		<Cursor position="971" topLine="0" />
+	<File name="../CARCoeff.H" open="1" top="0" tabpos="8">
+		<Cursor position="1536" topLine="20" />
 	</File>
-	<File name="../State.C" open="1" top="0" tabpos="37">
-		<Cursor position="899" topLine="0" />
+	<File name="../CARFACCommon.H" open="1" top="0" tabpos="7">
+		<Cursor position="2156" topLine="46" />
 	</File>
-	<File name="../State.H" open="1" top="0" tabpos="38">
-		<Cursor position="934" topLine="0" />
+	<File name="../CARParam.C" open="0" top="0" tabpos="7">
+		<Cursor position="94" topLine="16" />
+	</File>
+	<File name="../CARParam.H" open="0" top="0" tabpos="3">
+		<Cursor position="2340" topLine="31" />
+	</File>
+	<File name="../CARState.C" open="0" top="0" tabpos="16">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../CARState.H" open="0" top="0" tabpos="17">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../Coefficients.C" open="0" top="0" tabpos="18">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../Coefficients.H" open="1" top="0" tabpos="10">
+		<Cursor position="1139" topLine="12" />
+	</File>
+	<File name="../Ear.C" open="1" top="1" tabpos="3">
+		<Cursor position="2174" topLine="25" />
+	</File>
+	<File name="../Ear.H" open="1" top="0" tabpos="4">
+		<Cursor position="1086" topLine="18" />
+	</File>
+	<File name="../EarComponent.C" open="0" top="0" tabpos="6">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../EarComponent.H" open="1" top="0" tabpos="9">
+		<Cursor position="1541" topLine="26" />
+	</File>
+	<File name="../Ears.C" open="0" top="0" tabpos="24">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../Ears.H" open="0" top="0" tabpos="25">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../IHC.C" open="0" top="0" tabpos="26">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../IHC.H" open="0" top="0" tabpos="27">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../IHCCoeff.C" open="0" top="0" tabpos="28">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../IHCCoeff.H" open="0" top="0" tabpos="29">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../IHCParam.C" open="0" top="0" tabpos="30">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../IHCParam.H" open="0" top="0" tabpos="31">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../IHCState.C" open="0" top="0" tabpos="32">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../IHCState.H" open="0" top="0" tabpos="33">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../Makefile" open="1" top="0" tabpos="6">
+		<Cursor position="1159" topLine="9" />
+	</File>
+	<File name="../Parameters.C" open="0" top="0" tabpos="35">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../Parameters.H" open="1" top="0" tabpos="11">
+		<Cursor position="1125" topLine="12" />
+	</File>
+	<File name="../PsychoAcoustics.C" open="0" top="0" tabpos="8">
+		<Cursor position="889" topLine="6" />
+	</File>
+	<File name="../PsychoAcoustics.H" open="0" top="0" tabpos="7">
+		<Cursor position="1955" topLine="19" />
+	</File>
+	<File name="../State.C" open="0" top="0" tabpos="37">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="../State.H" open="1" top="0" tabpos="12">
+		<Cursor position="1095" topLine="12" />
+	</File>
+	<File name="../test/EarTest.C" open="1" top="0" tabpos="5">
+		<Cursor position="989" topLine="4" />
 	</File>
 </CodeBlocks_layout_file>

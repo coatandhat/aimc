@@ -1,5 +1,5 @@
 // Copyright 2013 Matt R. Flax <flatmax\@> All Rights Reserved.
-// Author Matt Flax <flatmax\@>
+// Author Matt Flax <flatmax@>
 //
 // This C++ file is part of an implementation of Lyon's cochlear model:
 // "Cascade of Asymmetric Resonators with Fast-Acting Compression"
@@ -18,6 +18,8 @@
 // limitations under the License.
 #ifndef COEFFICIENTS_H_
 #define COEFFICIENTS_H_
+
+#include "CARFACCommon.H"
 
 /**
     \author {Matt Flax <flatmax\@>}
