@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['car',['CAR',['../classCAR.html',1,'CAR'],['../classEar.html#a59243a8664d2c7d8bd3e5153e7f55e78',1,'Ear::car()'],['../classCAR.html#a7c80d0ba9d83caf4cf129b251e41e65c',1,'CAR::CAR()']]],
+  ['c0_5fcoeffs',['c0_coeffs',['../classCARCoeff.html#ab3490241c1adfc3168d8a4c12d01c092',1,'CARCoeff']]],
+  ['car',['CAR',['../classCAR.html',1,'CAR'],['../classCARCoeff.html#a090b35b339c09320d7dae48a06832261',1,'CARCoeff::CAR()'],['../classCARParam.html#a090b35b339c09320d7dae48a06832261',1,'CARParam::CAR()'],['../classCAR.html#a7c80d0ba9d83caf4cf129b251e41e65c',1,'CAR::CAR()'],['../classEar.html#a59243a8664d2c7d8bd3e5153e7f55e78',1,'Ear::car()']]],
   ['car_2ec',['CAR.C',['../CAR_8C.html',1,'']]],
   ['car_2eh',['CAR.H',['../CAR_8H.html',1,'']]],
   ['carcoeff',['CARCoeff',['../classCARCoeff.html',1,'CARCoeff'],['../classCARCoeff.html#ad5af264c24fe76bad741cacc6dcfad1d',1,'CARCoeff::CARCoeff()']]],

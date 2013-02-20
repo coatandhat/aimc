@@ -17,5 +17,6 @@ var annotated =
     [ "IHCParam", "classIHCParam.html", "classIHCParam" ],
     [ "IHCState", "classIHCState.html", "classIHCState" ],
     [ "Parameters", "classParameters.html", "classParameters" ],
+    [ "PsychoAcoustics", "classPsychoAcoustics.html", "classPsychoAcoustics" ],
     [ "State", "classState.html", "classState" ]
 ];

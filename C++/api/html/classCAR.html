@@ -98,7 +98,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#friends">Friends</a>  </div>
   <div class="headertitle">
 <div class="title">CAR Class Reference</div>  </div>
 </div><!--header-->
@@ -126,6 +129,17 @@ Collaboration diagram for CAR:</div>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCAR.html#a7c80d0ba9d83caf4cf129b251e41e65c">CAR</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCAR.html#ac3174919d88d3be0118fcb0fdab84b56">~CAR</a> ()</td></tr>
+<tr><td colspan="2"><h2><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCAR.html#a28852384d3c3fca2cd27fae743053eca">designFilters</a> (<a class="el" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0">FP_TYPE</a> fs, int n_ch)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Array&lt; <a class="el" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0">FP_TYPE</a>, Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCAR.html#a00bed086fc910b91fa8ed1c97af6eca8">stageG</a> (Array&lt; <a class="el" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0">FP_TYPE</a>, Dynamic, 1 &gt; &amp;relative_undamping)</td></tr>
+<tr><td colspan="2"><h2><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Array&lt; <a class="el" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0">FP_TYPE</a>, Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCAR.html#a27d57f14a604e7a444d12a5818f48994">pole_freqs</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The vector of pole frequencies used in filter design and variable estimation.  <a href="#a27d57f14a604e7a444d12a5818f48994"></a><br/></td></tr>
+<tr><td colspan="2"><h2><a name="friends"></a>
+Friends</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCAR.html#a38fd42a55b0aa61f4176bba8ace93988">Ear</a></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><dl class="author"><dt><b>Author:</b></dt><dd>{Matt Flax &lt;flatmax@&gt;} </dd></dl>
@@ -166,6 +180,96 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a28852384d3c3fca2cd27fae743053eca"></a><!-- doxytag: member="CAR::designFilters" ref="a28852384d3c3fca2cd27fae743053eca" args="(FP_TYPE fs, int n_ch)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classCAR.html#a28852384d3c3fca2cd27fae743053eca">CAR::designFilters</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0">FP_TYPE</a>&#160;</td>
+          <td class="paramname"><em>fs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n_ch</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Method to design the auditory filter coefficients </p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fs</td><td>The sample rate in Hz </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a00bed086fc910b91fa8ed1c97af6eca8"></a><!-- doxytag: member="CAR::stageG" ref="a00bed086fc910b91fa8ed1c97af6eca8" args="(Array&lt; FP_TYPE, Dynamic, 1 &gt; &amp;relative_undamping)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Array&lt; <a class="el" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0">FP_TYPE</a>, Dynamic, 1 &gt; <a class="el" href="classCAR.html#a00bed086fc910b91fa8ed1c97af6eca8">CAR::stageG</a> </td>
+          <td>(</td>
+          <td class="paramtype">Array&lt; <a class="el" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0">FP_TYPE</a>, Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>relative_undamping</em></td><td>)</td>
+          <td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Return the stage gain g needed to get unity gain at DC </p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">relative_undamping</td><td>Dick whats this ? </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The stage gain required to obtain 0 dB at DC. </dd></dl>
+
+</div>
+</div>
+<hr/><h2>Friends And Related Function Documentation</h2>
+<a class="anchor" id="a38fd42a55b0aa61f4176bba8ace93988"></a><!-- doxytag: member="CAR::Ear" ref="a38fd42a55b0aa61f4176bba8ace93988" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classEar.html">Ear</a><code> [friend]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="a27d57f14a604e7a444d12a5818f48994"></a><!-- doxytag: member="CAR::pole_freqs" ref="a27d57f14a604e7a444d12a5818f48994" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Array&lt;<a class="el" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0">FP_TYPE</a>, Dynamic,1&gt; <a class="el" href="classCAR.html#a27d57f14a604e7a444d12a5818f48994">CAR::pole_freqs</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>The vector of pole frequencies used in filter design and variable estimation. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="CAR_8H_source.html">CAR.H</a></li>
 <li><a class="el" href="CAR_8C.html">CAR.C</a></li>
@@ -177,7 +281,7 @@ Public Member Functions</h2></td></tr>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -190,7 +294,7 @@ Public Member Functions</h2></td></tr>
     <ul>
       <li class="navelem"><a class="el" href="classCAR.html">CAR</a>      </li>
 
-    <li class="footer">Generated on Sun Feb 10 2013 10:47:46 for CARFAC C++ by
+    <li class="footer">Generated on Thu Feb 21 2013 09:31:11 for CARFAC C++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

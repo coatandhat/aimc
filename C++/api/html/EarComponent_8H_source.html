@@ -100,7 +100,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a href="EarComponent_8H.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// Copyright 2013 Matt R. Flax &lt;flatmax\@&gt; All Rights Reserved.</span>
-<a name="l00002"></a>00002 <span class="comment">// Author Matt Flax &lt;flatmax\@&gt;</span>
+<a name="l00002"></a>00002 <span class="comment">// Author Matt Flax &lt;flatmax@&gt;</span>
 <a name="l00003"></a>00003 <span class="comment">//</span>
 <a name="l00004"></a>00004 <span class="comment">// This C++ file is part of an implementation of Lyon&#39;s cochlear model:</span>
 <a name="l00005"></a>00005 <span class="comment">// &quot;Cascade of Asymmetric Resonators with Fast-Acting Compression&quot;</span>
@@ -130,18 +130,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00029"></a>00029 <span class="preprocessor">#include &quot;<a class="code" href="IHCParam_8H.html">IHCParam.H</a>&quot;</span>
 <a name="l00030"></a>00030 <span class="preprocessor">#include &quot;<a class="code" href="IHCState_8H.html">IHCState.H</a>&quot;</span>
 <a name="l00031"></a>00031 
-<a name="l00039"></a>00039 <span class="keyword">template</span> &lt;<span class="keyword">class</span> COEFFTYPE, <span class="keyword">class</span> PARAMTYPE, <span class="keyword">class</span> STATETYPE&gt;
-<a name="l00040"></a><a class="code" href="classEarComponent.html">00040</a> <span class="keyword">class </span><a class="code" href="classEarComponent.html">EarComponent</a> {
-<a name="l00041"></a>00041 <span class="keyword">protected</span>:
-<a name="l00042"></a><a class="code" href="classEarComponent.html#a43461ed3bac1bd735ea6ddee5dda2594">00042</a>     COEFFTYPE <a class="code" href="classEarComponent.html#a43461ed3bac1bd735ea6ddee5dda2594">coeff</a>;
-<a name="l00043"></a><a class="code" href="classEarComponent.html#af409ffb12bafa60c09f319fa6edd48b9">00043</a>     PARAMTYPE <a class="code" href="classEarComponent.html#af409ffb12bafa60c09f319fa6edd48b9">param</a>;
-<a name="l00044"></a><a class="code" href="classEarComponent.html#a4ea8ae90cda6efc8b1b79550545a9210">00044</a>     STATETYPE <a class="code" href="classEarComponent.html#a4ea8ae90cda6efc8b1b79550545a9210">state</a>;
-<a name="l00045"></a>00045 <span class="keyword">public</span>:
-<a name="l00046"></a><a class="code" href="classEarComponent.html#afde50640ddf67626e8e62926d491269d">00046</a>     <a class="code" href="classEarComponent.html#afde50640ddf67626e8e62926d491269d">EarComponent</a>(){}
-<a name="l00047"></a><a class="code" href="classEarComponent.html#a0eaf3faf1ec50098fa5b3cdb21ffea6e">00047</a>     <span class="keyword">virtual</span> <a class="code" href="classEarComponent.html#a0eaf3faf1ec50098fa5b3cdb21ffea6e">~EarComponent</a>(){}
-<a name="l00048"></a>00048 };
-<a name="l00049"></a>00049 
-<a name="l00050"></a>00050 <span class="preprocessor">#endif // EARCOMPONENT_H_</span>
+<a name="l00032"></a>00032 <span class="preprocessor">#include &quot;<a class="code" href="CARFACCommon_8H.html">CARFACCommon.H</a>&quot;</span>
+<a name="l00033"></a>00033 
+<a name="l00041"></a>00041 <span class="keyword">template</span> &lt;<span class="keyword">class</span> COEFFTYPE, <span class="keyword">class</span> PARAMTYPE, <span class="keyword">class</span> STATETYPE&gt;
+<a name="l00042"></a><a class="code" href="classEarComponent.html">00042</a> <span class="keyword">class </span><a class="code" href="classEarComponent.html">EarComponent</a> {
+<a name="l00043"></a>00043 <span class="keyword">protected</span>:
+<a name="l00044"></a><a class="code" href="classEarComponent.html#a43461ed3bac1bd735ea6ddee5dda2594">00044</a>     COEFFTYPE <a class="code" href="classEarComponent.html#a43461ed3bac1bd735ea6ddee5dda2594">coeff</a>;
+<a name="l00045"></a><a class="code" href="classEarComponent.html#af409ffb12bafa60c09f319fa6edd48b9">00045</a>     PARAMTYPE <a class="code" href="classEarComponent.html#af409ffb12bafa60c09f319fa6edd48b9">param</a>;
+<a name="l00046"></a><a class="code" href="classEarComponent.html#a4ea8ae90cda6efc8b1b79550545a9210">00046</a>     STATETYPE <a class="code" href="classEarComponent.html#a4ea8ae90cda6efc8b1b79550545a9210">state</a>;
+<a name="l00047"></a>00047 <span class="keyword">public</span>:
+<a name="l00048"></a><a class="code" href="classEarComponent.html#afde50640ddf67626e8e62926d491269d">00048</a>     <a class="code" href="classEarComponent.html#afde50640ddf67626e8e62926d491269d">EarComponent</a>() {}
+<a name="l00049"></a><a class="code" href="classEarComponent.html#a0eaf3faf1ec50098fa5b3cdb21ffea6e">00049</a>     <span class="keyword">virtual</span> <a class="code" href="classEarComponent.html#a0eaf3faf1ec50098fa5b3cdb21ffea6e">~EarComponent</a>(){}
+<a name="l00050"></a>00050 };
+<a name="l00051"></a>00051 
+<a name="l00052"></a>00052 <span class="preprocessor">#endif // EARCOMPONENT_H_</span>
 </pre></div></div><!-- contents -->
 </div>
 <!-- window showing the filter options -->
@@ -149,7 +151,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -162,7 +164,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul>
       <li class="navelem"><a class="el" href="EarComponent_8H.html">EarComponent.H</a>      </li>
 
-    <li class="footer">Generated on Sun Feb 10 2013 10:47:45 for CARFAC C++ by
+    <li class="footer">Generated on Thu Feb 21 2013 09:31:11 for CARFAC C++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

@@ -118,10 +118,18 @@ Collaboration diagram for Ear:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEar.html#a58d5147ee3eb694d0b2e94897dd7bf57">Ear</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEar.html#aadc3da8092733631bcdde1bfa3f3734a">~Ear</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEar.html#a6ffbf5915966ef3e58214bc30b390a55">Ear</a> (<a class="el" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0">FP_TYPE</a> fs_)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEar.html#a8ffb11429ea872af900dac31252349a2">Ear</a> (void)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEar.html#ac5734e338464ee157d92fa0e7fe1ae9e">~Ear</a> (void)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEar.html#adf9d9b3c1e85d28dbd6921a06101b12b">design</a> (void)</td></tr>
 <tr><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0">FP_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEar.html#a8087301947ab7dc0bba049f332d44508">fs</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The sample rate.  <a href="#a8087301947ab7dc0bba049f332d44508"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0">FP_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEar.html#a9cbbd291568ea2756b17311cbe7a0d84">max_channels_per_octave</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">How many channels in each octave.  <a href="#a9cbbd291568ea2756b17311cbe7a0d84"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEar.html#a9c34579dc3e48bf40cc2a62677d1546e">n_ch</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of channels (in the ear)  <a href="#a9c34579dc3e48bf40cc2a62677d1546e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCAR.html">CAR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEar.html#a59243a8664d2c7d8bd3e5153e7f55e78">car</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The cascade of asymmetric resontaors for this ear.  <a href="#a59243a8664d2c7d8bd3e5153e7f55e78"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIHC.html">IHC</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEar.html#ac11c4afecd6ca8353fa7d2ed4689bbf6">ihc</a></td></tr>
@@ -134,37 +142,83 @@ Private Attributes</h2></td></tr>
 <dl class="date"><dt><b>Date:</b></dt><dd>2013.02.08</dd></dl>
 <p>Class which encapsulates an ear, using the <a class="el" href="classCAR.html">CAR</a>, <a class="el" href="classIHC.html">IHC</a> and <a class="el" href="classAGC.html">AGC</a> classes </p>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a58d5147ee3eb694d0b2e94897dd7bf57"></a><!-- doxytag: member="Ear::Ear" ref="a58d5147ee3eb694d0b2e94897dd7bf57" args="()" -->
+<a class="anchor" id="a6ffbf5915966ef3e58214bc30b390a55"></a><!-- doxytag: member="Ear::Ear" ref="a6ffbf5915966ef3e58214bc30b390a55" args="(FP_TYPE fs_)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classEar.html#a58d5147ee3eb694d0b2e94897dd7bf57">Ear::Ear</a> </td>
+          <td class="memname"><a class="el" href="classEar.html#a6ffbf5915966ef3e58214bc30b390a55">Ear::Ear</a> </td>
           <td>(</td>
+          <td class="paramtype"><a class="el" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0">FP_TYPE</a>&#160;</td>
+          <td class="paramname"><em>fs_</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Constructor specifying the sample rate </p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fs_</td><td>The sample rate to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="author"><dt><b>Author:</b></dt><dd>{Matt Flax &lt;flatmax@&gt;} </dd></dl>
+<dl class="date"><dt><b>Date:</b></dt><dd>2013.02.08 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a8ffb11429ea872af900dac31252349a2"></a><!-- doxytag: member="Ear::Ear" ref="a8ffb11429ea872af900dac31252349a2" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classEar.html#a6ffbf5915966ef3e58214bc30b390a55">Ear::Ear</a> </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<dl class="author"><dt><b>Author:</b></dt><dd>{Matt Flax &lt;flatmax@&gt;} </dd></dl>
-<dl class="date"><dt><b>Date:</b></dt><dd>2013.02.08 </dd></dl>
+<p>Constructor using the DEFAULT_SAMPLERATE as the sample rate </p>
 
 </div>
 </div>
-<a class="anchor" id="aadc3da8092733631bcdde1bfa3f3734a"></a><!-- doxytag: member="Ear::~Ear" ref="aadc3da8092733631bcdde1bfa3f3734a" args="()" -->
+<a class="anchor" id="ac5734e338464ee157d92fa0e7fe1ae9e"></a><!-- doxytag: member="Ear::~Ear" ref="ac5734e338464ee157d92fa0e7fe1ae9e" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classEar.html#aadc3da8092733631bcdde1bfa3f3734a">Ear::~Ear</a> </td>
+          <td class="memname"><a class="el" href="classEar.html#ac5734e338464ee157d92fa0e7fe1ae9e">Ear::~Ear</a> </td>
           <td>(</td>
+          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td><code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
+
+</div>
+</div>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="adf9d9b3c1e85d28dbd6921a06101b12b"></a><!-- doxytag: member="Ear::design" ref="adf9d9b3c1e85d28dbd6921a06101b12b" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classEar.html#adf9d9b3c1e85d28dbd6921a06101b12b">Ear::design</a> </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Estimates the number of filter stages and executes the dsign method for each of <a class="el" href="classCAR.html">CAR</a>, <a class="el" href="classAGC.html">AGC</a> and <a class="el" href="classIHC.html">IHC</a> </p>
 
 </div>
 </div>
@@ -199,6 +253,21 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a8087301947ab7dc0bba049f332d44508"></a><!-- doxytag: member="Ear::fs" ref="a8087301947ab7dc0bba049f332d44508" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0">FP_TYPE</a> <a class="el" href="classEar.html#a8087301947ab7dc0bba049f332d44508">Ear::fs</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>The sample rate. </p>
+
+</div>
+</div>
 <a class="anchor" id="ac11c4afecd6ca8353fa7d2ed4689bbf6"></a><!-- doxytag: member="Ear::ihc" ref="ac11c4afecd6ca8353fa7d2ed4689bbf6" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -214,6 +283,36 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a9cbbd291568ea2756b17311cbe7a0d84"></a><!-- doxytag: member="Ear::max_channels_per_octave" ref="a9cbbd291568ea2756b17311cbe7a0d84" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0">FP_TYPE</a> <a class="el" href="classEar.html#a9cbbd291568ea2756b17311cbe7a0d84">Ear::max_channels_per_octave</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>How many channels in each octave. </p>
+
+</div>
+</div>
+<a class="anchor" id="a9c34579dc3e48bf40cc2a62677d1546e"></a><!-- doxytag: member="Ear::n_ch" ref="a9c34579dc3e48bf40cc2a62677d1546e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classEar.html#a9c34579dc3e48bf40cc2a62677d1546e">Ear::n_ch</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>The number of channels (in the ear) </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="Ear_8H_source.html">Ear.H</a></li>
 <li><a class="el" href="Ear_8C.html">Ear.C</a></li>
@@ -225,7 +324,7 @@ Private Attributes</h2></td></tr>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -238,7 +337,7 @@ Private Attributes</h2></td></tr>
     <ul>
       <li class="navelem"><a class="el" href="classEar.html">Ear</a>      </li>
 
-    <li class="footer">Generated on Sun Feb 10 2013 10:47:46 for CARFAC C++ by
+    <li class="footer">Generated on Thu Feb 21 2013 09:31:11 for CARFAC C++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

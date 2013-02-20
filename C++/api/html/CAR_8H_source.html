@@ -100,7 +100,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a href="CAR_8H.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// Copyright 2013 Matt R. Flax &lt;flatmax\@&gt; All Rights Reserved.</span>
-<a name="l00002"></a>00002 <span class="comment">// Author Matt Flax &lt;flatmax\@&gt;</span>
+<a name="l00002"></a>00002 <span class="comment">// Author Matt Flax &lt;flatmax@&gt;</span>
 <a name="l00003"></a>00003 <span class="comment">//</span>
 <a name="l00004"></a>00004 <span class="comment">// This C++ file is part of an implementation of Lyon&#39;s cochlear model:</span>
 <a name="l00005"></a>00005 <span class="comment">// &quot;Cascade of Asymmetric Resonators with Fast-Acting Compression&quot;</span>
@@ -122,13 +122,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00021"></a>00021 <span class="preprocessor"></span>
 <a name="l00022"></a>00022 <span class="preprocessor">#include &quot;<a class="code" href="EarComponent_8H.html">EarComponent.H</a>&quot;</span> <span class="comment">// includes the various {CAR, IHC, AGC} {Coeff, Param, State} .H files</span>
 <a name="l00023"></a>00023 
-<a name="l00030"></a><a class="code" href="classCAR.html">00030</a> <span class="keyword">class </span><a class="code" href="classCAR.html">CAR</a> : <span class="keyword">public</span> <a class="code" href="classEarComponent.html">EarComponent</a>&lt;CARCoeff, CARParam, CARState&gt; {
-<a name="l00031"></a>00031     <span class="keyword">public</span>:
-<a name="l00032"></a>00032         <a class="code" href="classCAR.html#a7c80d0ba9d83caf4cf129b251e41e65c">CAR</a>();
-<a name="l00033"></a>00033         <span class="keyword">virtual</span> <a class="code" href="classCAR.html#ac3174919d88d3be0118fcb0fdab84b56">~CAR</a>();
-<a name="l00034"></a>00034 };
-<a name="l00035"></a>00035 
-<a name="l00036"></a>00036 <span class="preprocessor">#endif // CAR_H_</span>
+<a name="l00024"></a>00024 <span class="keyword">class </span><a class="code" href="classEar.html">Ear</a>;
+<a name="l00025"></a>00025 
+<a name="l00032"></a><a class="code" href="classCAR.html">00032</a> <span class="keyword">class </span><a class="code" href="classCAR.html">CAR</a> : <span class="keyword">public</span> <a class="code" href="classEarComponent.html">EarComponent</a>&lt;CARCoeff, CARParam, CARState&gt; {
+<a name="l00033"></a><a class="code" href="classCAR.html#a27d57f14a604e7a444d12a5818f48994">00033</a>     Array&lt;FP_TYPE, Dynamic,1&gt; <a class="code" href="classCAR.html#a27d57f14a604e7a444d12a5818f48994" title="The vector of pole frequencies used in filter design and variable estimation.">pole_freqs</a>; 
+<a name="l00034"></a>00034 
+<a name="l00035"></a>00035     <span class="keyword">protected</span>:
+<a name="l00036"></a>00036 
+<a name="l00040"></a>00040     <span class="keywordtype">void</span> <a class="code" href="classCAR.html#a28852384d3c3fca2cd27fae743053eca">designFilters</a>(<a class="code" href="CARFACCommon_8H.html#af081989b61cc5b60e85ad3d01e4af4f0" title="The floating point type.">FP_TYPE</a> fs, <span class="keywordtype">int</span> n_ch);
+<a name="l00041"></a>00041 
+<a name="l00046"></a>00046     Array&lt;FP_TYPE, Dynamic, 1&gt; <a class="code" href="classCAR.html#a00bed086fc910b91fa8ed1c97af6eca8">stageG</a>(Array&lt;FP_TYPE, Dynamic, 1&gt; &amp;relative_undamping);
+<a name="l00047"></a>00047 
+<a name="l00048"></a>00048     <span class="keyword">public</span>:
+<a name="l00049"></a>00049         <a class="code" href="classCAR.html#a7c80d0ba9d83caf4cf129b251e41e65c">CAR</a>();
+<a name="l00050"></a>00050         <span class="keyword">virtual</span> <a class="code" href="classCAR.html#ac3174919d88d3be0118fcb0fdab84b56">~CAR</a>();
+<a name="l00051"></a>00051 
+<a name="l00052"></a><a class="code" href="classCAR.html#a38fd42a55b0aa61f4176bba8ace93988">00052</a>     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classEar.html">Ear</a>;
+<a name="l00053"></a>00053 };
+<a name="l00054"></a>00054 
+<a name="l00055"></a>00055 <span class="preprocessor">#endif // CAR_H_</span>
 </pre></div></div><!-- contents -->
 </div>
 <!-- window showing the filter options -->
@@ -136,7 +148,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -149,7 +161,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul>
       <li class="navelem"><a class="el" href="CAR_8H.html">CAR.H</a>      </li>
 
-    <li class="footer">Generated on Sun Feb 10 2013 10:47:45 for CARFAC C++ by
+    <li class="footer">Generated on Thu Feb 21 2013 09:31:11 for CARFAC C++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

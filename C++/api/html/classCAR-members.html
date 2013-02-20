@@ -104,8 +104,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 This is the complete list of members for <a class="el" href="classCAR.html">CAR</a>, including all inherited members.<table>
   <tr class="memlist"><td><a class="el" href="classCAR.html#a7c80d0ba9d83caf4cf129b251e41e65c">CAR</a>()</td><td><a class="el" href="classCAR.html">CAR</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classEarComponent.html#a43461ed3bac1bd735ea6ddee5dda2594">coeff</a></td><td><a class="el" href="classEarComponent.html">EarComponent&lt; CARCoeff, CARParam, CARState &gt;</a></td><td><code> [protected]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classCAR.html#a28852384d3c3fca2cd27fae743053eca">designFilters</a>(FP_TYPE fs, int n_ch)</td><td><a class="el" href="classCAR.html">CAR</a></td><td><code> [protected]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classCAR.html#a38fd42a55b0aa61f4176bba8ace93988">Ear</a> class</td><td><a class="el" href="classCAR.html">CAR</a></td><td><code> [friend]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classEarComponent.html#afde50640ddf67626e8e62926d491269d">EarComponent</a>()</td><td><a class="el" href="classEarComponent.html">EarComponent&lt; CARCoeff, CARParam, CARState &gt;</a></td><td><code> [inline]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classEarComponent.html#af409ffb12bafa60c09f319fa6edd48b9">param</a></td><td><a class="el" href="classEarComponent.html">EarComponent&lt; CARCoeff, CARParam, CARState &gt;</a></td><td><code> [protected]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classCAR.html#a27d57f14a604e7a444d12a5818f48994">pole_freqs</a></td><td><a class="el" href="classCAR.html">CAR</a></td><td><code> [private]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classCAR.html#a00bed086fc910b91fa8ed1c97af6eca8">stageG</a>(Array&lt; FP_TYPE, Dynamic, 1 &gt; &amp;relative_undamping)</td><td><a class="el" href="classCAR.html">CAR</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classEarComponent.html#a4ea8ae90cda6efc8b1b79550545a9210">state</a></td><td><a class="el" href="classEarComponent.html">EarComponent&lt; CARCoeff, CARParam, CARState &gt;</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classCAR.html#ac3174919d88d3be0118fcb0fdab84b56">~CAR</a>()</td><td><a class="el" href="classCAR.html">CAR</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classEarComponent.html#a0eaf3faf1ec50098fa5b3cdb21ffea6e">~EarComponent</a>()</td><td><a class="el" href="classEarComponent.html">EarComponent&lt; CARCoeff, CARParam, CARState &gt;</a></td><td><code> [inline, virtual]</code></td></tr>
@@ -115,7 +119,7 @@ This is the complete list of members for <a class="el" href="classCAR.html">CAR<
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -128,7 +132,7 @@ This is the complete list of members for <a class="el" href="classCAR.html">CAR<
   <div id="nav-path" class="navpath">
     <ul>
 
-    <li class="footer">Generated on Sun Feb 10 2013 10:47:46 for CARFAC C++ by
+    <li class="footer">Generated on Thu Feb 21 2013 09:31:11 for CARFAC C++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>
