@@ -25,8 +25,8 @@
 	<File name="../AGCState.H" open="0" top="0" tabpos="9">
 		<Cursor position="94" topLine="0" />
 	</File>
-	<File name="../CAR.C" open="1" top="0" tabpos="1">
-		<Cursor position="3569" topLine="65" />
+	<File name="../CAR.C" open="1" top="1" tabpos="1">
+		<Cursor position="3388" topLine="65" />
 	</File>
 	<File name="../CAR.H" open="1" top="0" tabpos="2">
 		<Cursor position="1679" topLine="26" />
@@ -35,7 +35,7 @@
 		<Cursor position="94" topLine="0" />
 	</File>
 	<File name="../CARCoeff.H" open="1" top="0" tabpos="8">
-		<Cursor position="1536" topLine="20" />
+		<Cursor position="1171" topLine="20" />
 	</File>
 	<File name="../CARFACCommon.H" open="1" top="0" tabpos="7">
 		<Cursor position="2156" topLine="46" />
@@ -58,8 +58,8 @@
 	<File name="../Coefficients.H" open="1" top="0" tabpos="10">
 		<Cursor position="1139" topLine="12" />
 	</File>
-	<File name="../Ear.C" open="1" top="1" tabpos="3">
-		<Cursor position="2174" topLine="25" />
+	<File name="../Ear.C" open="1" top="0" tabpos="3">
+		<Cursor position="1709" topLine="40" />
 	</File>
 	<File name="../Ear.H" open="1" top="0" tabpos="4">
 		<Cursor position="1086" topLine="18" />
