@@ -34,11 +34,11 @@ CAR::~CAR() {
 void CAR::designFilters(FP_TYPE fs, int n_ch) {
     // don't really need these zero arrays, but it's a clue to what fields
     // and types are need in ohter language implementations:
-    coeff.r1_coeffs.resize(n_ch, 1); coeff.r1_coeffs-=coeff.r1_coeffs; // resize and zero
-    coeff.a0_coeffs.resize(n_ch, 1); coeff.a0_coeffs-=coeff.a0_coeffs;
-    coeff.c0_coeffs.resize(n_ch, 1); coeff.c0_coeffs-=coeff.c0_coeffs;
-    coeff.h_coeffs.resize(n_ch, 1); coeff.h_coeffs-=coeff.h_coeffs;
-    coeff.g0_coeffs.resize(n_ch, 1); coeff.g0_coeffs-=coeff.g0_coeffs;
+    coeff.r1_coeffs=Matrix<FP_TYPE, Dynamic, 1>::Zero(n_ch,1); // resize and zero
+    coeff.a0_coeffs=Matrix<FP_TYPE, Dynamic, 1>::Zero(n_ch,1);
+    coeff.c0_coeffs=Matrix<FP_TYPE, Dynamic, 1>::Zero(n_ch,1);
+    coeff.h_coeffs=Matrix<FP_TYPE, Dynamic, 1>::Zero(n_ch,1);
+    coeff.g0_coeffs=Matrix<FP_TYPE, Dynamic, 1>::Zero(n_ch,1);
     // zr_coeffs is not zeroed ... perhaps it should be ?
 
 // zero_ratio comes in via h.  In book's circuit D, zero_ratio is 1/sqrt(a),
@@ -76,12 +76,11 @@ void CAR::designFilters(FP_TYPE fs, int n_ch) {
 
 // for unity gain at min damping, radius r; only used in CARFAC_Init:
     Array<FP_TYPE, Dynamic,1> relative_undamping(n_ch, 1);
-    relative_undamping=(relative_undamping-=relative_undamping).cos();// what is an efficient way to set a matrix to 1. ? As this is in a design phase, I will leave it for now
+    relative_undamping=Array<FP_TYPE, Dynamic, 1>::Zero(n_ch, 1).cos();
 
 // this function needs to take CAR_coeffs even if we haven't finished
 // constucting it by putting in the g0_coeffs:
     coeff.g0_coeffs = stageG(relative_undamping);
-
 }
 
 Array<FP_TYPE, Dynamic, 1> CAR::stageG(Array<FP_TYPE, Dynamic, 1> &relative_undamping) {
