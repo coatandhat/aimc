@@ -31,6 +31,12 @@ class AGC : EarComponent<AGCCoeff, AGCParam, AGCState> {
     public:
         AGC();
         virtual ~AGC();
+
+    /** Method to design the automatic gain control coefficients
+    \param fs The sample rate in Hz
+    \param n_ch The number of channels. The CAR.coeff are one row per channel
+    */
+    void designAGC(FP_TYPE fs, int n_ch);
 };
 
 #endif // AGC_H_

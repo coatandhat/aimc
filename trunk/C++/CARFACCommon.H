@@ -30,6 +30,10 @@ using namespace Eigen;
 
 #include "PsychoAcoustics.H"
 
+#define AGC_DESIGN_ITERATION_ERROR -100 ///< Error when designing the AGC filter taps
+#define AGC_DESIGN_TAPS_OOB_ERROR -101 ///< The number of taps requested have not been accounted for in the code yet.
+#define AGC_FIR_TAP_COUNT_ERROR -102 ///< The number of taps passed to the AGC::Design_FIR_coeffs method are not handled
+
 /**
     \mainpage CARFAC C++
 

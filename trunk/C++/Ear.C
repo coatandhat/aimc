@@ -60,7 +60,7 @@ void Ear::design(void) {
     max_channels_per_octave = (FP_TYPE)(log(2.) / log(car.pole_freqs[0]/car.pole_freqs[1]));
 
     // convert to include an ear_array, each w coeffs and state...
-    car.designFilters(fs, n_ch); //(car.param. fs, car.pole_freqs);
-    //AGC.designAGC(CF_AGC_params, fs, n_ch);
+    car.designFilters(fs, n_ch);
+    AGC.designAGC(fs, n_ch);
     //IHC.designIHC(CF_IHC_params, fs, n_ch);
 }
