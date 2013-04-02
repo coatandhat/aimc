@@ -1,5 +1,5 @@
 // Copyright 2013 Matt R. Flax <flatmax\@> All Rights Reserved.
-// Author Matt Flax <flatmax@>
+// Author Matt Flax <flatmax@>s
 //
 // This C++ file is part of an implementation of Lyon's cochlear model:
 // "Cascade of Asymmetric Resonators with Fast-Acting Compression"
@@ -29,6 +29,8 @@
 */
 class AGCCoeff : public Coefficients {
 public:
+    Array<FP_TYPE, 1, Dynamic> AGC_epsilon; ///< the 1/(tau*fs) roughly
+
     AGCCoeff();
     virtual ~AGCCoeff();
 };

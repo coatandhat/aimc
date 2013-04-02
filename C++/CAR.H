@@ -36,6 +36,7 @@ class CAR : public EarComponent<CARCoeff, CARParam, CARState> {
 
     /** Method to design the auditory filter coefficients
     \param fs The sample rate in Hz
+    \param n_ch The number of channels. The CAR.coeff are one row per channel
     */
     void designFilters(FP_TYPE fs, int n_ch);
 
