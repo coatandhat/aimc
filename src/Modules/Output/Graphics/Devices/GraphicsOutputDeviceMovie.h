@@ -28,6 +28,7 @@
 #define __GRAPHICS_OUTPUT_DEVICE_MOVIE_H__
 
 #include <string>
+#include <unistd.h>
 #include "Modules/Output/Graphics/Devices/GraphicsOutputDeviceCairo.h"
 
 namespace aimc {
