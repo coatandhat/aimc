@@ -25,6 +25,8 @@
  * \version \$Id: $
  */
 
+#include "Modules/Output/FileOutputAIMC.h"
+
 #ifdef _WINDOWS
 #  include <direct.h>  // for _mkdir & _rmdir
 #else
@@ -38,8 +40,6 @@
 #include <cmath>
 #include <string>
 
-#include "Modules/Output/FileOutputAIMC.h"
-
 namespace aimc {
 FileOutputAIMC::FileOutputAIMC(Parameters *params) : Module(params) {
   module_description_ = "File output in AIMC format";
@@ -47,8 +47,11 @@ FileOutputAIMC::FileOutputAIMC(Parameters *params) : Module(params) {
   module_type_ = "output";
   module_version_ = "$Id: FileOutputAIMC.cc 51 2010-03-30 22:06:24Z tomwalters $";
   file_suffix_ = parameters_->DefaultString("file_suffix", ".aimc");
+  dump_strobes_ = parameters_->DefaultBool("dump_strobes", false);
+  strobes_file_suffix_ = parameters_->DefaultString("strobes_file_suffix", ".strobes");
 
   file_handle_ = NULL;
+  strobes_file_handle_ = NULL;
   header_written_ = false;
   frame_period_ms_ = 0.0f;
 }
@@ -56,6 +59,21 @@ FileOutputAIMC::FileOutputAIMC(Parameters *params) : Module(params) {
 FileOutputAIMC::~FileOutputAIMC() {
   if (file_handle_ != NULL)
     CloseFile();
+  if (strobes_file_handle_ != NULL)
+      CloseStrobesFile();
+}
+
+bool FileOutputAIMC::OpenStrobesFile(string &filename) {
+  if (strobes_file_handle_ != NULL) {
+    LOG_ERROR(_T("Couldn't open strobes output file. A file is already open."));
+    return false;
+  }
+  // Check that the output file exists and is writeable
+  if ((strobes_file_handle_ = fopen(filename.c_str(), "wb")) == NULL) {
+    LOG_ERROR(_T("Couldn't open output file '%s' for writing."), filename.c_str());
+    return false;
+  }
+  return true;
 }
 
 bool FileOutputAIMC::OpenFile(string &filename) {
@@ -76,6 +94,7 @@ bool FileOutputAIMC::OpenFile(string &filename) {
   if (initialized_) {
     WriteHeader();
   }
+  
   return true;
 }
 
@@ -101,7 +120,15 @@ void FileOutputAIMC::ResetInternal() {
   string out_filename;
   out_filename = global_parameters_->GetString("output_filename_base") + file_suffix_;
   OpenFile(out_filename);
-    
+  if (dump_strobes_) {
+    if (strobes_file_handle_ != NULL) {
+      CloseStrobesFile();
+    }
+    string strobes_filename =
+      global_parameters_->GetString("output_filename_base")
+        + strobes_file_suffix_;
+    OpenStrobesFile(strobes_filename);
+  }
 }
 
 void FileOutputAIMC::WriteHeader() {
@@ -157,6 +184,36 @@ void FileOutputAIMC::Process(const SignalBank &input) {
     }
   }
   frame_count_++;
+  
+  if (dump_strobes_) {
+    if (strobes_file_handle_ == NULL) {
+      LOG_ERROR(_T("Couldn't process file output for strobes. No srobes file is open."
+                   "Please call FileOutputAIMC::OpenStrobesFile first"));
+      return;
+    }
+    int strobe;
+    for (int ch = 0; ch < input.channel_count(); ch++) {
+      const int kStartOfStrobeRow = -65535;
+      strobe = kStartOfStrobeRow;
+      fwrite(&strobe, sizeof(strobe), 1, strobes_file_handle_);
+      for (int i = 0; i < static_cast<int>(input.get_strobes(ch).size());
+           i++) {
+        strobe = input.get_strobes(ch)[i];
+        fwrite(&strobe, sizeof(strobe), 1, strobes_file_handle_);
+      }
+    } 
+  }
+  
+}
+
+bool FileOutputAIMC::CloseStrobesFile() {
+  if (strobes_file_handle_ == NULL)
+    return false;
+
+  // And close the file
+  fclose(strobes_file_handle_);
+  strobes_file_handle_ = NULL;
+  return true;
 }
 
 bool FileOutputAIMC::CloseFile() {

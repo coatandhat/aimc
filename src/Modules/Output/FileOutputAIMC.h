@@ -40,16 +40,18 @@ class FileOutputAIMC : public Module {
    */
   explicit FileOutputAIMC(Parameters *pParam);
   ~FileOutputAIMC();
-
-  /*! \brief Initialize the output to AIMC.
+  virtual void Process(const SignalBank &input);
+ private:
+ /*! \brief Initialize the output to AIMC.
    *  \param *filename Filename of the ouptut file to be created.
    *  If the file exists it will be overwritten
    *  \return Returns true on success of initialization.
    */
   bool OpenFile(string &filename);
   bool CloseFile();
-  virtual void Process(const SignalBank &input);
- private:
+  bool OpenStrobesFile(string &filename);
+  bool CloseStrobesFile();
+  
   virtual bool InitializeInternal(const SignalBank &input);
   virtual void ResetInternal();
 
@@ -62,6 +64,7 @@ class FileOutputAIMC : public Module {
   /*! \brief Internal pointer to the output file
    */
   FILE *file_handle_;
+  FILE *strobes_file_handle_;
 
   /*! \brief Count of the number of samples in the file, written on close
    */
@@ -72,6 +75,8 @@ class FileOutputAIMC : public Module {
   float sample_rate_;  
   float frame_period_ms_;
   string file_suffix_;
+  bool dump_strobes_;
+  string strobes_file_suffix_;
 };
 }  // namespace aimc
 
