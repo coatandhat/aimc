@@ -23,6 +23,7 @@
 #include "Modules/NAP/ModuleHCL.h"
 #include "Modules/Output/FileOutputHTK.h"
 #include "Modules/Output/FileOutputAIMC.h"
+#include "Modules/Output/FileOutputJSON.h"
 //#include "Modules/Output/OSCOutput.h"
 #include "Modules/Output/Graphics/GraphicsViewTime.h"
 #include "Modules/Profile/ModuleSlice.h"
@@ -63,6 +64,9 @@ Module* ModuleFactory::Create(string module_name_, Parameters* params) {
 
   if (module_name_.compare("aimc_out") == 0)
     return new FileOutputAIMC(params);
+
+  if (module_name_.compare("json_out") == 0)
+    return new FileOutputJSON(params);
 
   if (module_name_.compare("graphics_time") == 0)
     return new GraphicsViewTime(params);

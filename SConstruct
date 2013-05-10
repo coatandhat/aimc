@@ -52,6 +52,7 @@ common_sources = ['Support/Common.cc',
                   'Modules/Profile/ModuleScaler.cc',
                   'Modules/Output/FileOutputHTK.cc',
                   'Modules/Output/FileOutputAIMC.cc',
+                  'Modules/Output/FileOutputJSON.cc',
                   #'Modules/Output/OSCOutput.cc',
                   'Modules/Features/ModuleGaussians.cc',
                   'Modules/Features/ModuleBoxes.cc',]

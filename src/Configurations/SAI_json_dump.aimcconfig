@@ -1,0 +1,26 @@
+module1.name = FileInput
+module1.id = file_input
+module1.child1 = PZFCFilterbank
+
+module2.name = PZFCFilterbank
+module2.id = pzfc
+module2.child1 = NAP
+
+module3.name = NAP
+module3.id = hcl
+module3.child1 = Strobes
+
+module4.name = Strobes
+module4.id = local_max
+module4.parameters = <<<ENDPARAMS
+ENDPARAMS
+module4.child1 = SAI
+
+module5.name = SAI
+module5.id = weighted_sai
+module5.child1 = SAIOutput
+
+module6.name = SAIOutput
+module6.id = json_out
+module6.parameters = <<<ENDPARAMS
+ENDPARAMS
