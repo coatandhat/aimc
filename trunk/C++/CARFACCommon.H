@@ -1,4 +1,4 @@
-// Copyright 2013 Matt R. Flax <flatmax\@> All Rights Reserved.
+
 // Author Matt Flax <flatmax@>
 //
 // This C++ file is part of an implementation of Lyon's cochlear model:
@@ -111,8 +111,7 @@ using namespace Eigen;
     simple as a few key strokes to change from the SoundCard.C file to the SoundCard.H file to inspect
     the names and types of available member variables.
 
-    \copyright {\code     Copyright 2013 Matt R. Flax <flatmax\@> All Rights Reserved.
-
+    \copyright {\code
     Author Matt Flax <flatmax@>
 
 
