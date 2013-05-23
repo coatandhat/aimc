@@ -1,9 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node2" href="$classEarComponent.html" title="EarComponent\&lt; IHCCoeff, IHCParam, IHCState \&gt;" alt="" coords="5,181,328,211"/>
-<area shape="rect" id="node4" href="$classIHCParam.html" title="IHCParam" alt="" coords="20,85,103,115"/>
-<area shape="rect" id="node6" href="$classParameters.html" title="Parameters" alt="" coords="12,5,100,35"/>
-<area shape="rect" id="node8" href="$classIHCCoeff.html" title="IHCCoeff" alt="" coords="128,85,205,115"/>
-<area shape="rect" id="node10" href="$classCoefficients.html" title="Coefficients" alt="" coords="124,5,215,35"/>
-<area shape="rect" id="node12" href="$classIHCState.html" title="IHCState" alt="" coords="229,85,307,115"/>
-<area shape="rect" id="node14" href="$classState.html" title="State" alt="" coords="241,5,295,35"/>
-</map>

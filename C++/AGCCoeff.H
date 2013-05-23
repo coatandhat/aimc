@@ -1,4 +1,4 @@
-// Copyright 2013 Matt R. Flax <flatmax\@> All Rights Reserved.
+
 // Author Matt Flax <flatmax@>s
 //
 // This C++ file is part of an implementation of Lyon's cochlear model:
