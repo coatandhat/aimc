@@ -168,7 +168,7 @@ void GraphicsOutputDeviceMovie::Stop() {
   char sCmdLine[1024]; //!\todo check that snprintf does not want a larger buffer
   snprintf(sCmdLine, sizeof(sCmdLine)/sizeof(sCmdLine[0]),
     "%s -y -i \"%s\" -r %.2f -i \"%s%%06d.png\" "
-    "-qscale 0 -r %.2f -ar 44100 -acodec pcm_s16le %s \"%s\"",
+    "-qscale 1 -r %.2f -ar 44100 -acodec pcm_s16le %s \"%s\"",
            sffmpegPath, sound_filename_.c_str(), frame_rate, directory_.c_str(),
            frame_rate, sCodecOptions, movie_filename_.c_str());
   printf("%s", sCmdLine);
